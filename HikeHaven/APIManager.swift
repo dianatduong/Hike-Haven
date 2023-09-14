@@ -9,9 +9,12 @@
 import Foundation
 
 class APIManager {
+    
+    let vc = ViewController()
     let dispatchGroup = DispatchGroup()
     var unsplashArray: [UnSplashData] = []
     var parksArray: [ParkData] = []
+    
     
     func fetchAllData() {
         dispatchGroup.enter()
@@ -21,7 +24,7 @@ class APIManager {
         fetchDataAPI()
         
         dispatchGroup.notify(queue: .main) {
-            // Reload your table view here
+            self.vc.tableView.reloadData()
         }
     }
     
@@ -84,4 +87,7 @@ class APIManager {
         }
         task.resume()
     }
+    
+    
+    
 }
