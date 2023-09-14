@@ -10,6 +10,8 @@ import UIKit
 
 class DetailsViewController: UIViewController {
     
+    let accordionVC = AccordionViewController()
+
     var selectedImageView: UIImageView!
     
     lazy var selectedNameLabel: UILabel = {
@@ -47,11 +49,18 @@ class DetailsViewController: UIViewController {
         return view
     }()
     
+   lazy var backgroundView: UIView = {
+         let view = UIView()
+         view.layer.shadowColor = UIColor.black.cgColor
+         view.layer.shadowOpacity = 0.8
+         view.layer.shadowOffset = CGSize(width: 1, height: 1)
+         view.layer.shadowRadius = 1
+          view.addSubview(selectedNameLabel)
+         return view
+    }()
     
     let name = " "
    
-
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -60,55 +69,61 @@ class DetailsViewController: UIViewController {
         
         selectedImageView = UIImageView()
         selectedNameLabel.text = name
-    
         view.addSubview(selectedImageView)
-        view.addSubview(selectedNameLabel)
+        selectedImageView.addSubview(backgroundView)
         view.addSubview(trailInfoContainerView)
+        view.addSubview(accordionVC.view)
         
         setUpConstraints()
     }
     
-    
     func setUpConstraints() {
         selectedImageView.translatesAutoresizingMaskIntoConstraints = false
         selectedNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        backgroundView.translatesAutoresizingMaskIntoConstraints = false
+
         trailInfoContainerView.translatesAutoresizingMaskIntoConstraints = false
         trailAddressLabel.translatesAutoresizingMaskIntoConstraints = false
         trailCityLabel.translatesAutoresizingMaskIntoConstraints = false
         trailStateLabel.translatesAutoresizingMaskIntoConstraints = false
         trailZipCodeLabel.translatesAutoresizingMaskIntoConstraints = false
         trailDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        accordionVC.view.translatesAutoresizingMaskIntoConstraints = false
 
-       NSLayoutConstraint.activate([
-           selectedImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-           selectedImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-           selectedImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-           selectedImageView.heightAnchor.constraint(equalToConstant: 270),
-           
-           selectedNameLabel.topAnchor.constraint(equalTo: selectedImageView.topAnchor, constant: 195),
-           selectedNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-           selectedNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-           
-           trailInfoContainerView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 5),
-           trailInfoContainerView.widthAnchor.constraint(equalToConstant: 420),
+        NSLayoutConstraint.activate([
+            selectedImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            selectedImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            selectedImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            selectedImageView.heightAnchor.constraint(equalToConstant: 270),
 
-           trailAddressLabel.topAnchor.constraint(equalTo: trailInfoContainerView.topAnchor, constant: 10),
-           trailAddressLabel.leadingAnchor.constraint(equalTo: trailInfoContainerView.leadingAnchor, constant: 15),
-           trailAddressLabel.trailingAnchor.constraint(equalTo: trailInfoContainerView.trailingAnchor, constant: -15),
+            backgroundView.topAnchor.constraint(equalTo: selectedImageView.topAnchor, constant: 195),
+                    backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+                    backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+         selectedNameLabel.topAnchor.constraint(equalTo: selectedImageView.topAnchor, constant: 195),
+                             selectedNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+                             selectedNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
 
-           trailCityLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
-           trailCityLabel.leadingAnchor.constraint(equalTo: trailInfoContainerView.leadingAnchor, constant: 15),
+            trailInfoContainerView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 5),
+            trailInfoContainerView.widthAnchor.constraint(equalToConstant: 420),
 
-           trailStateLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
-           trailStateLabel.leadingAnchor.constraint(equalTo: trailCityLabel.trailingAnchor),
+            trailAddressLabel.topAnchor.constraint(equalTo: trailInfoContainerView.topAnchor, constant: 10),
+            trailAddressLabel.leadingAnchor.constraint(equalTo: trailInfoContainerView.leadingAnchor, constant: 15),
+            trailAddressLabel.trailingAnchor.constraint(equalTo: trailInfoContainerView.trailingAnchor, constant: -15),
+            trailCityLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
+            trailCityLabel.leadingAnchor.constraint(equalTo: trailInfoContainerView.leadingAnchor, constant: 15),
+            trailStateLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
+            trailStateLabel.leadingAnchor.constraint(equalTo: trailCityLabel.trailingAnchor),
+            trailZipCodeLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
+            trailZipCodeLabel.leadingAnchor.constraint(equalTo: trailStateLabel.trailingAnchor),
 
-           trailZipCodeLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
-           trailZipCodeLabel.leadingAnchor.constraint(equalTo: trailStateLabel.trailingAnchor),
+            trailDescriptionLabel.topAnchor.constraint(equalTo: trailCityLabel.bottomAnchor, constant: 8),
+            trailDescriptionLabel.leadingAnchor.constraint(equalTo: trailInfoContainerView.leadingAnchor, constant: 15),
+            trailDescriptionLabel.trailingAnchor.constraint(equalTo: trailInfoContainerView.trailingAnchor, constant: -20),
 
-           trailDescriptionLabel.topAnchor.constraint(equalTo: trailCityLabel.bottomAnchor, constant: 8),
-           trailDescriptionLabel.leadingAnchor.constraint(equalTo: trailInfoContainerView.leadingAnchor, constant: 15),
-           trailDescriptionLabel.trailingAnchor.constraint(equalTo: trailInfoContainerView.trailingAnchor, constant: -20)
-           
+            accordionVC.view.topAnchor.constraint(equalTo: trailDescriptionLabel.bottomAnchor, constant: 15),
+            accordionVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            accordionVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            accordionVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
@@ -119,5 +134,4 @@ class DetailsViewController: UIViewController {
        required init?(coder aDecoder: NSCoder) {
            super.init(coder: aDecoder)
        }
-
 }

@@ -8,7 +8,10 @@
 
 import UIKit
 
-class ViewController: UITableViewController {
+class ViewController: UITableViewController, UISearchBarDelegate {
+    
+    var searchBar: UISearchBar = UISearchBar()
+    var searchTerm: String = "ca"
     
     let headerView = UIView()
 
@@ -25,14 +28,31 @@ class ViewController: UITableViewController {
     var unsplashArray: [UnSplashData] = []
     var parksArray: [ParkData] = []
     
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        configureSearchBar()
         navigationItem.title = "Hike Haven"
         setUpHeader()
         configureTableView()
-        fetchAllData()
+        fetchDataAPI()
+        fetchImagesAPI()
+    }
+    
+    func configureSearchBar() {
+        searchBar.searchBarStyle = UISearchBar.Style.default
+        searchBar.placeholder = " Search..."
+        searchBar.sizeToFit()
+        searchBar.isTranslucent = false
+        searchBar.delegate = self
+        navigationItem.titleView = searchBar
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchTerm = searchText
+        fetchDataAPI()
+        fetchImagesAPI()
     }
 
     func setUpHeader() {
@@ -53,77 +73,84 @@ class ViewController: UITableViewController {
         tableView.separatorStyle = .none
     }
     
-    func fetchAllData() {
-        dispatchGroup.enter()
-        fetchImagesAPI()
-        
-        dispatchGroup.enter()
-        fetchDataAPI()
-        
-        dispatchGroup.notify(queue: .main) {
-            self.tableView.reloadData()
-        }
-    }
-    
     func fetchImagesAPI() {
-        let searchTerm = "zion"
+        
+        //var search = searchTerm + "hiking"
+         
         let url = URL(string: "https://api.unsplash.com/search/photos?client_id=SwsdyqI6m6t38pMRrT8uCyXd-6-AKdT5Dy8I76IpEtc&count=1&query=\(searchTerm)&per_page=20&orientation=landscape&order_by=popular")!
+        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.timeoutInterval = Double.infinity
-        
+
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print(error.localizedDescription)
-                self.dispatchGroup.leave()
-                return
+              print(error.localizedDescription)
+              return
             }
             guard let data = data else {
-                print("No data returned from API.")
-                self.dispatchGroup.leave()
-                return
+              print("No data returned from API.")
+              return
             }
             do {
-                let parkResponse = try JSONDecoder().decode(UnSplashStruct.self, from: data)
+              let parkResponse = try JSONDecoder().decode(UnSplashStruct.self, from: data)
                 self.unsplashArray = parkResponse.results
-                self.dispatchGroup.leave()
+                //print(parkResponse.results.description)
+             
+              DispatchQueue.main.async {
+                self.tableView.reloadData()
+              }
             } catch {
-                print(error.localizedDescription)
-                self.dispatchGroup.leave()
+              print(error.localizedDescription)
             }
+          }
+          task.resume()
         }
-        task.resume()
-    }
-    
+
     func fetchDataAPI() {
-        let searchTerm = "mn"
+        // Define the URL for the API request
         let url = URL(string: "https://developer.nps.gov/api/v1/parks?limit=20&stateCode=\(searchTerm)")!
+        
+        // Create a URLRequest object
         var request = URLRequest(url: url)
         request.addValue("WKsNM1QPZ90IJLcgF7zsufYJQh8nCyACrTtoEABo", forHTTPHeaderField: "x-api-key")
         request.httpMethod = "GET"
         
+        // Create a URLSession data task
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            // Handle any errors
             if let error = error {
                 print(error.localizedDescription)
-                self.dispatchGroup.leave()
                 return
             }
+            // Ensure data is returned from the API
             guard let data = data else {
                 print("No data returned from API.")
-                self.dispatchGroup.leave()
                 return
             }
             do {
+                // Decode the JSON data into a Park object
                 let parkResponse = try JSONDecoder().decode(Park.self, from: data)
+                
+                // Update the parksArray property with the results
                 self.parksArray = parkResponse.data
-                self.dispatchGroup.leave()
+                
+                // Print the results to the console
+                print(parkResponse.data)
+                
+                // Reload the table view on the main thread
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             } catch {
+                // Handle any decoding errors
                 print(error.localizedDescription)
-                self.dispatchGroup.leave()
             }
         }
+        // Start the URLSession data task
         task.resume()
     }
+
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return parksArray.count
@@ -175,13 +202,14 @@ class ViewController: UITableViewController {
     }
     
     
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
        let secondVC = DetailsViewController()
        
        let park = parksArray[indexPath.row]
        let unsplashData = unsplashArray[indexPath.row]
+        
+
 
        self.navigationController?.pushViewController(secondVC, animated: true)
            
@@ -227,7 +255,6 @@ class ViewController: UITableViewController {
              secondVC.trailStateLabel.text = "State not available"
              secondVC.trailZipCodeLabel.text = "Postal code not available"
          }
-
-       }
+    }
 }
 
