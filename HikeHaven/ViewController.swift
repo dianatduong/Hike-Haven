@@ -21,6 +21,7 @@ class ViewController: UITableViewController {
     
     let headerView = UIView()
     
+    let apiManager = APIManager()
     
 
     override func viewDidLoad() {
@@ -28,7 +29,7 @@ class ViewController: UITableViewController {
         
         navigationItem.title = "Hike Haven"
         setUpHeader()
-        
+        apiManager.fetchAllData()
         
     }
 
@@ -41,23 +42,6 @@ class ViewController: UITableViewController {
             headerTitle.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 20)
         ])
     }
-    
-    //fetching API
-    let dispatchGroup = DispatchGroup()
-
-    func fetchAllData() {
-        dispatchGroup.enter()
-        fetchImagesAPI()
-        
-        dispatchGroup.enter()
-        fetchDataAPI()
-        
-        dispatchGroup.notify(queue: .main) {
-            self.tableView.reloadData()
-        }
-    }
-
-   
 
 
 }

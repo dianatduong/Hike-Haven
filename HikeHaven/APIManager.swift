@@ -10,8 +10,8 @@ import Foundation
 
 class APIManager {
     let dispatchGroup = DispatchGroup()
-    var unsplashArray: [UnSplashStruct] = []
-    var parksArray: [Park] = []
+    var unsplashArray: [UnSplashData] = []
+    var parksArray: [ParkData] = []
     
     func fetchAllData() {
         dispatchGroup.enter()
