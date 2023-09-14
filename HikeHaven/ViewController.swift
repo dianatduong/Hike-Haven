@@ -161,6 +161,37 @@ class ViewController: UITableViewController {
          return UITableViewCell()
 
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
+       
+       let secondVC = DetailsViewController()
+       
+       let park = parksArray[indexPath.row]
+       let unsplashData = unsplashArray[indexPath.row]
+
+       self.navigationController?.pushViewController(secondVC, animated: true)
+           
+       //unwrap urls: ImageURLS
+       if let imageURLString = unsplashData.urls.thumb,
+           let imageURL = URL(string: imageURLString) {
+           
+               URLSession.shared.dataTask(with: imageURL) { data, response, error in
+                   if let error = error {
+                       print(error.localizedDescription)
+                       return
+                   }
+                   guard let data = data else {
+                       print("No data returned from image URL.")
+                       return
+                   }
+                   DispatchQueue.main.async {
+                       secondVC.selectedImageView.image = UIImage(data: data)
+                   }
+               }
+               .resume()
+           }
+       
+       }
 }
 
