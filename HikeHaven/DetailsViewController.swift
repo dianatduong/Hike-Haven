@@ -116,11 +116,11 @@ class DetailsViewController: UIViewController {
             trailZipCodeLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
             trailZipCodeLabel.leadingAnchor.constraint(equalTo: trailStateLabel.trailingAnchor),
 
-            trailDescriptionLabel.topAnchor.constraint(equalTo: trailCityLabel.bottomAnchor, constant: 8),
+            trailDescriptionLabel.topAnchor.constraint(equalTo: trailCityLabel.bottomAnchor, constant: 12),
             trailDescriptionLabel.leadingAnchor.constraint(equalTo: trailInfoContainerView.leadingAnchor, constant: 15),
             trailDescriptionLabel.trailingAnchor.constraint(equalTo: trailInfoContainerView.trailingAnchor, constant: -20),
 
-            accordionVC.view.topAnchor.constraint(equalTo: trailDescriptionLabel.bottomAnchor, constant: 15),
+            accordionVC.view.topAnchor.constraint(equalTo: trailDescriptionLabel.bottomAnchor, constant: 25),
             accordionVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             accordionVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             accordionVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
