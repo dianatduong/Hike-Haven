@@ -10,6 +10,8 @@ import UIKit
 
 class ViewController: UITableViewController {
     
+    let headerView = UIView()
+
     lazy var headerTitle: UILabel = {
         let label = UILabel()
         label.text = "Popular Trails"
@@ -18,9 +20,7 @@ class ViewController: UITableViewController {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    let headerView = UIView()
-    
+        
     let dispatchGroup = DispatchGroup()
     var unsplashArray: [UnSplashData] = []
     var parksArray: [ParkData] = []
@@ -134,9 +134,21 @@ class ViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
         if let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? MainTableViewCell {
-
-            //let park = apiManager.parksArray[indexPath.row]
+            
+            let park = parksArray[indexPath.row]
             let unsplashData = unsplashArray[indexPath.row]
+            
+            cell.nameLabel.text = park.fullName
+
+            //unwrap [Addresses]
+            if let addresses = park.addresses, let firstAddress = addresses.first {
+              let address = "\(firstAddress.line1)"
+              let cityState = "\(firstAddress.city), \(firstAddress.stateCode) \(firstAddress.postalCode)"
+              cell.addressLabel.text = address
+              cell.cityLabel.text = cityState
+              cell.stateLabel.text = cityState
+              cell.postCodeLabel.text = cityState
+            }
             
             //unwrap urls: ImageURLS
             if let imageURLString = unsplashData.urls.thumb,
@@ -158,13 +170,14 @@ class ViewController: UITableViewController {
             }
             return cell
         }
-         return UITableViewCell()
-
+        
+        return UITableViewCell()
     }
+    
+    
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
-       
        let secondVC = DetailsViewController()
        
        let park = parksArray[indexPath.row]
@@ -187,11 +200,34 @@ class ViewController: UITableViewController {
                    }
                    DispatchQueue.main.async {
                        secondVC.selectedImageView.image = UIImage(data: data)
+                       secondVC.selectedNameLabel.text = park.fullName
+                       secondVC.trailDescriptionLabel.text = park.description
                    }
                }
                .resume()
            }
-       
+        
+        //unwrap [Addresses]
+        if let addresses = park.addresses, !addresses.isEmpty {
+             if let firstAddress = addresses.first {
+                 let address = "\(firstAddress.line1)"
+                 let city = "\(firstAddress.city), "
+                  let state =  "\(firstAddress.stateCode) "
+                 let postalCode = "\(firstAddress.postalCode)"
+
+                 secondVC.trailAddressLabel.text = address
+                 secondVC.trailCityLabel.text = city
+                 secondVC.trailStateLabel.text = state
+                 secondVC.trailZipCodeLabel.text = postalCode
+             }
+         } else {
+             // Handle the case where park.addresses is nil or empty
+             secondVC.trailAddressLabel.text = "Address not available"
+             secondVC.trailCityLabel.text = "City not available"
+             secondVC.trailStateLabel.text = "State not available"
+             secondVC.trailZipCodeLabel.text = "Postal code not available"
+         }
+
        }
 }
 
