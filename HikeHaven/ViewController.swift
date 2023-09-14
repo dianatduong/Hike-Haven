@@ -38,9 +38,9 @@ class ViewController: UITableViewController {
     func setUpHeader() {
         headerView.addSubview(headerTitle)
         tableView.tableHeaderView = headerView
-        tableView.tableHeaderView?.frame.size.height = 60
+        tableView.tableHeaderView?.frame.size.height = 65
         NSLayoutConstraint.activate([
-            headerTitle.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 12),
+            headerTitle.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 15),
             headerTitle.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 20)
         ])
     }
