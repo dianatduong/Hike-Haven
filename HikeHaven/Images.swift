@@ -20,5 +20,5 @@ import UIKit
     }
 
     struct ImageURLS: Codable {
-        let thumb: String?
+        let full: String?
     }

@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UITableViewController, UISearchBarDelegate {
     
     var searchBar: UISearchBar = UISearchBar()
-    var searchTerm: String = "ca"
+    var searchTerm: String = "MN"
     
     let headerView = UIView()
 
@@ -74,10 +74,7 @@ class ViewController: UITableViewController, UISearchBarDelegate {
     }
     
     func fetchImagesAPI() {
-        
-        //var search = searchTerm + "hiking"
-         
-        let url = URL(string: "https://api.unsplash.com/search/photos?client_id=SwsdyqI6m6t38pMRrT8uCyXd-6-AKdT5Dy8I76IpEtc&count=1&query=\(searchTerm)&per_page=20&orientation=landscape&order_by=popular")!
+        let url = URL(string: "https://api.unsplash.com/search/photos?client_id=SwsdyqI6m6t38pMRrT8uCyXd-6-AKdT5Dy8I76IpEtc&count=1&query=\(searchTerm)+national+parks&per_page=20&orientation=landscape&order_by=popular")!
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -109,7 +106,7 @@ class ViewController: UITableViewController, UISearchBarDelegate {
 
     func fetchDataAPI() {
         // Define the URL for the API request
-        let url = URL(string: "https://developer.nps.gov/api/v1/parks?limit=20&stateCode=\(searchTerm)")!
+        let url = URL(string: "https://developer.nps.gov/api/v1/parks?limit=20&statecode=\(searchTerm)")!
         
         // Create a URLRequest object
         var request = URLRequest(url: url)
@@ -178,7 +175,7 @@ class ViewController: UITableViewController, UISearchBarDelegate {
             }
             
             //unwrap urls: ImageURLS
-            if let imageURLString = unsplashData.urls.thumb,
+            if let imageURLString = unsplashData.urls.full,
                 let imageURL = URL(string: imageURLString) {
                 URLSession.shared.dataTask(with: imageURL) { data, response, error in
                     if let error = error {
@@ -214,7 +211,7 @@ class ViewController: UITableViewController, UISearchBarDelegate {
        self.navigationController?.pushViewController(secondVC, animated: true)
            
        //unwrap urls: ImageURLS
-       if let imageURLString = unsplashData.urls.thumb,
+       if let imageURLString = unsplashData.urls.full,
            let imageURL = URL(string: imageURLString) {
            
                URLSession.shared.dataTask(with: imageURL) { data, response, error in
