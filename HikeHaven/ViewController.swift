@@ -26,12 +26,12 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.title = "Hike Haven"
         setUpHeader()
+        
         
     }
 
- 
-    
     func setUpHeader() {
         headerView.addSubview(headerTitle)
         tableView.tableHeaderView = headerView
@@ -41,6 +41,23 @@ class ViewController: UITableViewController {
             headerTitle.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 20)
         ])
     }
+    
+    //fetching API
+    let dispatchGroup = DispatchGroup()
+
+    func fetchAllData() {
+        dispatchGroup.enter()
+        fetchImagesAPI()
+        
+        dispatchGroup.enter()
+        fetchDataAPI()
+        
+        dispatchGroup.notify(queue: .main) {
+            self.tableView.reloadData()
+        }
+    }
+
+   
 
 
 }
