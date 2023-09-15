@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UITableViewController, UISearchBarDelegate {
     
     var searchBar: UISearchBar = UISearchBar()
-    var searchTerm: String = "MN"
+    var searchTerm: String = "hiking"
     
     let headerView = UIView()
 
@@ -24,11 +24,12 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         return label
     }()
         
-    let dispatchGroup = DispatchGroup()
+  
     var unsplashArray: [UnSplashData] = []
     var parksArray: [ParkData] = []
     
-    
+    let imageCache = NSCache<NSString, UIImage>()
+
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,6 +74,31 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         tableView.separatorStyle = .none
     }
     
+
+    func loadImage(from url: URL, completion: @escaping (UIImage?) -> Void) {
+        if let cachedImage = imageCache.object(forKey: url.absoluteString as NSString) {
+            completion(cachedImage)
+        } else {
+            URLSession.shared.dataTask(with: url) { data, response, error in
+                if let error = error {
+                    print(error.localizedDescription)
+                    completion(nil)
+                }
+                guard let data = data else {
+                    print("No data returned from image URL.")
+                    completion(nil)
+                    return
+                }
+                DispatchQueue.main.async {
+                    if let downloadedImage = UIImage(data: data) {
+                        self.imageCache.setObject(downloadedImage, forKey: url.absoluteString as NSString)
+                        completion(downloadedImage)
+                    }
+                }
+            }.resume()
+        }
+    }
+
     func fetchImagesAPI() {
         let url = URL(string: "https://api.unsplash.com/search/photos?client_id=SwsdyqI6m6t38pMRrT8uCyXd-6-AKdT5Dy8I76IpEtc&count=1&query=\(searchTerm)+national+parks&per_page=20&orientation=landscape&order_by=popular")!
         
@@ -92,7 +118,6 @@ class ViewController: UITableViewController, UISearchBarDelegate {
             do {
               let parkResponse = try JSONDecoder().decode(UnSplashStruct.self, from: data)
                 self.unsplashArray = parkResponse.results
-                //print(parkResponse.results.description)
              
               DispatchQueue.main.async {
                 self.tableView.reloadData()
@@ -102,11 +127,11 @@ class ViewController: UITableViewController, UISearchBarDelegate {
             }
           }
           task.resume()
-        }
+    }
 
     func fetchDataAPI() {
         // Define the URL for the API request
-        let url = URL(string: "https://developer.nps.gov/api/v1/parks?limit=20&statecode=\(searchTerm)")!
+        let url = URL(string: "https://developer.nps.gov/api/v1/parks?limit=20&q=\(searchTerm)")!
         
         // Create a URLRequest object
         var request = URLRequest(url: url)
@@ -175,23 +200,15 @@ class ViewController: UITableViewController, UISearchBarDelegate {
             }
             
             //unwrap urls: ImageURLS
-            if let imageURLString = unsplashData.urls.full,
-                let imageURL = URL(string: imageURLString) {
-                URLSession.shared.dataTask(with: imageURL) { data, response, error in
-                    if let error = error {
-                        print(error.localizedDescription)
-                        return
-                    }
-                    guard let data = data else {
-                        print("No data returned from image URL.")
-                        return
-                    }
-                    DispatchQueue.main.async {
-                        let imageView = cell.mainImageView
-                        imageView.image = UIImage(data: data)
-                    }
-                }.resume()
+            if let imageURLString = unsplashData.urls.regular,
+               let imageURL = URL(string: imageURLString) {
+               loadImage(from: imageURL) { image in
+                   DispatchQueue.main.async {
+                       cell.mainImageView.image = image
+                   }
+               }
             }
+            
             return cell
         }
         
@@ -206,12 +223,10 @@ class ViewController: UITableViewController, UISearchBarDelegate {
        let park = parksArray[indexPath.row]
        let unsplashData = unsplashArray[indexPath.row]
         
-
-
        self.navigationController?.pushViewController(secondVC, animated: true)
            
        //unwrap urls: ImageURLS
-       if let imageURLString = unsplashData.urls.full,
+       if let imageURLString = unsplashData.urls.regular,
            let imageURL = URL(string: imageURLString) {
            
                URLSession.shared.dataTask(with: imageURL) { data, response, error in

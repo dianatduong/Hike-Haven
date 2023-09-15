@@ -52,7 +52,7 @@ class DetailsViewController: UIViewController {
    lazy var backgroundView: UIView = {
          let view = UIView()
          view.layer.shadowColor = UIColor.black.cgColor
-         view.layer.shadowOpacity = 0.8
+         view.layer.shadowOpacity = 0.9
          view.layer.shadowOffset = CGSize(width: 1, height: 1)
          view.layer.shadowRadius = 1
           view.addSubview(selectedNameLabel)
@@ -97,11 +97,11 @@ class DetailsViewController: UIViewController {
             selectedImageView.heightAnchor.constraint(equalToConstant: 270),
 
             backgroundView.topAnchor.constraint(equalTo: selectedImageView.topAnchor, constant: 195),
-                    backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-                    backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-         selectedNameLabel.topAnchor.constraint(equalTo: selectedImageView.topAnchor, constant: 195),
-                             selectedNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
-                             selectedNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            backgroundView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            backgroundView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            selectedNameLabel.topAnchor.constraint(equalTo: selectedImageView.topAnchor, constant: 195),
+            selectedNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            selectedNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
 
             trailInfoContainerView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 5),
             trailInfoContainerView.widthAnchor.constraint(equalToConstant: 420),

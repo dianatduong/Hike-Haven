@@ -18,6 +18,7 @@
 		A37A5B432AB384C8004F9007 /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37A5B422AB384C8004F9007 /* WeatherTableViewCell.swift */; };
 		A37A5B452AB38511004F9007 /* AccordionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37A5B442AB38511004F9007 /* AccordionViewController.swift */; };
 		A37A5B492AB385D9004F9007 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37A5B482AB385D9004F9007 /* WeatherData.swift */; };
+		A37A5B4B2AB3B578004F9007 /* ContactsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37A5B4A2AB3B578004F9007 /* ContactsTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		A37A5B422AB384C8004F9007 /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
 		A37A5B442AB38511004F9007 /* AccordionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccordionViewController.swift; sourceTree = "<group>"; };
 		A37A5B482AB385D9004F9007 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
+		A37A5B4A2AB3B578004F9007 /* ContactsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,7 @@
 				A37A5B382AB2B068004F9007 /* Park.swift */,
 				A37A5B482AB385D9004F9007 /* WeatherData.swift */,
 				A37A5B3A2AB2B13F004F9007 /* Images.swift */,
+				A37A5B4A2AB3B578004F9007 /* ContactsTableViewCell.swift */,
 				A37A5B2B2AB2AA20004F9007 /* Assets.xcassets */,
 				A37A5B302AB2AA20004F9007 /* Info.plist */,
 			);
@@ -151,6 +154,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A37A5B4B2AB3B578004F9007 /* ContactsTableViewCell.swift in Sources */,
 				A37A5B432AB384C8004F9007 /* WeatherTableViewCell.swift in Sources */,
 				A37A5B3B2AB2B13F004F9007 /* Images.swift in Sources */,
 				A37A5B272AB2AA1D004F9007 /* ViewController.swift in Sources */,

@@ -235,10 +235,10 @@ class AccordionViewController: UITableViewController {
                     return cell
                 }
             } else if indexPath.section == 2 { // Contacts section
-                let cell=tableView.dequeueReusableCell(withIdentifier:"cell",for:indexPath)
-                cell.textLabel?.text="contact details"
-                cell.accessoryType = .none
-                return cell
+                  let cell=tableView.dequeueReusableCell(withIdentifier:"cell",for:indexPath)
+                          cell.textLabel?.text="contact details"
+                          cell.accessoryType = .none
+                          return cell
             }
             
             return UITableViewCell() // Default case
@@ -265,3 +265,35 @@ class AccordionViewController: UITableViewController {
     } // End of tableView(_:didSelectRowAt:)
 
 }
+
+
+
+/*
+
+
+if let cell = tableView.dequeueReusableCell(withIdentifier:"cell",for:indexPath) as? ContactsTableViewCell {
+
+        let park = parksArray[indexPath.row]
+    
+        let contactsArray = park.contacts
+        for contact in contactsArray {
+            if let phoneNumbersArray = contact.phoneNumbers {
+                for phoneNumber in phoneNumbersArray {
+                    let number = phoneNumber.phoneNumber
+                    let text = "Phone Number: \(number)"
+                    cell.phoneNumber.text = text
+                }
+            }
+        
+            if let emailAddressesArray = contact.emailAddresses {
+            for emailAddress in emailAddressesArray {
+                let email = emailAddress.emailAddress
+                let text = "Email Address: \(email)"
+                    cell.emailAddress.text = text
+                }
+            }
+
+        }
+        
+}}
+*/
