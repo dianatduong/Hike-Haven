@@ -86,15 +86,13 @@ class MainTableViewCell: UITableViewCell {
             addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 3),
             addressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             addressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            cityLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 1.5),
+            cityLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 2),
             cityLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            cityLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            stateLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 1.5),
-            stateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            stateLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            postCodeLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 1.5),
-            postCodeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            postCodeLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+            stateLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 2),
+            stateLabel.leadingAnchor.constraint(equalTo: cityLabel.trailingAnchor),
+            postCodeLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 2),
+            postCodeLabel.leadingAnchor.constraint(equalTo: stateLabel.trailingAnchor)
+            
         ])
     }
 

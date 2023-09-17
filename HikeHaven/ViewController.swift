@@ -196,11 +196,13 @@ class ViewController: UITableViewController, UISearchBarDelegate {
             //unwrap [Addresses]
             if let addresses = park.addresses, let firstAddress = addresses.first {
               let address = "\(firstAddress.line1)"
-              let cityState = "\(firstAddress.city), \(firstAddress.stateCode) \(firstAddress.postalCode)"
-              cell.addressLabel.text = address
-              cell.cityLabel.text = cityState
-              cell.stateLabel.text = cityState
-              cell.postCodeLabel.text = cityState
+              let city = "\(firstAddress.city), "
+               let state =  "\(firstAddress.stateCode) "
+              let postalCode = "\(firstAddress.postalCode)"
+                  cell.addressLabel.text = address
+                  cell.cityLabel.text = city
+                  cell.stateLabel.text = state
+                  cell.postCodeLabel.text = postalCode
             }
             
             //unwrap urls: ImageURLS
