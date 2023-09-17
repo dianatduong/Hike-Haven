@@ -222,27 +222,37 @@ class ViewController: UITableViewController, UISearchBarDelegate {
     }
     
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-       let secondVC = DetailsViewController()
-       let park = parksArray[indexPath.row]
-       let unsplashData = unsplashArray[indexPath.row]
-       
-       // Pass the park data to DetailsViewController
-       secondVC.selectedPark = park
-       secondVC.selectedUnsplashData = unsplashData
-       
-       self.navigationController?.pushViewController(secondVC, animated: true)
-        
+  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let park = parksArray[indexPath.row]
+        let unsplashData = unsplashArray[indexPath.row]
+
+        // Create instances of both view controllers
+        let detailsVC = DetailsViewController()
         let accordionVC = AccordionViewController()
-         
-         // Pass the data to AccordionViewController
-         accordionVC.parksArray = parksArray
-         accordionVC.weatherArray = weatherArray
-         
-         secondVC.accordionVC = accordionVC
-         
-        
+
+        // Pass data to DetailsViewController
+        detailsVC.selectedPark = park
+        detailsVC.selectedUnsplashData = unsplashData
+
+        // Pass park hours data to AccordionViewController
+        if let operationHours = park.operatingHours,
+           let firstOperatingHours = operationHours.first,
+           let standardHours = firstOperatingHours.standardHours {
+            let sundayHours = standardHours.sunday
+            let mondayHours = standardHours.monday
+            // ... (other days)
+            
+            let text = "\nSunday: \(sundayHours) \nMonday: \(mondayHours) \n..."
+            accordionVC.parkHours = text
+            
+        }
+    
+    
+
+        // Add the AccordionViewController as a child view controller of DetailsViewController
+        detailsVC.addChild(accordionVC)
+
+        // Push the DetailsViewController onto the navigation stack
+        navigationController?.pushViewController(detailsVC, animated: true)
     }
 }
-

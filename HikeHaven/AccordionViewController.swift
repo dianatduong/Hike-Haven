@@ -15,14 +15,20 @@ class AccordionViewController: UITableViewController {
     var sections: [String] = ["Hours", "Weather", "Contacts"]
     var collapsed: [Bool] = [true, true, true]
 
+    //passed data from VC
+    var parkHours: String?
+    
     var parksArray: [ParkData] = []
     var weatherArray: [Periods] = []
             
     
     override func viewDidLoad() {
     super.viewDidLoad()
+        
+        view.backgroundColor = .clear
         configureTableView()
         fetchWeatherAPI()
+
     }
         
     func configureTableView() {
@@ -78,25 +84,21 @@ class AccordionViewController: UITableViewController {
          task.resume()
      }
            
-        
-   override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-       // Set the height of the row based on its section
-       if indexPath.section == 0 && indexPath.row == 1 {
-           return 200 // Hours content section
-       } else if indexPath.section == 1 && indexPath.row == 1 {
-           return 180 // Weather content section
-       } else {
-           return 55 // All others
-       }
-   }
+  override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+         // Set the height of the row based on its section
+         if indexPath.section == 0 && indexPath.row == 1 {
+             return 200 // Hours content section
+         } else if indexPath.section == 1 && indexPath.row == 1 {
+             return 180 // Weather content section
+         } else {
+             return 55 // All others
+         }
+     }
+ 
 
    override func numberOfSections(in tableView: UITableView) -> Int {
-       // Set the number of sections based on the table view tag
-       if tableView.tag == 0 || tableView.tag == 1 {
-           return parksArray.count
-       } else {
-           return sections.count
-       }
+    //sections.count
+    return 3
    }
 
    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -122,34 +124,19 @@ class AccordionViewController: UITableViewController {
             cell.layer.borderColor = UIColor.white.cgColor
             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 18.0)
             return cell
-        } else { // Second row of each section
-            if indexPath.section == 0 { // Hours section
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-                for park in parksArray {
-                    // Unwrap OperatingHours [StandardHours]
-                    if let operationHours = park.operatingHours,
-                       let firstOperatingHours = operationHours.first,
-                       let standardHours = firstOperatingHours.standardHours {
-                        // Access the properties of the StandardHours object
-                        let sundayHours = standardHours.sunday
-                        let mondayHours = standardHours.monday
-                        let tuesdayHours = standardHours.tuesday
-                        let wednesdayHours = standardHours.wednesday
-                        let thursdayHours = standardHours.thursday
-                        let fridayHours = standardHours.friday
-                        let saturdayHours = standardHours.saturday
+        }
+        
+        
+        // Second row of each section
+            if indexPath.section == 0  { // Hours section
+               let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
 
-                        let text = "\nSunday: \(sundayHours) \nMonday: \(mondayHours) \nTuesday: \(tuesdayHours) \nWednesday: \(wednesdayHours) \nThursday: \(thursdayHours) \nFriday: \(fridayHours) \nSaturday: \(saturdayHours)\n\n"
                         
-                        cell.textLabel?.text = text
-                        cell.accessoryType = .none
-                        cell.textLabel?.numberOfLines = 0 // Allow multiple lines
-                        cell.textLabel?.lineBreakMode = .byWordWrapping // Wrap text at word boundaries
-                        
-                        return cell
-                    }
-                }
-            }
+                        cell.textLabel?.text = parkHours
+                
+              
+    
+                
         }
     
          if indexPath.section == 1 { // Weather section

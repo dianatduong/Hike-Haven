@@ -11,6 +11,7 @@
 import UIKit
 
 class DetailsViewController: UIViewController {
+    
     let vc = ViewController()
     var accordionVC = AccordionViewController()
     
@@ -34,7 +35,7 @@ class DetailsViewController: UIViewController {
         view.backgroundColor = .white
         navigationItem.largeTitleDisplayMode = .never
         title = "Trail"
-    
+        
         setUpUI()
         getData()
     }
@@ -111,9 +112,10 @@ class DetailsViewController: UIViewController {
         view.addSubview(trailInfoContainerView)
         view.addSubview(selectedImageView)
         selectedImageView.addSubview(textShadowLayer)
+        textShadowLayer.addSubview(selectedNameLabel)
         view.addSubview(trailInfoContainerView)
         view.addSubview(accordionVC.view)
-        
+
         setUpConstraints()
     }
     
@@ -150,9 +152,11 @@ class DetailsViewController: UIViewController {
             textShadowLayer.topAnchor.constraint(equalTo: selectedImageView.topAnchor, constant: 195),
             textShadowLayer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             textShadowLayer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            
             selectedNameLabel.topAnchor.constraint(equalTo: selectedImageView.topAnchor, constant: 195),
             selectedNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             selectedNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
+            
             
             trailInfoContainerView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 5),
             trailInfoContainerView.widthAnchor.constraint(equalToConstant: 420),
