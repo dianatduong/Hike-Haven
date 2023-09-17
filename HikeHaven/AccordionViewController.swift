@@ -15,7 +15,7 @@ class AccordionViewController: UITableViewController {
 
     var parksArray: [ParkData] = []
     var weatherArray: [Periods] = []
-        
+            
     
     override func viewDidLoad() {
     super.viewDidLoad()
@@ -32,7 +32,9 @@ class AccordionViewController: UITableViewController {
         tableView.delegate = self
         tableView.separatorStyle = .none
     }
-        
+    
+    
+    
     func fetchDataAPI() {
         let searchTerm = "ca"
         // Define the URL for the API request

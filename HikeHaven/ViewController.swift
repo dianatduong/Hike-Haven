@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import MapKit
+
 
 class ViewController: UITableViewController, UISearchBarDelegate {
     
@@ -24,12 +26,13 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         return label
     }()
         
-  
     var unsplashArray: [UnSplashData] = []
     var parksArray: [ParkData] = []
+    var weatherArray: [Periods] = []
+
     
     let imageCache = NSCache<NSString, UIImage>()
-
+   
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +42,7 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         configureTableView()
         fetchDataAPI()
         fetchImagesAPI()
+
     }
     
     func configureSearchBar() {
@@ -217,13 +221,20 @@ class ViewController: UITableViewController, UISearchBarDelegate {
     
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-       let secondVC = DetailsViewController()
-       
-       let park = parksArray[indexPath.row]
-       let unsplashData = unsplashArray[indexPath.row]
         
-       self.navigationController?.pushViewController(secondVC, animated: true)
+        let secondVC = DetailsViewController()
+         let accordionVC = AccordionViewController()
+         
+         let park = parksArray[indexPath.row]
+         let unsplashData = unsplashArray[indexPath.row]
+         
+         // Pass the data to AccordionViewController
+         accordionVC.parksArray = parksArray
+         accordionVC.weatherArray = weatherArray
+         
+         secondVC.accordionVC = accordionVC
+         
+         self.navigationController?.pushViewController(secondVC, animated: true)
            
        //unwrap urls: ImageURLS
        if let imageURLString = unsplashData.urls.regular,

@@ -10,8 +10,7 @@ import UIKit
 
 class DetailsViewController: UIViewController {
     
-    let accordionVC = AccordionViewController()
-
+    var accordionVC = AccordionViewController()
     var selectedImageView: UIImageView!
     
     lazy var selectedNameLabel: UILabel = {
