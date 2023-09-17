@@ -64,7 +64,7 @@ class DetailsViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         navigationItem.largeTitleDisplayMode = .never
-        title = "Trails"
+        title = "Trail"
         
         selectedImageView = UIImageView()
         selectedNameLabel.text = name
