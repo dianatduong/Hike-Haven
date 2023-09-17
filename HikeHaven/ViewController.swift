@@ -222,7 +222,7 @@ class ViewController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let secondVC = DetailsViewController()
+         let secondVC = DetailsViewController()
          let accordionVC = AccordionViewController()
          
          let park = parksArray[indexPath.row]
@@ -236,27 +236,17 @@ class ViewController: UITableViewController, UISearchBarDelegate {
          
          self.navigationController?.pushViewController(secondVC, animated: true)
            
-       //unwrap urls: ImageURLS
-       if let imageURLString = unsplashData.urls.regular,
-           let imageURL = URL(string: imageURLString) {
-           
-               URLSession.shared.dataTask(with: imageURL) { data, response, error in
-                   if let error = error {
-                       print(error.localizedDescription)
-                       return
-                   }
-                   guard let data = data else {
-                       print("No data returned from image URL.")
-                       return
-                   }
-                   DispatchQueue.main.async {
-                       secondVC.selectedImageView.image = UIImage(data: data)
-                       secondVC.selectedNameLabel.text = park.fullName
-                       secondVC.trailDescriptionLabel.text = park.description
-                   }
-               }
-               .resume()
-           }
+           //unwrap urls: ImageURLS
+            if let imageURLString = unsplashData.urls.regular,
+                let imageURL = URL(string: imageURLString) {
+                    loadImage(from: imageURL) { image in
+                        DispatchQueue.main.async {
+                           secondVC.selectedImageView.image = image
+                           secondVC.selectedNameLabel.text = park.fullName
+                           secondVC.trailDescriptionLabel.text = park.description
+                        }
+                    }
+                }
         
         //unwrap [Addresses]
         if let addresses = park.addresses, !addresses.isEmpty {
