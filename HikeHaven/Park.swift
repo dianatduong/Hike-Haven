@@ -18,7 +18,6 @@ import UIKit
             let description: String?
             let operatingHours: [OperatingHours]?
             let parkCode: String?
-            //let contacts: [Contact]?
             // let directionsInfo: String?
             //  let weatherInfo: String?
         }
@@ -55,23 +54,24 @@ import UIKit
                 // let exceptionHours: [ExceptionHours]
             }
 
-        struct Contact: Codable {
-            let phoneNumbers: [PhoneNumber]?
-            let emailAddresses: [EmailAddress]?
-        }
-
-        struct EmailAddress: Codable {
-            let emailAddress: String?
-        }
-
-        struct PhoneNumber: Codable {
-            let phoneNumber: String?
-        }
-       
-
+     
 
 
     /*
+ 
+ struct Contact: Codable {
+          let phoneNumbers: [PhoneNumber]?
+          let emailAddresses: [EmailAddress]?
+      }
+
+      struct EmailAddress: Codable {
+          let emailAddress: String?
+      }
+
+      struct PhoneNumber: Codable {
+          let phoneNumber: String?
+      }
+     
      
      struct ExceptionHours: Codable {
          let sunday: String

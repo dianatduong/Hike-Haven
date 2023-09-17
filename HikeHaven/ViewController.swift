@@ -224,11 +224,17 @@ class ViewController: UITableViewController, UISearchBarDelegate {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-         let secondVC = DetailsViewController()
-         let accordionVC = AccordionViewController()
-         
-         let park = parksArray[indexPath.row]
-         let unsplashData = unsplashArray[indexPath.row]
+       let secondVC = DetailsViewController()
+       let park = parksArray[indexPath.row]
+       let unsplashData = unsplashArray[indexPath.row]
+       
+       // Pass the park data to DetailsViewController
+       secondVC.selectedPark = park
+       secondVC.selectedUnsplashData = unsplashData
+       
+       self.navigationController?.pushViewController(secondVC, animated: true)
+        
+        let accordionVC = AccordionViewController()
          
          // Pass the data to AccordionViewController
          accordionVC.parksArray = parksArray
@@ -236,40 +242,7 @@ class ViewController: UITableViewController, UISearchBarDelegate {
          
          secondVC.accordionVC = accordionVC
          
-         self.navigationController?.pushViewController(secondVC, animated: true)
-           
-           //unwrap urls: ImageURLS
-            if let imageURLString = unsplashData.urls.regular,
-                let imageURL = URL(string: imageURLString) {
-                    loadImage(from: imageURL) { image in
-                        DispatchQueue.main.async {
-                           secondVC.selectedImageView.image = image
-                           secondVC.selectedNameLabel.text = park.fullName
-                           secondVC.trailDescriptionLabel.text = park.description
-                        }
-                    }
-                }
         
-        //unwrap [Addresses]
-        if let addresses = park.addresses, !addresses.isEmpty {
-             if let firstAddress = addresses.first {
-                 let address = "\(firstAddress.line1)"
-                 let city = "\(firstAddress.city), "
-                  let state =  "\(firstAddress.stateCode) "
-                 let postalCode = "\(firstAddress.postalCode)"
-
-                 secondVC.trailAddressLabel.text = address
-                 secondVC.trailCityLabel.text = city
-                 secondVC.trailStateLabel.text = state
-                 secondVC.trailZipCodeLabel.text = postalCode
-             }
-         } else {
-             // Handle the case where park.addresses is nil or empty
-             secondVC.trailAddressLabel.text = "Address not available"
-             secondVC.trailCityLabel.text = "City not available"
-             secondVC.trailStateLabel.text = "State not available"
-             secondVC.trailZipCodeLabel.text = "Postal code not available"
-         }
     }
 }
 
