@@ -1,5 +1,4 @@
 
-
 //
 //  AccordionViewController.swift
 //  HikeHaven
@@ -15,20 +14,15 @@ class AccordionViewController: UITableViewController {
     var sections: [String] = ["Hours", "Weather", "Contacts"]
     var collapsed: [Bool] = [true, true, true]
 
-    //passed data from VC
-    var parkHours: String?
-    
     var parksArray: [ParkData] = []
     var weatherArray: [Periods] = []
             
     
     override func viewDidLoad() {
     super.viewDidLoad()
-        
-        view.backgroundColor = .clear
         configureTableView()
+        fetchDataAPI()
         fetchWeatherAPI()
-
     }
         
     func configureTableView() {
@@ -39,7 +33,48 @@ class AccordionViewController: UITableViewController {
         tableView.delegate = self
         tableView.separatorStyle = .none
     }
-    
+        
+    func fetchDataAPI() {
+        let searchTerm = "ca"
+        // Define the URL for the API request
+        let url = URL(string: "https://developer.nps.gov/api/v1/parks?limit=20&stateCode=\(searchTerm)")!
+        
+        // Create a URLRequest object
+        var request = URLRequest(url: url)
+        request.addValue("WKsNM1QPZ90IJLcgF7zsufYJQh8nCyACrTtoEABo", forHTTPHeaderField: "x-api-key")
+        request.httpMethod = "GET"
+        
+        // Create a URLSession data task
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            // Handle any errors
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            // Ensure data is returned from the API
+            guard let data = data else {
+                print("No data returned from API.")
+                return
+            }
+            do {
+                // Decode the JSON data into a Park object
+                let parkResponse = try JSONDecoder().decode(Park.self, from: data)
+                // Update the parksArray property with the results
+                self.parksArray = parkResponse.data
+                // Print the results to the console
+                print(parkResponse.data)
+                // Reload the table view on the main thread
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            } catch {
+                // Handle any decoding errors
+                print(error.localizedDescription)
+            }
+        }
+        // Start the URLSession data task
+        task.resume()
+    }
 
      func fetchWeatherAPI() {
          // Define the URL for the API request
@@ -84,21 +119,20 @@ class AccordionViewController: UITableViewController {
          task.resume()
      }
            
-  override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-         // Set the height of the row based on its section
-         if indexPath.section == 0 && indexPath.row == 1 {
-             return 200 // Hours content section
-         } else if indexPath.section == 1 && indexPath.row == 1 {
-             return 180 // Weather content section
-         } else {
-             return 55 // All others
-         }
-     }
- 
+        
+   override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+       // Set the height of the row based on its section
+       if indexPath.section == 0 && indexPath.row == 1 {
+           return 200 // Hours content section
+       } else if indexPath.section == 1 && indexPath.row == 1 {
+           return 180 // Weather content section
+       } else {
+           return 55 // All others
+       }
+   }
 
    override func numberOfSections(in tableView: UITableView) -> Int {
-    //sections.count
-    return 3
+    return sections.count
    }
 
    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -124,19 +158,35 @@ class AccordionViewController: UITableViewController {
             cell.layer.borderColor = UIColor.white.cgColor
             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 18.0)
             return cell
-        }
-        
-        
-        // Second row of each section
-            if indexPath.section == 0  { // Hours section
-               let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        } else { // Second row of each section
+            if indexPath.section == 0 { // Hours section
+                
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+                for park in parksArray {
+                    // Unwrap OperatingHours [StandardHours]
+                    if let operationHours = park.operatingHours,
+                       let firstOperatingHours = operationHours.first,
+                       let standardHours = firstOperatingHours.standardHours {
+                        // Access the properties of the StandardHours object
+                        let sundayHours = standardHours.sunday
+                        let mondayHours = standardHours.monday
+                        let tuesdayHours = standardHours.tuesday
+                        let wednesdayHours = standardHours.wednesday
+                        let thursdayHours = standardHours.thursday
+                        let fridayHours = standardHours.friday
+                        let saturdayHours = standardHours.saturday
 
+                        let text = "\nSunday: \(sundayHours) \nMonday: \(mondayHours) \nTuesday: \(tuesdayHours) \nWednesday: \(wednesdayHours) \nThursday: \(thursdayHours) \nFriday: \(fridayHours) \nSaturday: \(saturdayHours)\n\n"
                         
-                        cell.textLabel?.text = parkHours
-                
-              
-    
-                
+                        cell.textLabel?.text = text
+                        cell.accessoryType = .none
+                        cell.textLabel?.numberOfLines = 0 // Allow multiple lines
+                        cell.textLabel?.lineBreakMode = .byWordWrapping // Wrap text at word boundaries
+                        
+                        return cell
+                    }
+                }
+            }
         }
     
          if indexPath.section == 1 { // Weather section

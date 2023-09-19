@@ -37,7 +37,7 @@ class ViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureSearchBar()
-        navigationItem.title = "Hike Haven"
+       // navigationItem.title = "Hike Haven"
         setUpHeader()
         configureTableView()
         fetchDataAPI()
@@ -162,7 +162,7 @@ class ViewController: UITableViewController, UISearchBarDelegate {
                 self.parksArray = parkResponse.data
                 
                 // Print the results to the console
-                print(parkResponse.data)
+                //print(parkResponse.data)
                 
                 // Reload the table view on the main thread
                 DispatchQueue.main.async {
@@ -229,26 +229,12 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         // Create instances of both view controllers
         let detailsVC = DetailsViewController()
         let accordionVC = AccordionViewController()
+    
 
         // Pass data to DetailsViewController
         detailsVC.selectedPark = park
-        detailsVC.selectedUnsplashData = unsplashData
-
-        // Pass park hours data to AccordionViewController
-        if let operationHours = park.operatingHours,
-           let firstOperatingHours = operationHours.first,
-           let standardHours = firstOperatingHours.standardHours {
-            let sundayHours = standardHours.sunday
-            let mondayHours = standardHours.monday
-            // ... (other days)
-            
-            let text = "\nSunday: \(sundayHours) \nMonday: \(mondayHours) \n..."
-            accordionVC.parkHours = text
-            
-        }
-    
-    
-
+        detailsVC.selectedUnsplashData = unsplashData      
+  
         // Add the AccordionViewController as a child view controller of DetailsViewController
         detailsVC.addChild(accordionVC)
 

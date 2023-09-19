@@ -16,9 +16,9 @@ class DetailsViewController: UIViewController {
     var accordionVC = AccordionViewController()
     
     //passed data from VC
-    var selectedPark: ParkData?
+    var selectedPark: ParkData?   //property to hold the selected park
     var selectedUnsplashData: UnSplashData?
-    
+        
     //UI Elements
     var selectedImageView: UIImageView!
     var selectedNameLabel: UILabel!
@@ -33,8 +33,8 @@ class DetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        navigationItem.largeTitleDisplayMode = .never
-        title = "Trail"
+       // navigationItem.largeTitleDisplayMode = .never
+       // title = "Trail"
         
         setUpUI()
         getData()
@@ -97,11 +97,11 @@ class DetailsViewController: UIViewController {
         
         //trailInfoContainer holds the address and description
         trailInfoContainerView = UIView()
-        trailAddressLabel = createLabel(font: UIFont.systemFont(ofSize: 16, weight: .semibold))
-        trailCityLabel = createLabel(font: UIFont.systemFont(ofSize: 16, weight: .semibold))
-        trailStateLabel = createLabel(font: UIFont.systemFont(ofSize: 16, weight: .semibold))
-        trailZipCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 16, weight: .semibold))
-        trailDescriptionLabel = createLabel(font: UIFont.systemFont(ofSize: 16))
+        trailAddressLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
+        trailCityLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
+        trailStateLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
+        trailZipCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
+        trailDescriptionLabel = createLabel(font: UIFont.systemFont(ofSize: 16.5))
         
         trailInfoContainerView.addSubview(trailAddressLabel)
         trailInfoContainerView.addSubview(trailCityLabel)

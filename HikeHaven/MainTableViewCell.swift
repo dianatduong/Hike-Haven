@@ -37,10 +37,10 @@ class MainTableViewCell: UITableViewCell {
     }
 
     var nameLabel = createLabel(font: UIFont.boldSystemFont(ofSize: 16.5))
-    var addressLabel = createLabel(font: UIFont.systemFont(ofSize: 15))
-    var cityLabel = createLabel(font: UIFont.systemFont(ofSize: 15))
-    var stateLabel = createLabel(font: UIFont.systemFont(ofSize: 15))
-    var postCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 15))
+    var addressLabel = createLabel(font: UIFont.systemFont(ofSize: 16))
+    var cityLabel = createLabel(font: UIFont.systemFont(ofSize: 16))
+    var stateLabel = createLabel(font: UIFont.systemFont(ofSize: 16))
+    var postCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 16))
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
       super.init(style: style, reuseIdentifier: reuseIdentifier)
