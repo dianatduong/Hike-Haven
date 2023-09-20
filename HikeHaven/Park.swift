@@ -54,8 +54,6 @@ import UIKit
                 // let exceptionHours: [ExceptionHours]
             }
 
-     
-
 
     /*
  

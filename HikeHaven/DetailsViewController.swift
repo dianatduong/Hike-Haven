@@ -13,11 +13,19 @@ import UIKit
 class DetailsViewController: UIViewController {
     
     let vc = ViewController()
-    var accordionVC = AccordionViewController()
+   // var accordionVC = AccordionViewController()
+    var accordionData: [OperatingHours] = []
+    var weatherArray: [Periods] = []
+    var parksArray: [ParkData] = []
+    
+    var sections: [String] = ["Hours", "Weather", "Contacts", "History"]
+    var collapsed: [Bool] = [true, true, true, true]
     
     //passed data from VC
     var selectedPark: ParkData?   //property to hold the selected park
     var selectedUnsplashData: UnSplashData?
+    var selectedWeatherData: Periods?
+
         
     //UI Elements
     var selectedImageView: UIImageView!
@@ -29,7 +37,10 @@ class DetailsViewController: UIViewController {
     var trailStateLabel: UILabel!
     var trailZipCodeLabel: UILabel!
     var trailDescriptionLabel: UILabel!
+    var trailHoursLabel: UILabel!
     
+   
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -38,15 +49,18 @@ class DetailsViewController: UIViewController {
         
         setUpUI()
         getData()
+        setUpAccordionTableView()
     }
     
     
+    
+
     //used to populate the UI elements with data received from ViewController
     func getData() {
         // Update labels with the park data
         if let park = selectedPark, let unsplashData = selectedUnsplashData {
             selectedNameLabel.text = park.fullName
-            trailDescriptionLabel.text = park.description
+            //trailDescriptionLabel.text = park.description
             
             // Load and display the image via loadImage function from vc
             if let imageURLString = unsplashData.urls.regular,
@@ -79,8 +93,8 @@ class DetailsViewController: UIViewController {
             trailStateLabel.text = "State not available"
             trailZipCodeLabel.text = "Postal code not available"
         }
-        
     }
+
     
     //set up the user interface elements
     func setUpUI() {
@@ -101,20 +115,20 @@ class DetailsViewController: UIViewController {
         trailCityLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
         trailStateLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
         trailZipCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
-        trailDescriptionLabel = createLabel(font: UIFont.systemFont(ofSize: 16.5))
-        
+        //trailDescriptionLabel = createLabel(font: UIFont.systemFont(ofSize: 16.5))
+        trailHoursLabel = createLabel(font: UIFont.systemFont(ofSize: 16.5))
+
         trailInfoContainerView.addSubview(trailAddressLabel)
         trailInfoContainerView.addSubview(trailCityLabel)
         trailInfoContainerView.addSubview(trailStateLabel)
         trailInfoContainerView.addSubview(trailZipCodeLabel)
-        trailInfoContainerView.addSubview(trailDescriptionLabel)
+        //trailInfoContainerView.addSubview(trailDescriptionLabel)
         
         view.addSubview(trailInfoContainerView)
         view.addSubview(selectedImageView)
         selectedImageView.addSubview(textShadowLayer)
         textShadowLayer.addSubview(selectedNameLabel)
         view.addSubview(trailInfoContainerView)
-        view.addSubview(accordionVC.view)
 
         setUpConstraints()
     }
@@ -140,8 +154,8 @@ class DetailsViewController: UIViewController {
         trailCityLabel.translatesAutoresizingMaskIntoConstraints = false
         trailStateLabel.translatesAutoresizingMaskIntoConstraints = false
         trailZipCodeLabel.translatesAutoresizingMaskIntoConstraints = false
-        trailDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        accordionVC.view.translatesAutoresizingMaskIntoConstraints = false
+        //trailDescriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+       // accordionVC.view.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             selectedImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -169,16 +183,191 @@ class DetailsViewController: UIViewController {
             trailStateLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
             trailStateLabel.leadingAnchor.constraint(equalTo: trailCityLabel.trailingAnchor),
             trailZipCodeLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
-            trailZipCodeLabel.leadingAnchor.constraint(equalTo: trailStateLabel.trailingAnchor),
+            trailZipCodeLabel.leadingAnchor.constraint(equalTo: trailStateLabel.trailingAnchor)
             
-            trailDescriptionLabel.topAnchor.constraint(equalTo: trailCityLabel.bottomAnchor, constant: 12),
+           /* trailDescriptionLabel.topAnchor.constraint(equalTo: trailCityLabel.bottomAnchor, constant: 12),
             trailDescriptionLabel.leadingAnchor.constraint(equalTo: trailInfoContainerView.leadingAnchor, constant: 15),
-            trailDescriptionLabel.trailingAnchor.constraint(equalTo: trailInfoContainerView.trailingAnchor, constant: -20),
-            
-            accordionVC.view.topAnchor.constraint(equalTo: trailDescriptionLabel.bottomAnchor, constant: 25),
-            accordionVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            accordionVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            accordionVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            trailDescriptionLabel.trailingAnchor.constraint(equalTo: trailInfoContainerView.trailingAnchor, constant: -20)*/
         ])
     }
+    
+    func setUpAccordionTableView() {
+          //UITableView for the accordion-style view
+          let accordionTableView = UITableView()
+          accordionTableView.translatesAutoresizingMaskIntoConstraints = false
+          accordionTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+          accordionTableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "weatherCell")
+
+          accordionTableView.dataSource = self
+          accordionTableView.delegate = self
+        //accordionTableView.separatorStyle = .none
+
+
+          view.addSubview(accordionTableView)
+          accordionTableView.addSubview(trailHoursLabel)
+
+
+          NSLayoutConstraint.activate([
+              accordionTableView.topAnchor.constraint(equalTo: trailCityLabel.bottomAnchor, constant: 25),
+              accordionTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+              accordionTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+              accordionTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+              
+              trailHoursLabel.topAnchor.constraint(equalTo: accordionTableView.topAnchor, constant: 25),
+               trailHoursLabel.leadingAnchor.constraint(equalTo: accordionTableView.leadingAnchor),
+               trailHoursLabel.trailingAnchor.constraint(equalTo: accordionTableView.trailingAnchor)
+          ])
+      }
+    
+    
 }
+    extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
+        
+        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+            // Set the height of the row based on its section
+            
+            // HOURS SECTION
+            if indexPath.section == 0 && indexPath.row == 1 {
+                return 200
+            }
+             // WEATHER SECTION
+            else if indexPath.section == 1 && indexPath.row == 1 {
+                return 180
+            }
+            
+            // CONTACT SECTION
+            else if indexPath.section == 2 && indexPath.row == 1 {
+                return 55
+            }
+                
+            // HISTORY SECTION
+              else if indexPath.section == 3 && indexPath.row == 1 {
+                return 250
+            }
+            return 55 // All others
+
+        }
+        
+        func numberOfSections(in tableView: UITableView) -> Int {
+            return sections.count
+        }
+        
+        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+            // Check if the section index is less than the count of the 'collapsed' array
+            if section < collapsed.count {
+                // If it is, return 1 or 2 based on the boolean value at that index in the 'collapsed' array
+                // If the section is collapsed (true), return 1 row. If not collapsed (false), return 2 rows.
+                return collapsed[section] ? 1 : 2
+            } else {
+                // If the section index is not less than the count of the 'collapsed' array, return 0
+                // This could be a default value or an error handling case
+                return 0
+            }
+        }
+        
+        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+            let sectionName = sections[indexPath.section]
+            let lightGray = UIColor(white: 0.9, alpha: 1.0)
+            
+            // Configure the cell based on its row and section
+            if indexPath.row == 0 { // First row of the section
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+                
+                cell.textLabel?.text = sectionName
+                cell.accessoryType = .disclosureIndicator
+                cell.backgroundColor = lightGray
+                cell.layer.borderWidth = 3.0 // The width of the border
+                cell.layer.borderColor = UIColor.white.cgColor
+                cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 18.0)
+                return cell
+                
+            //HOURS SECTION
+            } else if indexPath.section == 0 && indexPath.row == 1 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+                
+                
+                   if let park = selectedPark {
+                       // Unwrap OperatingHours [StandardHours]
+                       if let operationHours = park.operatingHours,
+                          let firstOperatingHours = operationHours.first,
+                          let standardHours = firstOperatingHours.standardHours {
+                           // Access the properties of the StandardHours object
+                           let sundayHours = standardHours.sunday
+                           let mondayHours = standardHours.monday
+                           let tuesdayHours = standardHours.tuesday
+                           let wednesdayHours = standardHours.wednesday
+                           let thursdayHours = standardHours.thursday
+                           let fridayHours = standardHours.friday
+                           let saturdayHours = standardHours.saturday
+
+                           let text = "\nSunday: \(sundayHours) \nMonday: \(mondayHours) \nTuesday: \(tuesdayHours) \nWednesday: \(wednesdayHours) \nThursday: \(thursdayHours) \nFriday: \(fridayHours) \nSaturday: \(saturdayHours)\n\n"
+                           
+                           cell.textLabel?.text = text
+                           cell.accessoryType = .none
+                           cell.textLabel?.numberOfLines = 0 // Allow multiple lines
+                           cell.textLabel?.lineBreakMode = .byWordWrapping // Wrap text at word boundaries
+                           
+                           return cell
+                       }
+                   }
+                
+                
+            //WEATHER SECTION
+            } else if indexPath.section == 0 && indexPath.row == 1 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+                    
+                    return cell
+                
+                
+            //CONTACTS SECTION
+            } else if indexPath.section == 0 && indexPath.row == 1 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+                
+                return cell
+                
+                
+            //HISTORY SECTION
+            } else if indexPath.section == 3 && indexPath.row == 1 {
+               let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+
+                
+                if let park = selectedPark {
+                    cell.textLabel?.text = park.description
+                    cell.accessoryType = .none
+                   cell.textLabel?.numberOfLines = 0
+                   cell.textLabel?.lineBreakMode = .byWordWrapping
+                   return cell
+                }
+                 
+            }
+            return UITableViewCell()
+        }
+        
+        func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+            // Check if the first row of a section is selected
+            if indexPath.row == 0 {
+                // Toggle the collapsed state for this section
+                collapsed[indexPath.section] = !collapsed[indexPath.section]
+
+                // Check the new collapsed state for this section
+                if collapsed[indexPath.section] {
+                    // If the section is now collapsed, delete the second row of this section
+                    tableView.deleteRows(at: [IndexPath(row: 1, section: indexPath.section)], with: .automatic)
+                } else {
+                    // If the section is now expanded, insert the second row of this section
+                    tableView.insertRows(at: [IndexPath(row: 1, section: indexPath.section)], with: .automatic)
+                }
+
+                // Deselect the row that was just selected
+                tableView.deselectRow(at: indexPath, animated: true)
+            }
+        } // End of tableView(_:didSelectRowAt:)
+    }
+
+   
+           /*
+           accordionVC.view.topAnchor.constraint(equalTo: trailDescriptionLabel.bottomAnchor, constant: 25),
+           accordionVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+           accordionVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+           accordionVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            */

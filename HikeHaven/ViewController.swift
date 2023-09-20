@@ -42,6 +42,7 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         configureTableView()
         fetchDataAPI()
         fetchImagesAPI()
+        fetchWeatherAPI()
 
     }
     
@@ -58,6 +59,7 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         searchTerm = searchText
         fetchDataAPI()
         fetchImagesAPI()
+        fetchWeatherAPI()
     }
 
     func setUpHeader() {
@@ -132,6 +134,7 @@ class ViewController: UITableViewController, UISearchBarDelegate {
           }
           task.resume()
     }
+    
 
     func fetchDataAPI() {
         // Define the URL for the API request
@@ -177,6 +180,48 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         task.resume()
     }
 
+    func fetchWeatherAPI() {
+        // Define the URL for the API request
+        let url = URL(string: "https://api.weather.gov/gridpoints/TOP/31,80/forecast")!
+        
+        // Create a URLRequest object
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        // Create a URLSession data task
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            // Handle any errors
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+            
+            // Ensure data is returned from the API
+            guard let data = data else {
+                print("No data returned from API.")
+                return
+            }
+            
+            do {
+                // Decode the JSON data into a WeatherData object
+                let weatherResponse = try JSONDecoder().decode(WeatherData.self, from: data)
+                
+                // Update the weatherArray property with the results
+                self.weatherArray = weatherResponse.properties?.periods ?? []
+                
+                // Reload the table view on the main thread
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            } catch {
+                // Handle any decoding errors
+                print(error.localizedDescription)
+            }
+        }
+        
+        // Start the URLSession data task
+        task.resume()
+    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return parksArray.count
@@ -225,18 +270,23 @@ class ViewController: UITableViewController, UISearchBarDelegate {
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let park = parksArray[indexPath.row]
         let unsplashData = unsplashArray[indexPath.row]
+        let weather = weatherArray[indexPath.row]
+
 
         // Create instances of both view controllers
         let detailsVC = DetailsViewController()
-        let accordionVC = AccordionViewController()
+       // let accordionVC = AccordionViewController()
     
-
         // Pass data to DetailsViewController
         detailsVC.selectedPark = park
-        detailsVC.selectedUnsplashData = unsplashData      
+        detailsVC.selectedUnsplashData = unsplashData
+        detailsVC.selectedWeatherData = weather
+
+    
+    
   
         // Add the AccordionViewController as a child view controller of DetailsViewController
-        detailsVC.addChild(accordionVC)
+        //detailsVC.addChild(accordionVC)
 
         // Push the DetailsViewController onto the navigation stack
         navigationController?.pushViewController(detailsVC, animated: true)
