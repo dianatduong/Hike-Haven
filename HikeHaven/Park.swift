@@ -18,7 +18,7 @@ import UIKit
             let description: String?
             let operatingHours: [OperatingHours]?
             let parkCode: String?
-            // let directionsInfo: String?
+            let directionsInfo: String?
             //  let weatherInfo: String?
         }
 

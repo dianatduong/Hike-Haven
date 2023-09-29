@@ -270,7 +270,7 @@ class ViewController: UITableViewController, UISearchBarDelegate {
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let park = parksArray[indexPath.row]
         let unsplashData = unsplashArray[indexPath.row]
-        let weather = weatherArray[indexPath.row]
+        //let weather = weatherArray[indexPath.row]
 
 
         // Create instances of both view controllers
@@ -280,11 +280,8 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         // Pass data to DetailsViewController
         detailsVC.selectedPark = park
         detailsVC.selectedUnsplashData = unsplashData
-        detailsVC.selectedWeatherData = weather
+       // detailsVC.selectedWeatherData = weather
 
-    
-    
-  
         // Add the AccordionViewController as a child view controller of DetailsViewController
         //detailsVC.addChild(accordionVC)
 
