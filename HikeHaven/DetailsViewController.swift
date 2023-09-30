@@ -10,6 +10,18 @@
 
 import UIKit
 
+
+func createLabel(font: UIFont) -> UILabel {
+    let label = UILabel()
+    label.numberOfLines = 0
+    label.lineBreakMode = .byWordWrapping // Wrap text at word boundaries
+    label.adjustsFontSizeToFitWidth = true
+    label.font = font
+    label.textAlignment = .left
+    return label
+}
+
+
 class DetailsViewController: UIViewController {
     
     let vc = ViewController()
@@ -36,11 +48,10 @@ class DetailsViewController: UIViewController {
     var trailHoursLabel: UILabel!
     var trailHistoryLabel: UILabel!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-       
+        
         setUpUI()
         getData()
         setUpAccordionTableView()
@@ -68,15 +79,7 @@ class DetailsViewController: UIViewController {
         setUpConstraints()
     }
     
-    //a utility function to create UILabel instances with specific font settings
-    func createLabel(font: UIFont) -> UILabel {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.adjustsFontSizeToFitWidth = true
-        label.font = font
-        label.textAlignment = .left
-        return label
-    }
+    
     
     //sets up Auto Layout constraints to define the layout of UI elements
     func setUpConstraints() {
@@ -159,26 +162,21 @@ class DirectionsCell: UITableViewCell {
     var trailCityLabel: UILabel!
     var trailStateLabel: UILabel!
     var trailZipCodeLabel: UILabel!
+    var trailDirectionsInfoLabel: UILabel!
     
-    let trailDirectionsInfoLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.numberOfLines = 0 // Allow multiple lines
-        label.lineBreakMode = .byWordWrapping // Wrap text at word boundaries
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    
+    
+    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        
-        //trailInfoContainer holds the address and description
-        //trailInfoContainerView = UIView()
         trailAddressLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
         trailCityLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
         trailStateLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
         trailZipCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
+        trailDirectionsInfoLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
+        
         
         contentView.addSubview(trailAddressLabel)
         contentView.addSubview(trailCityLabel)
@@ -186,24 +184,13 @@ class DirectionsCell: UITableViewCell {
         contentView.addSubview(trailZipCodeLabel)
         contentView.addSubview(trailDirectionsInfoLabel)
         
-        //contentView.addSubview(trailInfoContainerView)
-        
-        //trailInfoContainerView.translatesAutoresizingMaskIntoConstraints = false
         trailAddressLabel.translatesAutoresizingMaskIntoConstraints = false
         trailCityLabel.translatesAutoresizingMaskIntoConstraints = false
         trailStateLabel.translatesAutoresizingMaskIntoConstraints = false
         trailZipCodeLabel.translatesAutoresizingMaskIntoConstraints = false
-        //trailDirectionsInfoLabel.translatesAutoresizingMaskIntoConstraints = false
+        trailDirectionsInfoLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        
-        // Configure constraints for trailHoursLabel
         NSLayoutConstraint.activate([
-            
-           // trailInfoContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-            //trailInfoContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: 5),
-
-            //trailInfoContainerView.widthAnchor.constraint(equalToConstant: 420),
-            
             trailAddressLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             trailAddressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             trailAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
@@ -221,18 +208,10 @@ class DirectionsCell: UITableViewCell {
             trailDirectionsInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             trailDirectionsInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             trailDirectionsInfoLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
-
+            
         ])
     }
-    func createLabel(font: UIFont) -> UILabel {
-        let label = UILabel()
-        label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping // Wrap text at word boundaries
-        label.adjustsFontSizeToFitWidth = true
-        label.font = font
-        label.textAlignment = .left
-        return label
-    }
+    
     
     
     required init?(coder: NSCoder) {
