@@ -318,8 +318,53 @@ class HistoryCell: UITableViewCell {
                   cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 18.0)
                   return cell
               }
-        }
 
+        switch indexPath.section {
+            
+            //HOURS SECTION
+            case 0:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
+
+                if let park = selectedPark,
+                    let operationHours = park.operatingHours,
+                    let firstOperatingHours = operationHours.first,
+                    let standardHours = firstOperatingHours.standardHours {
+                    // Access the properties of the StandardHours object
+                    let sundayHours = standardHours.sunday
+                    let mondayHours = standardHours.monday
+                    let tuesdayHours = standardHours.tuesday
+                    let wednesdayHours = standardHours.wednesday
+                    let thursdayHours = standardHours.thursday
+                    let fridayHours = standardHours.friday
+                    let saturdayHours = standardHours.saturday
+                    
+                    let text = "Sunday: \(sundayHours)\nMonday: \(mondayHours)\nTuesday: \(tuesdayHours)\nWednesday: \(wednesdayHours)\nThursday: \(thursdayHours)\nFriday: \(fridayHours)\nSaturday: \(saturdayHours)\n\n"
+                    
+                    let attributedString = NSMutableAttributedString(string: text)
+                    let paragraphStyle = NSMutableParagraphStyle()
+                    paragraphStyle.lineSpacing = 5
+                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
+                    
+                    // Assuming trailHoursLabel is a label within your HoursTableViewCell.
+                    cell.trailHoursLabel.attributedText = attributedString
+                }
+                return cell
+            case 3:
+                          // HISTORY SECTION
+                          let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryCell
+
+                           if let park = selectedPark {
+                             cell.trailHistoryLabel.text = park.description
+                            
+                         }
+                          return cell
+
+            default:
+                // Handle other sections or rows if necessary
+                return UITableViewCell()
+            }
+        }
+      
 
     
         func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
