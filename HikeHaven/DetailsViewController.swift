@@ -265,7 +265,36 @@ class HoursCell: UITableViewCell {
     }
 }
 
+class HistoryCell: UITableViewCell {
+    
+    let trailHistoryLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.numberOfLines = 0 // Allow multiple lines
+        label.lineBreakMode = .byWordWrapping // Wrap text at word boundaries
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        // Add the trailHoursLabel to the cell's content view
+        contentView.addSubview(trailHistoryLabel)
 
+        // Configure constraints for trailHoursLabel
+        NSLayoutConstraint.activate([
+            trailHistoryLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+            trailHistoryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            trailHistoryLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            trailHistoryLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
 
 
 
