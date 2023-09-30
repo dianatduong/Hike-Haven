@@ -14,10 +14,11 @@ import UIKit
 func createLabel(font: UIFont) -> UILabel {
     let label = UILabel()
     label.numberOfLines = 0
-    label.lineBreakMode = .byWordWrapping // Wrap text at word boundaries
+    label.lineBreakMode = .byWordWrapping
     label.adjustsFontSizeToFitWidth = true
     label.font = font
     label.textAlignment = .left
+    label.translatesAutoresizingMaskIntoConstraints = false
     return label
 }
 
@@ -25,12 +26,14 @@ func createLabel(font: UIFont) -> UILabel {
 class DetailsViewController: UIViewController {
     
     let vc = ViewController()
-    // var accordionVC = AccordionViewController()
+
+    //API
     var accordionData: [OperatingHours] = []
     var weatherArray: [Periods] = []
     var parksArray: [ParkData] = []
     
-    var sections: [String] = ["Directions", "Hours", "Weather", "Contacts", "History"]
+    //Accordion Data
+    var sections: [String] = ["Direction", "Park Hours", "Weather", "Contacts", "History"]
     var collapsed: [Bool] = [true, true, true, true, true]
     
     //passed data from VC
@@ -38,15 +41,11 @@ class DetailsViewController: UIViewController {
     var selectedUnsplashData: UnSplashData?
     var selectedWeatherData: Periods?
     
-    
     //UI Elements
     var selectedImageView: UIImageView!
     var selectedNameLabel: UILabel!
     var textShadowLayer: UIView!
     
-    
-    var trailHoursLabel: UILabel!
-    var trailHistoryLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,15 +69,12 @@ class DetailsViewController: UIViewController {
         textShadowLayer.layer.shadowOffset = CGSize(width: 1, height: 1)
         textShadowLayer.layer.shadowRadius = 1
         
-        
         view.addSubview(selectedImageView)
         selectedImageView.addSubview(textShadowLayer)
         textShadowLayer.addSubview(selectedNameLabel)
         
-        
         setUpConstraints()
     }
-    
     
     
     //sets up Auto Layout constraints to define the layout of UI elements
@@ -104,8 +100,8 @@ class DetailsViewController: UIViewController {
         ])
     }
     
+    //UITableView for the accordion-style view
     func setUpAccordionTableView() {
-        //UITableView for the accordion-style view
         let accordionTableView = UITableView()
         accordionTableView.translatesAutoresizingMaskIntoConstraints = false
         accordionTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -157,7 +153,6 @@ class DetailsViewController: UIViewController {
 
 class DirectionsCell: UITableViewCell {
     
-    var trailInfoContainerView: UIView!
     var trailAddressLabel: UILabel!
     var trailCityLabel: UILabel!
     var trailStateLabel: UILabel!
@@ -165,30 +160,19 @@ class DirectionsCell: UITableViewCell {
     var trailDirectionsInfoLabel: UILabel!
     
     
-    
-    
-    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         trailAddressLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
         trailCityLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
         trailStateLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
         trailZipCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
         trailDirectionsInfoLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
         
-        
         contentView.addSubview(trailAddressLabel)
         contentView.addSubview(trailCityLabel)
         contentView.addSubview(trailStateLabel)
         contentView.addSubview(trailZipCodeLabel)
         contentView.addSubview(trailDirectionsInfoLabel)
-        
-        trailAddressLabel.translatesAutoresizingMaskIntoConstraints = false
-        trailCityLabel.translatesAutoresizingMaskIntoConstraints = false
-        trailStateLabel.translatesAutoresizingMaskIntoConstraints = false
-        trailZipCodeLabel.translatesAutoresizingMaskIntoConstraints = false
-        trailDirectionsInfoLabel.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
             trailAddressLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
@@ -207,31 +191,24 @@ class DirectionsCell: UITableViewCell {
             trailDirectionsInfoLabel.topAnchor.constraint(equalTo: trailCityLabel.bottomAnchor, constant: 15),
             trailDirectionsInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             trailDirectionsInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            trailDirectionsInfoLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+            trailDirectionsInfoLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
             
         ])
     }
-    
-    
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
+
 class HoursCell: UITableViewCell {
     
-    let trailHoursLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.numberOfLines = 0 // Allow multiple lines
-        label.lineBreakMode = .byWordWrapping // Wrap text at word boundaries
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    var trailHoursLabel: UILabel!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        trailHoursLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
         
         // Add the trailHoursLabel to the cell's content view
         contentView.addSubview(trailHoursLabel)
@@ -244,25 +221,20 @@ class HoursCell: UITableViewCell {
             trailHoursLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
+
 class HistoryCell: UITableViewCell {
     
-    let trailHistoryLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
-        label.numberOfLines = 0 // Allow multiple lines
-        label.lineBreakMode = .byWordWrapping // Wrap text at word boundaries
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    var trailHistoryLabel: UILabel!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        trailHistoryLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
         
         // Add the trailHoursLabel to the cell's content view
         contentView.addSubview(trailHistoryLabel)
@@ -275,7 +247,6 @@ class HistoryCell: UITableViewCell {
             trailHistoryLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
         ])
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -295,7 +266,7 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
             cell.textLabel?.text = sectionName
             cell.accessoryType = .disclosureIndicator
             cell.backgroundColor = lightGray
-            cell.layer.borderWidth = 3.0 // The width of the border
+            cell.layer.borderWidth = 3.0
             cell.layer.borderColor = UIColor.white.cgColor
             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 18.0)
             return cell
@@ -333,10 +304,9 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
                     let fullText = "Directions: \n\(directions)"
                     let attributedText = NSMutableAttributedString(string: fullText)
                     
-                    // Apply bold font to "Directions"
-                    let boldFont = UIFont.boldSystemFont(ofSize:  cell.trailDirectionsInfoLabel.font.pointSize) // Use the label's current font size
-                    attributedText.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: 11)) // 11 is the length of "Directions: "
-                    
+                    //set to bold "Directions:"
+                    let boldFont = UIFont.boldSystemFont(ofSize:  cell.trailDirectionsInfoLabel.font.pointSize)
+                    attributedText.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: 11))
                     // Apply custom line height
                     let paragraphStyle = NSMutableParagraphStyle()
                     paragraphStyle.lineSpacing = 3 // Adjust the line spacing as needed
@@ -349,7 +319,6 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
             }
             
             return cell
-            
             
         //HOURS SECTION
         case 1:
@@ -383,7 +352,33 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryCell
             
             if let park = selectedPark {
-                cell.trailHistoryLabel.text = park.description
+                
+                if let history =  park.description {
+                    let fullText = "\(history)"
+                    let attributedText = NSMutableAttributedString(string: fullText)
+                    
+                    //Set to bold the first two words
+                    // Split the directions into words
+                    let words = history.components(separatedBy: " ")
+                    if let firstWord = words.first, let secondWord = words.dropFirst().first {
+                        // Calculate the length of the first two words
+                        let lengthOfFirstTwoWords = firstWord.count + secondWord.count + 1 // Add 1 for the space
+                        // Create a range for the first two words
+                        let range = NSRange(location: 0, length: lengthOfFirstTwoWords)
+                        let boldFont = UIFont.boldSystemFont(ofSize: cell.trailHistoryLabel.font.pointSize)
+                        // Apply bold font to the first two words
+                        attributedText.addAttribute(.font, value: boldFont, range: range)
+                    }
+                    
+                    // Apply custom line height
+                    let paragraphStyle = NSMutableParagraphStyle()
+                    paragraphStyle.lineSpacing = 3
+                    attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
+                    
+                    cell.trailHistoryLabel.attributedText = attributedText
+                } else {
+                    cell.trailHistoryLabel.text = nil
+                }
             }
             return cell
             
@@ -403,9 +398,11 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
             return UITableView.automaticDimension }
     }
     
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return sections.count
     }
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Check if the section index is less than the count of the 'collapsed' array
