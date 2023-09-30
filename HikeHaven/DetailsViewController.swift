@@ -36,10 +36,10 @@ class DetailsViewController: UIViewController {
     var trailCityLabel: UILabel!
     var trailStateLabel: UILabel!
     var trailZipCodeLabel: UILabel!
-    var trailDescriptionLabel: UILabel!
-    var trailHoursLabel: UILabel!
-     var trailDirectionsInfoLabel: UILabel!
+    var trailDirectionsInfoLabel: UILabel!
     
+    var trailHoursLabel: UILabel!
+    var trailHistoryLabel: UILabel!
    
 
     override func viewDidLoad() {
@@ -52,16 +52,34 @@ class DetailsViewController: UIViewController {
         getData()
         setUpAccordionTableView()
     }
-    
-    
-    
+
 
     //used to populate the UI elements with data received from ViewController
     func getData() {
         // Update labels with the park data
         if let park = selectedPark, let unsplashData = selectedUnsplashData {
+            
+            //Park Name
             selectedNameLabel.text = park.fullName
-            trailDirectionsInfoLabel.text = park.directionsInfo
+
+            //Directions Info
+            if let directions = park.directionsInfo {
+                let fullText = "Directions: \n\(directions)"
+                let attributedText = NSMutableAttributedString(string: fullText)
+                
+                // Apply bold font to "Directions"
+                let boldFont = UIFont.boldSystemFont(ofSize: trailDirectionsInfoLabel.font.pointSize) // Use the label's current font size
+                attributedText.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: 11)) // 11 is the length of "Directions: "
+                
+                // Apply custom line height
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = 3 // Adjust the line spacing as needed
+                attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
+                
+                trailDirectionsInfoLabel.attributedText = attributedText
+            } else {
+                trailDirectionsInfoLabel.text = nil
+            }
             
             // Load and display the image via loadImage function from vc
             if let imageURLString = unsplashData.urls.regular,
@@ -117,7 +135,6 @@ class DetailsViewController: UIViewController {
         trailStateLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
         trailZipCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
         trailDirectionsInfoLabel = createLabel(font: UIFont.systemFont(ofSize: 16.5))
-        trailHoursLabel = createLabel(font: UIFont.systemFont(ofSize: 17))
 
         trailInfoContainerView.addSubview(trailAddressLabel)
         trailInfoContainerView.addSubview(trailCityLabel)
@@ -172,7 +189,6 @@ class DetailsViewController: UIViewController {
             selectedNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
             selectedNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             
-            
             trailInfoContainerView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 5),
             trailInfoContainerView.widthAnchor.constraint(equalToConstant: 420),
             
@@ -186,7 +202,7 @@ class DetailsViewController: UIViewController {
             trailZipCodeLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
             trailZipCodeLabel.leadingAnchor.constraint(equalTo: trailStateLabel.trailingAnchor),
             
-           trailDirectionsInfoLabel.topAnchor.constraint(equalTo: trailCityLabel.bottomAnchor, constant: 12),
+           trailDirectionsInfoLabel.topAnchor.constraint(equalTo: trailCityLabel.bottomAnchor, constant: 15),
             trailDirectionsInfoLabel.leadingAnchor.constraint(equalTo: trailInfoContainerView.leadingAnchor, constant: 15),
             trailDirectionsInfoLabel.trailingAnchor.constraint(equalTo: trailInfoContainerView.trailingAnchor, constant: -20)
         ])
@@ -197,15 +213,15 @@ class DetailsViewController: UIViewController {
         let accordionTableView = UITableView()
         accordionTableView.translatesAutoresizingMaskIntoConstraints = false
         accordionTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        accordionTableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "weatherCell")
+        accordionTableView.register(HoursCell.self, forCellReuseIdentifier: "hoursCell")
+        accordionTableView.register(HistoryCell.self, forCellReuseIdentifier: "historyCell")
+
         
         accordionTableView.dataSource = self
         accordionTableView.delegate = self
         accordionTableView.separatorStyle = .none
         
         view.addSubview(accordionTableView)
-        
-        
         NSLayoutConstraint.activate([
             accordionTableView.topAnchor.constraint(equalTo: trailDirectionsInfoLabel.bottomAnchor, constant: 25),
             accordionTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -213,172 +229,149 @@ class DetailsViewController: UIViewController {
             accordionTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-    
-    
 }
+
+
+
+
+class HoursCell: UITableViewCell {
+    
+    let trailHoursLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.numberOfLines = 0 // Allow multiple lines
+        label.lineBreakMode = .byWordWrapping // Wrap text at word boundaries
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        // Add the trailHoursLabel to the cell's content view
+        contentView.addSubview(trailHoursLabel)
+      
+        // Configure constraints for trailHoursLabel
+        NSLayoutConstraint.activate([
+            trailHoursLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            trailHoursLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            trailHoursLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            trailHoursLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+        ])
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+
+
+
+
     extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
         
-        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-            // Set the height of the row based on its section
-            
-            // HOURS SECTION
-            if indexPath.section == 0 && indexPath.row == 1 {
-                return 200
-            }
-             // WEATHER SECTION
-            else if indexPath.section == 1 && indexPath.row == 1 {
-                return 180
-            }
-            
-            // CONTACT SECTION
-            else if indexPath.section == 2 && indexPath.row == 1 {
-                return 55
-            }
-                
-            // HISTORY SECTION
-              else if indexPath.section == 3 && indexPath.row == 1 {
-                return 250
-            }
-            return 55 // All others
-
-        }
+   
         
-        func numberOfSections(in tableView: UITableView) -> Int {
-            return sections.count
-        }
-        
-        func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-            // Check if the section index is less than the count of the 'collapsed' array
-            if section < collapsed.count {
-                // If it is, return 1 or 2 based on the boolean value at that index in the 'collapsed' array
-                // If the section is collapsed (true), return 1 row. If not collapsed (false), return 2 rows.
-                return collapsed[section] ? 1 : 2
-            } else {
-                // If the section index is not less than the count of the 'collapsed' array, return 0
-                // This could be a default value or an error handling case
-                return 0
-            }
-        }
-        
-        func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+       func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             let sectionName = sections[indexPath.section]
             let lightGray = UIColor(white: 0.9, alpha: 1.0)
             
-            // Configure the cell based on its row and section
-            if indexPath.row == 0 { // First row of the section
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-                
-                cell.textLabel?.text = sectionName
-                cell.accessoryType = .disclosureIndicator
-                cell.backgroundColor = lightGray
-                cell.layer.borderWidth = 3.0 // The width of the border
-                cell.layer.borderColor = UIColor.white.cgColor
-                cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 18.0)
-                return cell
-                
-                //HOURS SECTION
-            } else if indexPath.section == 0 && indexPath.row == 1 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-                
-                if let park = selectedPark {
-                    // Unwrap OperatingHours [StandardHours]
-                    if let operationHours = park.operatingHours,
-                        let firstOperatingHours = operationHours.first,
-                        let standardHours = firstOperatingHours.standardHours {
-                        // Access the properties of the StandardHours object
-                        let sundayHours = standardHours.sunday
-                        let mondayHours = standardHours.monday
-                        let tuesdayHours = standardHours.tuesday
-                        let wednesdayHours = standardHours.wednesday
-                        let thursdayHours = standardHours.thursday
-                        let fridayHours = standardHours.friday
-                        let saturdayHours = standardHours.saturday
-                        
-                        let text = "Sunday:  \(sundayHours) \nMonday:  \(mondayHours) \nTuesday:  \(tuesdayHours) \nWednesday:  \(wednesdayHours) \nThursday:  \(thursdayHours) \nFriday:  \(fridayHours) \nSaturday:  \(saturdayHours)\n\n"
-                        
-                        //creates line height
-                        let attributedString = NSMutableAttributedString(string: text)
-                        let paragraphStyle = NSMutableParagraphStyle()
-                        paragraphStyle.lineSpacing = 5 // adjust the line spacing here
-                        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
-                        
-                        let trailHoursLabel = UILabel()
-                        trailHoursLabel.attributedText = attributedString
-                        trailHoursLabel.numberOfLines = 0 // Allow multiple lines
-                        trailHoursLabel.lineBreakMode = .byWordWrapping // Wrap text at word boundaries
-                        cell.contentView.addSubview(trailHoursLabel)
-                        
-                        //constraints for the UILabel
-                        trailHoursLabel.translatesAutoresizingMaskIntoConstraints = false
-                        
-                        NSLayoutConstraint.activate([
-                            trailHoursLabel.topAnchor.constraint(equalTo: cell.contentView.topAnchor, constant: 8),
-                            trailHoursLabel.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 16),
-                            trailHoursLabel.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -16),
-                            trailHoursLabel.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor, constant: -10)
-                        ])
-                        
-                        return cell
-                    }
-                }
-                
-                
-                //WEATHER SECTION
-            } else if indexPath.section == 0 && indexPath.row == 1 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-                
-                return cell
-                
-                
-                //CONTACTS SECTION
-            } else if indexPath.section == 0 && indexPath.row == 1 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-                
-                return cell
-                
-                
-                //HISTORY SECTION
-            } else if indexPath.section == 3 && indexPath.row == 1 {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-                
-                
-                if let park = selectedPark {
-                    cell.textLabel?.text = park.description
-                    cell.accessoryType = .none
-                    cell.textLabel?.numberOfLines = 0
-                    cell.textLabel?.lineBreakMode = .byWordWrapping
-                    return cell
-                }
-                
-            }
-            return UITableViewCell()
+          // Configure the cell based on its row and section
+              if indexPath.row == 0 { // First row of the section
+                  let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+                  
+                  cell.textLabel?.text = sectionName
+                  cell.accessoryType = .disclosureIndicator
+                  cell.backgroundColor = lightGray
+                  cell.layer.borderWidth = 3.0 // The width of the border
+                  cell.layer.borderColor = UIColor.white.cgColor
+                  cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 18.0)
+                  return cell
+              }
         }
-        
+
+
+    
+        func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+               // Set the height of the row based on its section
+               
+               // HOURS SECTION
+               if indexPath.section == 0 && indexPath.row == 1 {
+                   return 200
+               }
+                // WEATHER SECTION
+               else if indexPath.section == 1 && indexPath.row == 1 {
+                   return 180
+               }
+               
+               // CONTACT SECTION
+               else if indexPath.section == 2 && indexPath.row == 1 {
+                   return 55
+               }
+                   
+               // HISTORY SECTION
+                 else if indexPath.section == 3 && indexPath.row == 1 {
+                   return 250
+               }
+               return 55 // All others
+
+           }
+           
+           func numberOfSections(in tableView: UITableView) -> Int {
+               return sections.count
+           }
+           
+           func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+               // Check if the section index is less than the count of the 'collapsed' array
+               if section < collapsed.count {
+                   // If expanded, show 2 rows (1 header + 1 detail), otherwise, show 1 row (header only)
+                   return collapsed[section] ? 1 : 2
+               } else {
+                   // If the section index is not less than the count of the 'collapsed' array, return 0
+                   // This could be a default value or an error handling case
+                   return 0
+               }
+           }
+
+      
         func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-            // Check if the first row of a section is selected
+            // If user tapped the first row
             if indexPath.row == 0 {
-                // Toggle the collapsed state for this section
+                // Toggle the collapsed state via the collapse array for the value at the index section
                 collapsed[indexPath.section] = !collapsed[indexPath.section]
-
-                // Check the new collapsed state for this section
-                if collapsed[indexPath.section] {
-                    // If the section is now collapsed, delete the second row of this section
-                    tableView.deleteRows(at: [IndexPath(row: 1, section: indexPath.section)], with: .automatic)
-                } else {
-                    // If the section is now expanded, insert the second row of this section
-                    tableView.insertRows(at: [IndexPath(row: 1, section: indexPath.section)], with: .automatic)
-                }
-
+                
+                // Update the section with animation
+                tableView.reloadSections(IndexSet(integer: indexPath.section), with: .automatic)
+                
                 // Deselect the row that was just selected
                 tableView.deselectRow(at: indexPath, animated: true)
             }
-        } // End of tableView(_:didSelectRowAt:)
+        }
     }
 
-   
-           /*
-           accordionVC.view.topAnchor.constraint(equalTo: trailDescriptionLabel.bottomAnchor, constant: 25),
-           accordionVC.view.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-           accordionVC.view.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-           accordionVC.view.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            */
+
+
+
+
+
+      
+      
+      /*
+
+      
+               
+           case 2:
+               // HISTORY SECTION
+               let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+
+               if let park = selectedPark {
+                   cell.textLabel?.text = park.description
+                   cell.accessoryType = .none
+                   cell.textLabel?.numberOfLines = 0
+                   cell.textLabel?.lineBreakMode = .byWordWrapping
+               } else {
+                   cell.textLabel?.text = "Section: \(indexPath.section), Row: \(indexPath.row)"
+               }
+               return cell
+       */
