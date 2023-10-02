@@ -1,5 +1,3 @@
-
-
 //
 //  DetailsViewController.swift
 //  HikeHaven
@@ -9,7 +7,6 @@
 //
 
 import UIKit
-
 
 func createLabel(font: UIFont) -> UILabel {
     let label = UILabel()
@@ -22,11 +19,10 @@ func createLabel(font: UIFont) -> UILabel {
     return label
 }
 
-
 class DetailsViewController: UIViewController {
     
     let vc = ViewController()
-
+    
     //API
     var accordionData: [OperatingHours] = []
     var weatherArray: [Periods] = []
@@ -55,7 +51,6 @@ class DetailsViewController: UIViewController {
         getData()
         setUpAccordionTableView()
     }
-    
     //set up the user interface elements
     func setUpUI() {
         selectedImageView = UIImageView()
@@ -73,12 +68,6 @@ class DetailsViewController: UIViewController {
         selectedImageView.addSubview(textShadowLayer)
         textShadowLayer.addSubview(selectedNameLabel)
         
-        setUpConstraints()
-    }
-    
-    
-    //sets up Auto Layout constraints to define the layout of UI elements
-    func setUpConstraints() {
         selectedImageView.translatesAutoresizingMaskIntoConstraints = false
         selectedNameLabel.translatesAutoresizingMaskIntoConstraints = false
         textShadowLayer.translatesAutoresizingMaskIntoConstraints = false
@@ -99,33 +88,6 @@ class DetailsViewController: UIViewController {
             
         ])
     }
-    
-    //UITableView for the accordion-style view
-    func setUpAccordionTableView() {
-        let accordionTableView = UITableView()
-        accordionTableView.translatesAutoresizingMaskIntoConstraints = false
-        accordionTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        accordionTableView.register(DirectionsCell.self, forCellReuseIdentifier: "directionsCell")
-        accordionTableView.register(HoursCell.self, forCellReuseIdentifier: "hoursCell")
-        accordionTableView.register(HistoryCell.self, forCellReuseIdentifier: "historyCell")
-        
-        
-        accordionTableView.dataSource = self
-        accordionTableView.delegate = self
-        accordionTableView.separatorStyle = .none
-        accordionTableView.estimatedRowHeight = 100 // Set an estimated row height
-        accordionTableView.rowHeight = UITableView.automaticDimension
-        
-        view.addSubview(accordionTableView)
-        
-        NSLayoutConstraint.activate([
-            accordionTableView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 5),
-            accordionTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            accordionTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            accordionTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-    }
-    
     
     //used to populate the UI elements with data received from ViewController
     func getData() {
@@ -149,6 +111,30 @@ class DetailsViewController: UIViewController {
         }
     }
     
+    //UITableView for the accordion-style view
+    func setUpAccordionTableView() {
+        let accordionTableView = UITableView()
+        accordionTableView.translatesAutoresizingMaskIntoConstraints = false
+        accordionTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        accordionTableView.register(DirectionsCell.self, forCellReuseIdentifier: "directionsCell")
+        accordionTableView.register(HoursCell.self, forCellReuseIdentifier: "hoursCell")
+        accordionTableView.register(HistoryCell.self, forCellReuseIdentifier: "historyCell")
+        
+        accordionTableView.dataSource = self
+        accordionTableView.delegate = self
+        accordionTableView.separatorStyle = .none
+        accordionTableView.estimatedRowHeight = 100 // Set an estimated row height
+        accordionTableView.rowHeight = UITableView.automaticDimension
+        
+        view.addSubview(accordionTableView)
+        
+        NSLayoutConstraint.activate([
+            accordionTableView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 5),
+            accordionTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            accordionTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            accordionTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
 }
 
 class DirectionsCell: UITableViewCell {
@@ -158,7 +144,7 @@ class DirectionsCell: UITableViewCell {
     var trailStateLabel: UILabel!
     var trailZipCodeLabel: UILabel!
     var trailDirectionsInfoLabel: UILabel!
-    
+    var trailDirectionsURLLabel: UITextView!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -167,20 +153,30 @@ class DirectionsCell: UITableViewCell {
         trailStateLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
         trailZipCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
         trailDirectionsInfoLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
+
+        // Initialize trailDirectionsURLLabel
+        trailDirectionsURLLabel = UITextView()
+        trailDirectionsURLLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
+        trailDirectionsURLLabel.isEditable = false
+        trailDirectionsURLLabel.isScrollEnabled = false
+        trailDirectionsURLLabel.dataDetectorTypes = .link // Make links clickable
+        trailDirectionsURLLabel.translatesAutoresizingMaskIntoConstraints = false
+
         
         contentView.addSubview(trailAddressLabel)
         contentView.addSubview(trailCityLabel)
         contentView.addSubview(trailStateLabel)
         contentView.addSubview(trailZipCodeLabel)
         contentView.addSubview(trailDirectionsInfoLabel)
+        contentView.addSubview(trailDirectionsURLLabel)
         
         NSLayoutConstraint.activate([
-            trailAddressLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            trailAddressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            trailAddressLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            trailAddressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             
             trailCityLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
-            trailCityLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            trailCityLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             
             trailStateLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
             trailStateLabel.leadingAnchor.constraint(equalTo: trailCityLabel.trailingAnchor),
@@ -189,10 +185,15 @@ class DirectionsCell: UITableViewCell {
             trailZipCodeLabel.leadingAnchor.constraint(equalTo: trailStateLabel.trailingAnchor),
             
             trailDirectionsInfoLabel.topAnchor.constraint(equalTo: trailCityLabel.bottomAnchor, constant: 15),
-            trailDirectionsInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
-            trailDirectionsInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            trailDirectionsInfoLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
+            trailDirectionsInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            trailDirectionsInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            trailDirectionsInfoLabel.bottomAnchor.constraint(equalTo: trailDirectionsURLLabel.topAnchor),
             
+            trailDirectionsURLLabel.topAnchor.constraint(equalTo: trailDirectionsInfoLabel.bottomAnchor, constant: 15),
+            trailDirectionsURLLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            trailDirectionsURLLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            trailDirectionsURLLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
+    
         ])
     }
     required init?(coder: NSCoder) {
@@ -204,21 +205,29 @@ class DirectionsCell: UITableViewCell {
 class HoursCell: UITableViewCell {
     
     var trailHoursLabel: UILabel!
+    var trailHolidayHours: UILabel!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         trailHoursLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        
+        trailHolidayHours = createLabel(font: UIFont.italicSystemFont(ofSize: 14))
+
         // Add the trailHoursLabel to the cell's content view
         contentView.addSubview(trailHoursLabel)
-        
+        contentView.addSubview(trailHolidayHours)
+
         // Configure constraints for trailHoursLabel
         NSLayoutConstraint.activate([
-            trailHoursLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            trailHoursLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
             trailHoursLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailHoursLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            trailHoursLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+            trailHoursLabel.bottomAnchor.constraint(equalTo: trailHolidayHours.topAnchor, constant: -20),
+            
+            trailHolidayHours.topAnchor.constraint(equalTo: trailHoursLabel.bottomAnchor),
+            trailHolidayHours.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            trailHolidayHours.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            trailHolidayHours.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
         ])
     }
     required init?(coder: NSCoder) {
@@ -241,7 +250,7 @@ class HistoryCell: UITableViewCell {
         
         // Configure constraints for trailHoursLabel
         NSLayoutConstraint.activate([
-            trailHistoryLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            trailHistoryLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
             trailHistoryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailHistoryLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             trailHistoryLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
@@ -273,11 +282,11 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         switch indexPath.section {
+        //DIRECTIONS
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "directionsCell", for: indexPath) as! DirectionsCell
             
             if let park = selectedPark {
-                
                 //unwrap [Addresses]
                 if let park = selectedPark, let addresses = park.addresses, !addresses.isEmpty {
                     if let firstAddress = addresses.first {
@@ -316,6 +325,14 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
                 } else {
                     cell.trailDirectionsInfoLabel.text = nil
                 }
+                
+                // Set the URL text
+                       if let directionsUrl = park.directionsUrl {
+                           cell.trailDirectionsURLLabel.text = directionsUrl
+                       } else {
+                           cell.trailDirectionsURLLabel.text = "URL not available"
+                       }
+                   
             }
             
             return cell
@@ -323,32 +340,38 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
         //HOURS SECTION
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
-            
-            if let park = selectedPark,
-                let operationHours = park.operatingHours,
-                let firstOperatingHours = operationHours.first,
-                let standardHours = firstOperatingHours.standardHours {
-                // Access the properties of the StandardHours object
-                let sundayHours = standardHours.sunday
-                let mondayHours = standardHours.monday
-                let tuesdayHours = standardHours.tuesday
-                let wednesdayHours = standardHours.wednesday
-                let thursdayHours = standardHours.thursday
-                let fridayHours = standardHours.friday
-                let saturdayHours = standardHours.saturday
+                    
+               if let park = selectedPark,
+                    let operatingHours = park.operatingHours,
+                    let firstOperatingHours = operatingHours.first,
+                    let standardHours = firstOperatingHours.standardHours {
+
+                    // Access the properties of the StandardHours object
+                    let sundayHours = standardHours.sunday
+                    let mondayHours = standardHours.monday
+                    let tuesdayHours = standardHours.tuesday
+                    let wednesdayHours = standardHours.wednesday
+                    let thursdayHours = standardHours.thursday
+                    let fridayHours = standardHours.friday
+                    let saturdayHours = standardHours.saturday
+
+                    let hoursText = "Sunday: \(sundayHours)\nMonday: \(mondayHours)\nTuesday: \(tuesdayHours)\nWednesday: \(wednesdayHours)\nThursday: \(thursdayHours)\nFriday: \(fridayHours)\nSaturday: \(saturdayHours)"
                 
-                let text = "Sunday: \(sundayHours)\nMonday: \(mondayHours)\nTuesday: \(tuesdayHours)\nWednesday: \(wednesdayHours)\nThursday: \(thursdayHours)\nFriday: \(fridayHours)\nSaturday: \(saturdayHours)\n\n"
-                
-                let attributedString = NSMutableAttributedString(string: text)
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.lineSpacing = 5
-                attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
-                
-                cell.trailHoursLabel.attributedText = attributedString
-            }
-            return cell
+                    let holidayText = "*Please refer to Park’s website for Holiday hours."
+
+                    let attributedString = NSMutableAttributedString(string: hoursText)
+                    let paragraphStyle = NSMutableParagraphStyle()
+                    paragraphStyle.lineSpacing = 5
+                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
+
+                    cell.trailHoursLabel.attributedText = attributedString
+                    cell.trailHolidayHours.text = holidayText
+                }
+                return cell
+
+        // HISTORY SECTION
         case 4:
-            // HISTORY SECTION
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryCell
             
             if let park = selectedPark {
@@ -387,6 +410,7 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
     }
+    
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
@@ -431,4 +455,6 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 }
+
+
 

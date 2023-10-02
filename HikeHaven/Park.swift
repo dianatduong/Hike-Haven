@@ -19,6 +19,7 @@ import UIKit
             let operatingHours: [OperatingHours]?
             let parkCode: String?
             let directionsInfo: String?
+              let directionsUrl: String?
             //  let weatherInfo: String?
         }
 
