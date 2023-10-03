@@ -29,8 +29,8 @@ class DetailsViewController: UIViewController {
     var parksArray: [ParkData] = []
     
     //Accordion Data
-    var sections: [String] = ["Directions", "Park Hours", "Weather", "Contact Info", "History"]
-    var collapsed: [Bool] = [true, true, true, true, true]
+    var sections: [String] = ["Directions", "Park Hours", "Alerts", "Park Fees", "Weather", "Contact Info", "History"]
+    var collapsed: [Bool] = [true, true, true, true, true, true, true]
     
     //passed data from VC
     var selectedPark: ParkData?   //property to hold the selected park
@@ -179,7 +179,6 @@ class DirectionsCell: UITableViewCell {
     var trailStateLabel: UILabel!
     var trailZipCodeLabel: UILabel!
     var trailDirectionsInfoLabel: UILabel!
-    var trailDirectionsURLLabel: UITextView!
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -190,20 +189,12 @@ class DirectionsCell: UITableViewCell {
         trailZipCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
         trailDirectionsInfoLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
 
-        // Initialize trailDirectionsURLLabel
-        trailDirectionsURLLabel = UITextView()
-        trailDirectionsURLLabel.isEditable = false
-        trailDirectionsURLLabel.isScrollEnabled = false
-        trailDirectionsURLLabel.dataDetectorTypes = .link // Make links clickable
-        trailDirectionsURLLabel.translatesAutoresizingMaskIntoConstraints = false
-
         contentView.addSubview(trailNameLabel)
         contentView.addSubview(trailAddressLabel)
         contentView.addSubview(trailCityLabel)
         contentView.addSubview(trailStateLabel)
         contentView.addSubview(trailZipCodeLabel)
         contentView.addSubview(trailDirectionsInfoLabel)
-        contentView.addSubview(trailDirectionsURLLabel)
         
         NSLayoutConstraint.activate([
             trailNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
@@ -217,12 +208,8 @@ class DirectionsCell: UITableViewCell {
             trailDirectionsInfoLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 5),
             trailDirectionsInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailDirectionsInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            
-            trailDirectionsURLLabel.topAnchor.constraint(equalTo: trailDirectionsInfoLabel.bottomAnchor, constant: 5),
-            trailDirectionsURLLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
-            trailDirectionsURLLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            trailDirectionsURLLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
-    
+            trailDirectionsInfoLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+
         ])
     }
     required init?(coder: NSCoder) {
@@ -366,19 +353,6 @@ extension DetailsViewController {
                cell.trailDirectionsInfoLabel.attributedText = attributedText
            } else {
                cell.trailDirectionsInfoLabel.text = nil
-           }
-
-           if let directionsUrl = park.directionsUrl {
-               let attributedText = NSMutableAttributedString(string: "Visit Website")
-               let linkAttributes: [NSAttributedString.Key: Any] = [
-                   .link: directionsUrl,
-                   .underlineStyle: NSUnderlineStyle.single.rawValue,
-                    .font: UIFont.systemFont(ofSize: 17)
-               ]
-               attributedText.addAttributes(linkAttributes, range: NSRange(location: 0, length: attributedText.length))
-               cell.trailDirectionsURLLabel.attributedText = attributedText
-           } else {
-               cell.trailDirectionsURLLabel.text = "URL not available"
            }
 
            cell.trailNameLabel.text = park.fullName
@@ -591,15 +565,15 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
             configureHoursCell(cell)
             return cell
-        case 2:
+        case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) as! WeatherCell
             configureWeatherCell(cell)
             return cell
-        case 3:
+        case 5:
            let cell = tableView.dequeueReusableCell(withIdentifier: "contactsCell", for: indexPath) as! ContactsCell
            configureContactsCell(cell)
            return cell
-        case 4:
+        case 6:
             let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryCell
             configureHistoryCell(cell)
             return cell
