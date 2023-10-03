@@ -138,6 +138,37 @@ class DetailsViewController: UIViewController {
     }
 }
 
+class ContactsCell: UITableViewCell {
+    
+    var phoneNumberLabel: UILabel!
+    var emailAddressLabel: UILabel!
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        phoneNumberLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
+        emailAddressLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
+
+        contentView.addSubview(phoneNumberLabel)
+        contentView.addSubview(emailAddressLabel)
+   
+        NSLayoutConstraint.activate([
+            phoneNumberLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            phoneNumberLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            phoneNumberLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            
+            emailAddressLabel.topAnchor.constraint(equalTo: phoneNumberLabel.bottomAnchor, constant: 15),
+            emailAddressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            emailAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            emailAddressLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
+
+        ])
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 class DirectionsCell: UITableViewCell {
     
     var trailNameLabel: UILabel!
@@ -181,16 +212,7 @@ class DirectionsCell: UITableViewCell {
             trailAddressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             
-            trailCityLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
-            trailCityLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            
-            trailStateLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
-            trailStateLabel.leadingAnchor.constraint(equalTo: trailCityLabel.trailingAnchor),
-            
-            trailZipCodeLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 2),
-            trailZipCodeLabel.leadingAnchor.constraint(equalTo: trailStateLabel.trailingAnchor),
-            
-            trailDirectionsInfoLabel.topAnchor.constraint(equalTo: trailCityLabel.bottomAnchor, constant: 15),
+            trailDirectionsInfoLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 5),
             trailDirectionsInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailDirectionsInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             
@@ -199,70 +221,6 @@ class DirectionsCell: UITableViewCell {
             trailDirectionsURLLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             trailDirectionsURLLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
     
-        ])
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-
-class HoursCell: UITableViewCell {
-    
-    var trailHoursLabel: UILabel!
-    var trailHolidayHours: UILabel!
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        trailHoursLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        trailHolidayHours = createLabel(font: UIFont.italicSystemFont(ofSize: 15))
-
-        // Add the trailHoursLabel to the cell's content view
-        contentView.addSubview(trailHoursLabel)
-        contentView.addSubview(trailHolidayHours)
-
-        // Configure constraints for trailHoursLabel
-        NSLayoutConstraint.activate([
-            trailHoursLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
-            trailHoursLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            trailHoursLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            
-            trailHolidayHours.topAnchor.constraint(equalTo: trailHoursLabel.bottomAnchor, constant: 20),
-            trailHolidayHours.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            trailHolidayHours.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            trailHolidayHours.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
-        ])
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class ContactsCell: UITableViewCell {
-    
-    var phoneNumberLabel: UILabel!
-    var emailAddressLabel: UILabel!
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        phoneNumberLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        emailAddressLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-
-        contentView.addSubview(phoneNumberLabel)
-        contentView.addSubview(emailAddressLabel)
-   
-        NSLayoutConstraint.activate([
-            phoneNumberLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
-            phoneNumberLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            phoneNumberLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            
-            emailAddressLabel.topAnchor.constraint(equalTo: phoneNumberLabel.bottomAnchor, constant: 4),
-            emailAddressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            emailAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            emailAddressLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
-
         ])
     }
     required init?(coder: NSCoder) {
@@ -296,60 +254,138 @@ class HistoryCell: UITableViewCell {
     }
 }
 
+class HoursCell: UITableViewCell {
+    
+    var trailHoursLabel: UILabel!
+    var trailHolidayHours: UILabel!
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        trailHoursLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
+        trailHolidayHours = createLabel(font: UIFont.italicSystemFont(ofSize: 15))
+
+        // Add the trailHoursLabel to the cell's content view
+        contentView.addSubview(trailHoursLabel)
+        contentView.addSubview(trailHolidayHours)
+
+        // Configure constraints for trailHoursLabel
+        NSLayoutConstraint.activate([
+            trailHoursLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            trailHoursLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            trailHoursLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            
+            trailHolidayHours.topAnchor.constraint(equalTo: trailHoursLabel.bottomAnchor, constant: 20),
+            trailHolidayHours.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            trailHolidayHours.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            trailHolidayHours.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
+        ])
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
 
 extension DetailsViewController {
     
-    // Helper function to configure Directions cell
-    func configureDirectionsCell(_ cell: DirectionsCell) {
-        if let park = selectedPark {
-            if let addresses = park.addresses, let firstAddress = addresses.first {
-                let address = "\(firstAddress.line1)"
-                let city = "\(firstAddress.city), "
-                let state =  "\(firstAddress.stateCode) "
-                let postalCode = "\(firstAddress.postalCode)"
-                
-                cell.trailAddressLabel.text = address
-                cell.trailCityLabel.text = city
-                cell.trailStateLabel.text = state
-                cell.trailZipCodeLabel.text = postalCode
-            } else {
-                cell.trailAddressLabel.text = "Address not available"
-                cell.trailCityLabel.text = "City not available"
-                cell.trailStateLabel.text = "State not available"
-                cell.trailZipCodeLabel.text = "Postal code not available"
-            }
+   // Helper function to configure Directions cell
+   func configureDirectionsCell(_ cell: DirectionsCell) {
+       if let park = selectedPark {
+           if let addresses = park.addresses, let firstAddress = addresses.first {
+               let address = "\(firstAddress.line1)"
+               let city = "\(firstAddress.city),"
+               let state = "\(firstAddress.stateCode)"
+               let postalCode = "\(firstAddress.postalCode)"
+
+               // Create a tap gesture recognizer for the address label
+               let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openInGoogleMaps(_:)))
+               cell.trailAddressLabel.isUserInteractionEnabled = true
+               cell.trailAddressLabel.addGestureRecognizer(tapGesture)
+               cell.trailAddressLabel.tag = 1 // Set a tag to identify the label
+
+             // Create an attributed string for the address label
+               let attributedAddress = NSMutableAttributedString(string: "\(address) \n\(city) \(state) \(postalCode)\n")
+               let boldFont = UIFont.boldSystemFont(ofSize: cell.trailAddressLabel.font.pointSize)
+               attributedAddress.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: attributedAddress.length))
+
+
+               let paragraphStyle = NSMutableParagraphStyle()
+               paragraphStyle.lineSpacing = 3
+               attributedAddress.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedAddress.length))
+
+               // Construct the Google Maps URL with city, state, and ZIP code
+               let googleMapsQuery = "\(address) \(city) \(state) \(postalCode)"
+               if let encodedQuery = googleMapsQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                   let googleMapsURL = "googlemaps://?q=\(encodedQuery)"
+                   let linkAttributes: [NSAttributedString.Key: Any] = [
+                       .link: googleMapsURL,
+                       .underlineStyle: NSUnderlineStyle.single.rawValue
+                   ]
+                   attributedAddress.addAttributes(linkAttributes, range: NSRange(location: 0, length: attributedAddress.length))
+               }
+               cell.trailAddressLabel.attributedText = attributedAddress
             
-            if let directions = park.directionsInfo {
-                let fullText = "Directions: \n\(directions)"
-                let attributedText = NSMutableAttributedString(string: fullText)
-                let boldFont = UIFont.boldSystemFont(ofSize: cell.trailDirectionsInfoLabel.font.pointSize)
-                attributedText.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: 11))
-                
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.lineSpacing = 3
-                attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
-                
-                cell.trailDirectionsInfoLabel.attributedText = attributedText
-            } else {
-                cell.trailDirectionsInfoLabel.text = nil
-            }
-            
-            if let directionsUrl = park.directionsUrl {
-                let attributedText = NSMutableAttributedString(string: "Visit Directions")
-                let linkAttributes: [NSAttributedString.Key: Any] = [
-                    .link: directionsUrl,
-                    .underlineStyle: NSUnderlineStyle.single.rawValue
-                ]
-                attributedText.addAttributes(linkAttributes, range: NSRange(location: 0, length: attributedText.length))
-                cell.trailDirectionsURLLabel.attributedText = attributedText
-            } else {
-                cell.trailDirectionsURLLabel.text = "URL not available"
-            }
-            
-            cell.trailNameLabel.text = park.fullName
-        }
-    }
-    
+           } else {
+               cell.trailAddressLabel.text = "Address not available"
+           }
+
+           if let directions = park.directionsInfo {
+               let fullText = "Directions: \n\(directions)"
+               let attributedText = NSMutableAttributedString(string: fullText)
+               let boldFont = UIFont.boldSystemFont(ofSize: cell.trailDirectionsInfoLabel.font.pointSize)
+               attributedText.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: 11))
+
+               let paragraphStyle = NSMutableParagraphStyle()
+               paragraphStyle.lineSpacing = 3
+               attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
+
+               cell.trailDirectionsInfoLabel.attributedText = attributedText
+           } else {
+               cell.trailDirectionsInfoLabel.text = nil
+           }
+
+           if let directionsUrl = park.directionsUrl {
+               let attributedText = NSMutableAttributedString(string: "Visit Website")
+               let linkAttributes: [NSAttributedString.Key: Any] = [
+                   .link: directionsUrl,
+                   .underlineStyle: NSUnderlineStyle.single.rawValue,
+                    .font: UIFont.systemFont(ofSize: 17)
+               ]
+               attributedText.addAttributes(linkAttributes, range: NSRange(location: 0, length: attributedText.length))
+               cell.trailDirectionsURLLabel.attributedText = attributedText
+           } else {
+               cell.trailDirectionsURLLabel.text = "URL not available"
+           }
+
+           cell.trailNameLabel.text = park.fullName
+       }
+   }
+
+    @objc func openInGoogleMaps(_ sender: UITapGestureRecognizer) {
+          if let addressLabel = sender.view as? UILabel,
+              let park = selectedPark,
+              let addresses = park.addresses,
+              let firstAddress = addresses.first,
+              addressLabel.tag == 1 { // Check if it's the address label
+
+              let address = "\(firstAddress.line1), \(firstAddress.city), \(firstAddress.stateCode) \(firstAddress.postalCode)"
+              if let encodedAddress = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                  let urlString = "https://www.google.com/maps/search/?api=1&query=\(encodedAddress)"
+                  if let url = URL(string: urlString) {
+                      if UIApplication.shared.canOpenURL(url) {
+                          UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                      } else {
+                          // Handle the case where Google Maps cannot be opened
+                          let alertController = UIAlertController(title: "Error", message: "Google Maps or Safari cannot be opened.", preferredStyle: .alert)
+                          let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                          alertController.addAction(okAction)
+                          present(alertController, animated: true, completion: nil)
+                      }
+                  }
+              }
+          }
+      }
+
     // Helper function to configure Hours cell
     func configureHoursCell(_ cell: HoursCell) {
         if let park = selectedPark,
@@ -399,33 +435,49 @@ extension DetailsViewController {
     }
     
     // Helper function to configure History cell
-   func configureContactsCell(_ cell: ContactsCell) {
-        if let park = selectedPark, let contacts = park.contacts {
-            // Create attributed strings with bold text for labels
-            let phoneNumberText = "Phone Number:  "
-            let emailAddressText = "Email Address:  "
-            let boldAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17)]
-            
-            // Unwrap phone numbers
-            if let phoneNumber = contacts.phoneNumbers.first?.phoneNumber {
-                let formattedPhoneNumber = formatPhoneNumber(phoneNumber)
-                let attributedPhoneNumber = NSMutableAttributedString(string: phoneNumberText, attributes: boldAttributes)
-                attributedPhoneNumber.append(NSAttributedString(string: formattedPhoneNumber))
-                cell.phoneNumberLabel.attributedText = attributedPhoneNumber
-            } else {
-                cell.phoneNumberLabel.text = "Phone Number not available"
-            }
-            
-            // Unwrap email addresses
-            if let emailAddress = contacts.emailAddresses.first?.emailAddress {
-                let attributedEmailAddress = NSMutableAttributedString(string: emailAddressText, attributes: boldAttributes)
-                attributedEmailAddress.append(NSAttributedString(string: emailAddress))
-                cell.emailAddressLabel.attributedText = attributedEmailAddress
-            } else {
-                cell.emailAddressLabel.text = "Email Address not available"
-            }
-        }
-    }
+ func configureContactsCell(_ cell: ContactsCell) {
+       if let park = selectedPark, let contacts = park.contacts {
+           // Create attributed strings with bold text for labels
+           let phoneNumberText = "Phone Number:  \n"
+           let emailAddressText = "Email Address:  \n"
+           let boldAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17)]
+           
+           // Define line height
+           let lineHeight: CGFloat = 5.0
+           
+           // Unwrap phone numbers
+           if let phoneNumber = contacts.phoneNumbers.first?.phoneNumber {
+               let formattedPhoneNumber = formatPhoneNumber(phoneNumber)
+               let attributedPhoneNumber = NSMutableAttributedString(string: phoneNumberText, attributes: boldAttributes)
+               attributedPhoneNumber.append(NSAttributedString(string: formattedPhoneNumber))
+               
+               // Apply line height to the entire attributed string
+               let paragraphStyle = NSMutableParagraphStyle()
+               paragraphStyle.lineSpacing = lineHeight
+               attributedPhoneNumber.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedPhoneNumber.length))
+               
+               cell.phoneNumberLabel.attributedText = attributedPhoneNumber
+           } else {
+               cell.phoneNumberLabel.text = "Phone Number not available"
+           }
+           
+           // Unwrap email addresses
+           if let emailAddress = contacts.emailAddresses.first?.emailAddress {
+               let attributedEmailAddress = NSMutableAttributedString(string: emailAddressText, attributes: boldAttributes)
+               attributedEmailAddress.append(NSAttributedString(string: emailAddress))
+               
+               // Apply line height to the entire attributed string
+               let paragraphStyle = NSMutableParagraphStyle()
+               paragraphStyle.lineSpacing = lineHeight
+               attributedEmailAddress.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedEmailAddress.length))
+               
+               cell.emailAddressLabel.attributedText = attributedEmailAddress
+           } else {
+               cell.emailAddressLabel.text = "Email Address not available"
+           }
+       }
+   }
+
 
 
 
