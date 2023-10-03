@@ -29,7 +29,7 @@ class DetailsViewController: UIViewController {
     var parksArray: [ParkData] = []
     
     //Accordion Data
-    var sections: [String] = ["Direction", "Park Hours", "Weather", "Contacts", "History"]
+    var sections: [String] = ["Directions", "Park Hours", "Weather", "Contacts", "History"]
     var collapsed: [Bool] = [true, true, true, true, true]
     
     //passed data from VC
@@ -139,6 +139,7 @@ class DetailsViewController: UIViewController {
 
 class DirectionsCell: UITableViewCell {
     
+    var trailNameLabel: UILabel!
     var trailAddressLabel: UILabel!
     var trailCityLabel: UILabel!
     var trailStateLabel: UILabel!
@@ -148,21 +149,21 @@ class DirectionsCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        trailAddressLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
-        trailCityLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
-        trailStateLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
-        trailZipCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
+        trailNameLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
+        trailAddressLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
+        trailCityLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
+        trailStateLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
+        trailZipCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
         trailDirectionsInfoLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
 
         // Initialize trailDirectionsURLLabel
         trailDirectionsURLLabel = UITextView()
-        trailDirectionsURLLabel.font = UIFont.systemFont(ofSize: 17, weight: .regular)
         trailDirectionsURLLabel.isEditable = false
         trailDirectionsURLLabel.isScrollEnabled = false
         trailDirectionsURLLabel.dataDetectorTypes = .link // Make links clickable
         trailDirectionsURLLabel.translatesAutoresizingMaskIntoConstraints = false
 
-        
+        contentView.addSubview(trailNameLabel)
         contentView.addSubview(trailAddressLabel)
         contentView.addSubview(trailCityLabel)
         contentView.addSubview(trailStateLabel)
@@ -171,7 +172,11 @@ class DirectionsCell: UITableViewCell {
         contentView.addSubview(trailDirectionsURLLabel)
         
         NSLayoutConstraint.activate([
-            trailAddressLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            trailNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            trailNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            trailNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            
+            trailAddressLabel.topAnchor.constraint(equalTo: trailNameLabel.bottomAnchor, constant: 4),
             trailAddressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             
@@ -187,10 +192,9 @@ class DirectionsCell: UITableViewCell {
             trailDirectionsInfoLabel.topAnchor.constraint(equalTo: trailCityLabel.bottomAnchor, constant: 15),
             trailDirectionsInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailDirectionsInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            trailDirectionsInfoLabel.bottomAnchor.constraint(equalTo: trailDirectionsURLLabel.topAnchor),
             
-            trailDirectionsURLLabel.topAnchor.constraint(equalTo: trailDirectionsInfoLabel.bottomAnchor, constant: 15),
-            trailDirectionsURLLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            trailDirectionsURLLabel.topAnchor.constraint(equalTo: trailDirectionsInfoLabel.bottomAnchor, constant: 5),
+            trailDirectionsURLLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             trailDirectionsURLLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             trailDirectionsURLLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
     
@@ -211,7 +215,7 @@ class HoursCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         trailHoursLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        trailHolidayHours = createLabel(font: UIFont.italicSystemFont(ofSize: 14))
+        trailHolidayHours = createLabel(font: UIFont.italicSystemFont(ofSize: 15))
 
         // Add the trailHoursLabel to the cell's content view
         contentView.addSubview(trailHoursLabel)
@@ -222,9 +226,8 @@ class HoursCell: UITableViewCell {
             trailHoursLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
             trailHoursLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailHoursLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            trailHoursLabel.bottomAnchor.constraint(equalTo: trailHolidayHours.topAnchor, constant: -20),
             
-            trailHolidayHours.topAnchor.constraint(equalTo: trailHoursLabel.bottomAnchor),
+            trailHolidayHours.topAnchor.constraint(equalTo: trailHoursLabel.bottomAnchor, constant: 20),
             trailHolidayHours.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailHolidayHours.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             trailHolidayHours.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
@@ -265,6 +268,7 @@ class HistoryCell: UITableViewCell {
 extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let sectionName = sections[indexPath.section]
         let lightGray = UIColor(white: 0.9, alpha: 1.0)
         
@@ -282,24 +286,23 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         switch indexPath.section {
-        //DIRECTIONS
+       // DIRECTIONS
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "directionsCell", for: indexPath) as! DirectionsCell
             
             if let park = selectedPark {
-                //unwrap [Addresses]
-                if let park = selectedPark, let addresses = park.addresses, !addresses.isEmpty {
-                    if let firstAddress = addresses.first {
-                        let address = "\(firstAddress.line1)"
-                        let city = "\(firstAddress.city), "
-                        let state =  "\(firstAddress.stateCode) "
-                        let postalCode = "\(firstAddress.postalCode)"
-                        
-                        cell.trailAddressLabel.text = address
-                        cell.trailCityLabel.text = city
-                        cell.trailStateLabel.text = state
-                        cell.trailZipCodeLabel.text = postalCode
-                    }
+               
+                // Unwrap [Addresses]
+                if let addresses = park.addresses, !addresses.isEmpty, let firstAddress = addresses.first {
+                    let address = "\(firstAddress.line1)"
+                    let city = "\(firstAddress.city), "
+                    let state =  "\(firstAddress.stateCode) "
+                    let postalCode = "\(firstAddress.postalCode)"
+                    
+                    cell.trailAddressLabel.text = address
+                    cell.trailCityLabel.text = city
+                    cell.trailStateLabel.text = state
+                    cell.trailZipCodeLabel.text = postalCode
                 } else {
                     // Handle the case where park.addresses is nil or empty
                     cell.trailAddressLabel.text = "Address not available"
@@ -308,14 +311,15 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
                     cell.trailZipCodeLabel.text = "Postal code not available"
                 }
                 
-                //Directions Info
+                // Directions Info
                 if let directions = park.directionsInfo {
                     let fullText = "Directions: \n\(directions)"
                     let attributedText = NSMutableAttributedString(string: fullText)
                     
-                    //set to bold "Directions:"
-                    let boldFont = UIFont.boldSystemFont(ofSize:  cell.trailDirectionsInfoLabel.font.pointSize)
+                    // Set to bold "Directions:"
+                    let boldFont = UIFont.boldSystemFont(ofSize: cell.trailDirectionsInfoLabel.font.pointSize)
                     attributedText.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: 11))
+                    
                     // Apply custom line height
                     let paragraphStyle = NSMutableParagraphStyle()
                     paragraphStyle.lineSpacing = 3 // Adjust the line spacing as needed
@@ -326,17 +330,28 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
                     cell.trailDirectionsInfoLabel.text = nil
                 }
                 
-                // Set the URL text
-                       if let directionsUrl = park.directionsUrl {
-                           cell.trailDirectionsURLLabel.text = directionsUrl
-                       } else {
-                           cell.trailDirectionsURLLabel.text = "URL not available"
-                       }
-                   
+                // Set the URL for Directions
+                if let directionsUrl = park.directionsUrl {
+                    // Create an attributed string with a link-like appearance
+                    let attributedText = NSMutableAttributedString(string: "Visit Directions")
+                    
+                    // Set the link attribute for the entire text
+                    let linkAttributes: [NSAttributedString.Key: Any] = [
+                        .link: directionsUrl,
+                        .underlineStyle: NSUnderlineStyle.single.rawValue // underline
+                    ]
+                    attributedText.addAttributes(linkAttributes, range: NSRange(location: 0, length: attributedText.length))
+                    
+                    cell.trailDirectionsURLLabel.attributedText = attributedText
+                } else {
+                    cell.trailDirectionsURLLabel.text = "URL not available"
+                }
+                
+                // Park Name
+                cell.trailNameLabel.text = park.fullName
             }
-            
             return cell
-            
+
         //HOURS SECTION
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
