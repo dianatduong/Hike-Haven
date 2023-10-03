@@ -352,37 +352,51 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
             }
             return cell
 
-        //HOURS SECTION
+      //HOURS SECTION
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
                     
-               if let park = selectedPark,
-                    let operatingHours = park.operatingHours,
-                    let firstOperatingHours = operatingHours.first,
-                    let standardHours = firstOperatingHours.standardHours {
+            if let park = selectedPark,
+                let operatingHours = park.operatingHours,
+                let firstOperatingHours = operatingHours.first,
+                let standardHours = firstOperatingHours.standardHours {
 
-                    // Access the properties of the StandardHours object
-                    let sundayHours = standardHours.sunday
-                    let mondayHours = standardHours.monday
-                    let tuesdayHours = standardHours.tuesday
-                    let wednesdayHours = standardHours.wednesday
-                    let thursdayHours = standardHours.thursday
-                    let fridayHours = standardHours.friday
-                    let saturdayHours = standardHours.saturday
+                // Access the properties of the StandardHours object
+                let sundayHours = standardHours.sunday
+                let mondayHours = standardHours.monday
+                let tuesdayHours = standardHours.tuesday
+                let wednesdayHours = standardHours.wednesday
+                let thursdayHours = standardHours.thursday
+                let fridayHours = standardHours.friday
+                let saturdayHours = standardHours.saturday
+                        
+                let daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+                let hoursText = "Sunday: \(sundayHours)\nMonday: \(mondayHours)\nTuesday: \(tuesdayHours)\nWednesday: \(wednesdayHours)\nThursday: \(thursdayHours)\nFriday: \(fridayHours)\nSaturday: \(saturdayHours)"
 
-                    let hoursText = "Sunday: \(sundayHours)\nMonday: \(mondayHours)\nTuesday: \(tuesdayHours)\nWednesday: \(wednesdayHours)\nThursday: \(thursdayHours)\nFriday: \(fridayHours)\nSaturday: \(saturdayHours)"
-                
-                    let holidayText = "*Please refer to Park’s website for Holiday hours."
+                // Create a mutable attributed string
+                let attributedText = NSMutableAttributedString(string: hoursText)
 
-                    let attributedString = NSMutableAttributedString(string: hoursText)
-                    let paragraphStyle = NSMutableParagraphStyle()
-                    paragraphStyle.lineSpacing = 5
-                    attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
-
-                    cell.trailHoursLabel.attributedText = attributedString
-                    cell.trailHolidayHours.text = holidayText
+                // Loop through the days of the week and apply bold font
+                for day in daysOfWeek {
+                    if let range = hoursText.range(of: "\(day):") {
+                        let nsRange = NSRange(range, in: hoursText)
+                        attributedText.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: nsRange)
+                    }
                 }
-                return cell
+                        
+                let holidayText = "*Please refer to Park’s website for Holiday hours."
+
+                // Apply line spacing to the attributed text
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = 5
+                attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
+
+                // Set the attributed text for the trailHoursLabel
+                cell.trailHoursLabel.attributedText = attributedText
+                cell.trailHolidayHours.text = holidayText
+            }
+            return cell
+
 
         // HISTORY SECTION
         case 4:
