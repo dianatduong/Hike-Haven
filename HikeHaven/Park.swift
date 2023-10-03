@@ -5,7 +5,6 @@
 //  Created by Diana Duong on 9/13/23.
 //  Copyright © 2023 Diana Duong. All rights reserved.
 //
-
 import UIKit
 
 struct Park: Codable {
@@ -15,7 +14,7 @@ struct Park: Codable {
 struct ParkData: Codable {
     let fullName: String?
     let addresses: [Addresses]?
-    let contacts: [Contact]?
+    let contacts: Contact?
     let description: String?
     let directionsInfo: String?
     let directionsUrl: String?
@@ -26,7 +25,6 @@ struct ParkData: Codable {
 
 struct Addresses: Codable {
     let line1: String
-    let line2: String
     let city: String
     let stateCode: String
     let postalCode: String
@@ -47,22 +45,26 @@ struct StandardHours: Codable {
 }
 
 struct Contact: Codable {
-    let phoneNumbers: [PhoneNumber]?
-    let emailAddresses: [EmailAddress]?
-}
-
-struct EmailAddress: Codable {
-    let emailAddress: String?
+    let phoneNumbers: [PhoneNumber]
+    let emailAddresses: [EmailAddress]
 }
 
 struct PhoneNumber: Codable {
-    let phoneNumber: String?
+    let phoneNumber: String
 }
+
+struct EmailAddress: Codable {
+    let emailAddress: String
+}
+
+
+
 
 
 
 
     /*
+
      struct ExceptionHours: Codable {
          let sunday: String
          let monday: String

@@ -29,7 +29,7 @@ class DetailsViewController: UIViewController {
     var parksArray: [ParkData] = []
     
     //Accordion Data
-    var sections: [String] = ["Directions", "Park Hours", "Weather", "Contacts", "History"]
+    var sections: [String] = ["Directions", "Park Hours", "Weather", "Contact Info", "History"]
     var collapsed: [Bool] = [true, true, true, true, true]
     
     //passed data from VC
@@ -118,6 +118,7 @@ class DetailsViewController: UIViewController {
         accordionTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         accordionTableView.register(DirectionsCell.self, forCellReuseIdentifier: "directionsCell")
         accordionTableView.register(HoursCell.self, forCellReuseIdentifier: "hoursCell")
+        accordionTableView.register(ContactsCell.self, forCellReuseIdentifier: "contactsCell")
         accordionTableView.register(HistoryCell.self, forCellReuseIdentifier: "historyCell")
         
         accordionTableView.dataSource = self
@@ -238,6 +239,37 @@ class HoursCell: UITableViewCell {
     }
 }
 
+class ContactsCell: UITableViewCell {
+    
+    var phoneNumberLabel: UILabel!
+    var emailAddressLabel: UILabel!
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        
+        phoneNumberLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
+        emailAddressLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
+
+        contentView.addSubview(phoneNumberLabel)
+        contentView.addSubview(emailAddressLabel)
+   
+        NSLayoutConstraint.activate([
+            phoneNumberLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            phoneNumberLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            phoneNumberLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            
+            emailAddressLabel.topAnchor.constraint(equalTo: phoneNumberLabel.bottomAnchor, constant: 4),
+            emailAddressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            emailAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            emailAddressLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
+
+        ])
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 
 class HistoryCell: UITableViewCell {
     
@@ -265,17 +297,175 @@ class HistoryCell: UITableViewCell {
 }
 
 
+extension DetailsViewController {
+    
+    // Helper function to configure Directions cell
+    func configureDirectionsCell(_ cell: DirectionsCell) {
+        if let park = selectedPark {
+            if let addresses = park.addresses, let firstAddress = addresses.first {
+                let address = "\(firstAddress.line1)"
+                let city = "\(firstAddress.city), "
+                let state =  "\(firstAddress.stateCode) "
+                let postalCode = "\(firstAddress.postalCode)"
+                
+                cell.trailAddressLabel.text = address
+                cell.trailCityLabel.text = city
+                cell.trailStateLabel.text = state
+                cell.trailZipCodeLabel.text = postalCode
+            } else {
+                cell.trailAddressLabel.text = "Address not available"
+                cell.trailCityLabel.text = "City not available"
+                cell.trailStateLabel.text = "State not available"
+                cell.trailZipCodeLabel.text = "Postal code not available"
+            }
+            
+            if let directions = park.directionsInfo {
+                let fullText = "Directions: \n\(directions)"
+                let attributedText = NSMutableAttributedString(string: fullText)
+                let boldFont = UIFont.boldSystemFont(ofSize: cell.trailDirectionsInfoLabel.font.pointSize)
+                attributedText.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: 11))
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = 3
+                attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
+                
+                cell.trailDirectionsInfoLabel.attributedText = attributedText
+            } else {
+                cell.trailDirectionsInfoLabel.text = nil
+            }
+            
+            if let directionsUrl = park.directionsUrl {
+                let attributedText = NSMutableAttributedString(string: "Visit Directions")
+                let linkAttributes: [NSAttributedString.Key: Any] = [
+                    .link: directionsUrl,
+                    .underlineStyle: NSUnderlineStyle.single.rawValue
+                ]
+                attributedText.addAttributes(linkAttributes, range: NSRange(location: 0, length: attributedText.length))
+                cell.trailDirectionsURLLabel.attributedText = attributedText
+            } else {
+                cell.trailDirectionsURLLabel.text = "URL not available"
+            }
+            
+            cell.trailNameLabel.text = park.fullName
+        }
+    }
+    
+    // Helper function to configure Hours cell
+    func configureHoursCell(_ cell: HoursCell) {
+        if let park = selectedPark,
+            let operatingHours = park.operatingHours,
+            let firstOperatingHours = operatingHours.first,
+            let standardHours = firstOperatingHours.standardHours {
+            
+            let daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+            let hoursText = "Sunday: \(standardHours.sunday)\nMonday: \(standardHours.monday)\nTuesday: \(standardHours.tuesday)\nWednesday: \(standardHours.wednesday)\nThursday: \(standardHours.thursday)\nFriday: \(standardHours.friday)\nSaturday: \(standardHours.saturday)"
+            
+            let attributedText = NSMutableAttributedString(string: hoursText)
+            
+            for day in daysOfWeek {
+                if let range = hoursText.range(of: "\(day):") {
+                    let nsRange = NSRange(range, in: hoursText)
+                    attributedText.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: nsRange)
+                }
+            }
+            
+            let holidayText = "*Please refer to Park’s website for Holiday hours."
+            
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineSpacing = 5
+            attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
+            
+            cell.trailHoursLabel.attributedText = attributedText
+            cell.trailHolidayHours.text = holidayText
+        }
+    }
+    
+    func formatPhoneNumber(_ phoneNumber: String) -> String {
+        // Remove any characters that are not digits
+        let digitsOnly = phoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted).joined()
+        
+        // Check if the phone number has enough digits
+        guard digitsOnly.count == 10 else {
+            return "Invalid phone number"
+        }
+        
+        // Split the digits into groups and format
+        let areaCode = digitsOnly.prefix(3)
+        let prefix = digitsOnly.dropFirst(3).prefix(3)
+        let lineNumber = digitsOnly.dropFirst(6)
+        
+        let formattedNumber = "(\(areaCode)) \(prefix)-\(lineNumber)"
+        return formattedNumber
+    }
+    
+    // Helper function to configure History cell
+   func configureContactsCell(_ cell: ContactsCell) {
+        if let park = selectedPark, let contacts = park.contacts {
+            // Create attributed strings with bold text for labels
+            let phoneNumberText = "Phone Number:  "
+            let emailAddressText = "Email Address:  "
+            let boldAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17)]
+            
+            // Unwrap phone numbers
+            if let phoneNumber = contacts.phoneNumbers.first?.phoneNumber {
+                let formattedPhoneNumber = formatPhoneNumber(phoneNumber)
+                let attributedPhoneNumber = NSMutableAttributedString(string: phoneNumberText, attributes: boldAttributes)
+                attributedPhoneNumber.append(NSAttributedString(string: formattedPhoneNumber))
+                cell.phoneNumberLabel.attributedText = attributedPhoneNumber
+            } else {
+                cell.phoneNumberLabel.text = "Phone Number not available"
+            }
+            
+            // Unwrap email addresses
+            if let emailAddress = contacts.emailAddresses.first?.emailAddress {
+                let attributedEmailAddress = NSMutableAttributedString(string: emailAddressText, attributes: boldAttributes)
+                attributedEmailAddress.append(NSAttributedString(string: emailAddress))
+                cell.emailAddressLabel.attributedText = attributedEmailAddress
+            } else {
+                cell.emailAddressLabel.text = "Email Address not available"
+            }
+        }
+    }
+
+
+
+    
+    // Helper function to configure History cell
+    func configureHistoryCell(_ cell: HistoryCell) {
+        if let park = selectedPark {
+            if let history = park.description {
+                let fullText = "\(history)"
+                let attributedText = NSMutableAttributedString(string: fullText)
+                
+                let words = history.components(separatedBy: " ")
+                if let firstWord = words.first, let secondWord = words.dropFirst().first {
+                    let lengthOfFirstTwoWords = firstWord.count + secondWord.count + 1
+                    let range = NSRange(location: 0, length: lengthOfFirstTwoWords)
+                    let boldFont = UIFont.boldSystemFont(ofSize: cell.trailHistoryLabel.font.pointSize)
+                    attributedText.addAttribute(.font, value: boldFont, range: range)
+                }
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = 3
+                attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
+                
+                cell.trailHistoryLabel.attributedText = attributedText
+            } else {
+                cell.trailHistoryLabel.text = nil
+            }
+        }
+    }
+}
+
 extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
     
+    // Update tableView(_:cellForRowAt:) method
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
         let sectionName = sections[indexPath.section]
         let lightGray = UIColor(white: 0.9, alpha: 1.0)
         
-        // Configure the cell based on its row and section
-        if indexPath.row == 0 { // First row of the section
+        if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            
             cell.textLabel?.text = sectionName
             cell.accessoryType = .disclosureIndicator
             cell.backgroundColor = lightGray
@@ -286,161 +476,28 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         switch indexPath.section {
-       // DIRECTIONS
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "directionsCell", for: indexPath) as! DirectionsCell
-            
-            if let park = selectedPark {
-               
-                // Unwrap [Addresses]
-                if let addresses = park.addresses, !addresses.isEmpty, let firstAddress = addresses.first {
-                    let address = "\(firstAddress.line1)"
-                    let city = "\(firstAddress.city), "
-                    let state =  "\(firstAddress.stateCode) "
-                    let postalCode = "\(firstAddress.postalCode)"
-                    
-                    cell.trailAddressLabel.text = address
-                    cell.trailCityLabel.text = city
-                    cell.trailStateLabel.text = state
-                    cell.trailZipCodeLabel.text = postalCode
-                } else {
-                    // Handle the case where park.addresses is nil or empty
-                    cell.trailAddressLabel.text = "Address not available"
-                    cell.trailCityLabel.text = "City not available"
-                    cell.trailStateLabel.text = "State not available"
-                    cell.trailZipCodeLabel.text = "Postal code not available"
-                }
-                
-                // Directions Info
-                if let directions = park.directionsInfo {
-                    let fullText = "Directions: \n\(directions)"
-                    let attributedText = NSMutableAttributedString(string: fullText)
-                    
-                    // Set to bold "Directions:"
-                    let boldFont = UIFont.boldSystemFont(ofSize: cell.trailDirectionsInfoLabel.font.pointSize)
-                    attributedText.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: 11))
-                    
-                    // Apply custom line height
-                    let paragraphStyle = NSMutableParagraphStyle()
-                    paragraphStyle.lineSpacing = 3 // Adjust the line spacing as needed
-                    attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
-                    
-                    cell.trailDirectionsInfoLabel.attributedText = attributedText
-                } else {
-                    cell.trailDirectionsInfoLabel.text = nil
-                }
-                
-                // Set the URL for Directions
-                if let directionsUrl = park.directionsUrl {
-                    // Create an attributed string with a link-like appearance
-                    let attributedText = NSMutableAttributedString(string: "Visit Directions")
-                    
-                    // Set the link attribute for the entire text
-                    let linkAttributes: [NSAttributedString.Key: Any] = [
-                        .link: directionsUrl,
-                        .underlineStyle: NSUnderlineStyle.single.rawValue // underline
-                    ]
-                    attributedText.addAttributes(linkAttributes, range: NSRange(location: 0, length: attributedText.length))
-                    
-                    cell.trailDirectionsURLLabel.attributedText = attributedText
-                } else {
-                    cell.trailDirectionsURLLabel.text = "URL not available"
-                }
-                
-                // Park Name
-                cell.trailNameLabel.text = park.fullName
-            }
+            configureDirectionsCell(cell)
             return cell
-
-      //HOURS SECTION
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
-                    
-            if let park = selectedPark,
-                let operatingHours = park.operatingHours,
-                let firstOperatingHours = operatingHours.first,
-                let standardHours = firstOperatingHours.standardHours {
-
-                // Access the properties of the StandardHours object
-                let sundayHours = standardHours.sunday
-                let mondayHours = standardHours.monday
-                let tuesdayHours = standardHours.tuesday
-                let wednesdayHours = standardHours.wednesday
-                let thursdayHours = standardHours.thursday
-                let fridayHours = standardHours.friday
-                let saturdayHours = standardHours.saturday
-                        
-                let daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
-                let hoursText = "Sunday: \(sundayHours)\nMonday: \(mondayHours)\nTuesday: \(tuesdayHours)\nWednesday: \(wednesdayHours)\nThursday: \(thursdayHours)\nFriday: \(fridayHours)\nSaturday: \(saturdayHours)"
-
-                // Create a mutable attributed string
-                let attributedText = NSMutableAttributedString(string: hoursText)
-
-                // Loop through the days of the week and apply bold font
-                for day in daysOfWeek {
-                    if let range = hoursText.range(of: "\(day):") {
-                        let nsRange = NSRange(range, in: hoursText)
-                        attributedText.addAttribute(.font, value: UIFont.boldSystemFont(ofSize: 17), range: nsRange)
-                    }
-                }
-                        
-                let holidayText = "*Please refer to Park’s website for Holiday hours."
-
-                // Apply line spacing to the attributed text
-                let paragraphStyle = NSMutableParagraphStyle()
-                paragraphStyle.lineSpacing = 5
-                attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
-
-                // Set the attributed text for the trailHoursLabel
-                cell.trailHoursLabel.attributedText = attributedText
-                cell.trailHolidayHours.text = holidayText
-            }
+            configureHoursCell(cell)
             return cell
-
-
-        // HISTORY SECTION
+        case 3:
+           let cell = tableView.dequeueReusableCell(withIdentifier: "contactsCell", for: indexPath) as! ContactsCell
+           configureContactsCell(cell)
+           return cell
         case 4:
-            
             let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryCell
-            
-            if let park = selectedPark {
-                
-                if let history =  park.description {
-                    let fullText = "\(history)"
-                    let attributedText = NSMutableAttributedString(string: fullText)
-                    
-                    //Set to bold the first two words
-                    // Split the directions into words
-                    let words = history.components(separatedBy: " ")
-                    if let firstWord = words.first, let secondWord = words.dropFirst().first {
-                        // Calculate the length of the first two words
-                        let lengthOfFirstTwoWords = firstWord.count + secondWord.count + 1 // Add 1 for the space
-                        // Create a range for the first two words
-                        let range = NSRange(location: 0, length: lengthOfFirstTwoWords)
-                        let boldFont = UIFont.boldSystemFont(ofSize: cell.trailHistoryLabel.font.pointSize)
-                        // Apply bold font to the first two words
-                        attributedText.addAttribute(.font, value: boldFont, range: range)
-                    }
-                    
-                    // Apply custom line height
-                    let paragraphStyle = NSMutableParagraphStyle()
-                    paragraphStyle.lineSpacing = 3
-                    attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
-                    
-                    cell.trailHistoryLabel.attributedText = attributedText
-                } else {
-                    cell.trailHistoryLabel.text = nil
-                }
-            }
+            configureHistoryCell(cell)
             return cell
-            
         default:
-            // Handle other sections or rows if necessary
             return UITableViewCell()
         }
     }
     
-    
+
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
         //set header rows at height of 55
