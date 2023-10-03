@@ -155,14 +155,14 @@ class ContactsCell: UITableViewCell {
         contentView.addSubview(emailAddressLabel)
    
         NSLayoutConstraint.activate([
-            phoneNumberLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            phoneNumberLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             phoneNumberLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             phoneNumberLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             
             emailAddressLabel.topAnchor.constraint(equalTo: phoneNumberLabel.bottomAnchor, constant: 15),
             emailAddressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             emailAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            emailAddressLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
+            emailAddressLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
 
         ])
     }
@@ -206,7 +206,7 @@ class DirectionsCell: UITableViewCell {
         contentView.addSubview(trailDirectionsURLLabel)
         
         NSLayoutConstraint.activate([
-            trailNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            trailNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             trailNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             
@@ -221,7 +221,7 @@ class DirectionsCell: UITableViewCell {
             trailDirectionsURLLabel.topAnchor.constraint(equalTo: trailDirectionsInfoLabel.bottomAnchor, constant: 5),
             trailDirectionsURLLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
             trailDirectionsURLLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            trailDirectionsURLLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
+            trailDirectionsURLLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
     
         ])
     }
@@ -245,10 +245,10 @@ class HistoryCell: UITableViewCell {
         
         // Configure constraints for trailHoursLabel
         NSLayoutConstraint.activate([
-            trailHistoryLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            trailHistoryLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             trailHistoryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailHistoryLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            trailHistoryLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10)
+            trailHistoryLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     required init?(coder: NSCoder) {
@@ -265,7 +265,7 @@ class HoursCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
         trailHoursLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        trailHolidayHours = createLabel(font: UIFont.italicSystemFont(ofSize: 15))
+        trailHolidayHours = createLabel(font: UIFont.italicSystemFont(ofSize: 16))
 
         // Add the trailHoursLabel to the cell's content view
         contentView.addSubview(trailHoursLabel)
@@ -273,14 +273,14 @@ class HoursCell: UITableViewCell {
 
         // Configure constraints for trailHoursLabel
         NSLayoutConstraint.activate([
-            trailHoursLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            trailHoursLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             trailHoursLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailHoursLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             
             trailHolidayHours.topAnchor.constraint(equalTo: trailHoursLabel.bottomAnchor, constant: 20),
             trailHolidayHours.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailHolidayHours.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            trailHolidayHours.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
+            trailHolidayHours.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     required init?(coder: NSCoder) {
@@ -299,10 +299,10 @@ class WeatherCell: UITableViewCell {
         contentView.addSubview(weatherLabel)
         
         NSLayoutConstraint.activate([
-            weatherLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
-            weatherLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            weatherLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            weatherLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             weatherLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            weatherLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
+            weatherLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
     }
     required init?(coder: NSCoder) {
@@ -529,11 +529,40 @@ extension DetailsViewController {
                 
                 cell.trailHistoryLabel.attributedText = attributedText
             } else {
-                cell.trailHistoryLabel.text = nil
+                cell.trailHistoryLabel.text = "History information is unavailable at this time."
             }
         }
     }
+
+    
+    // Helper function to configure Weather cell
+    func configureWeatherCell(_ cell: WeatherCell) {
+        if let park = selectedPark {
+            if let weather = park.weatherInfo {
+                let fullText = "\(weather)"
+                let attributedText = NSMutableAttributedString(string: fullText)
+                
+                let words = weather.components(separatedBy: " ")
+                if let firstWord = words.first, let secondWord = words.dropFirst().first {
+                    let lengthOfFirstTwoWords = firstWord.count + secondWord.count + 1
+                    let range = NSRange(location: 0, length: lengthOfFirstTwoWords)
+                    let boldFont = UIFont.boldSystemFont(ofSize: cell.weatherLabel.font.pointSize)
+                    attributedText.addAttribute(.font, value: boldFont, range: range)
+                }
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = 3
+                attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
+                
+                cell.weatherLabel.attributedText = attributedText
+            } else {
+                cell.weatherLabel.text = "Weather info is unavailable at this time"
+            }
+        }
+    }
+    
 }
+
 
 extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
     
@@ -564,9 +593,7 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) as! WeatherCell
-            if let park = selectedPark {
-                cell.weatherLabel.text = park.weatherInfo
-            }
+            configureWeatherCell(cell)
             return cell
         case 3:
            let cell = tableView.dequeueReusableCell(withIdentifier: "contactsCell", for: indexPath) as! ContactsCell
