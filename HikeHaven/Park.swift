@@ -15,11 +15,12 @@ struct Park: Codable {
 struct ParkData: Codable {
     let fullName: String?
     let addresses: [Addresses]?
+    let contacts: [Contact]?
     let description: String?
-    let operatingHours: [OperatingHours]?
-    let parkCode: String?
     let directionsInfo: String?
     let directionsUrl: String?
+    let operatingHours: [OperatingHours]?
+    let parkCode: String?
     //  let weatherInfo: String?
 }
 
@@ -62,9 +63,6 @@ struct PhoneNumber: Codable {
 
 
     /*
- 
-    
-     
      struct ExceptionHours: Codable {
          let sunday: String
          let monday: String
