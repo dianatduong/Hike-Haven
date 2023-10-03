@@ -20,7 +20,7 @@ struct ParkData: Codable {
     let directionsUrl: String?
     let operatingHours: [OperatingHours]?
     let parkCode: String?
-    //  let weatherInfo: String?
+    let weatherInfo: String?
 }
 
 struct Addresses: Codable {

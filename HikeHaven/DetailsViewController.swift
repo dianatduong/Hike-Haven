@@ -116,10 +116,12 @@ class DetailsViewController: UIViewController {
         let accordionTableView = UITableView()
         accordionTableView.translatesAutoresizingMaskIntoConstraints = false
         accordionTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        accordionTableView.register(DirectionsCell.self, forCellReuseIdentifier: "directionsCell")
-        accordionTableView.register(HoursCell.self, forCellReuseIdentifier: "hoursCell")
         accordionTableView.register(ContactsCell.self, forCellReuseIdentifier: "contactsCell")
+        accordionTableView.register(DirectionsCell.self, forCellReuseIdentifier: "directionsCell")
         accordionTableView.register(HistoryCell.self, forCellReuseIdentifier: "historyCell")
+        accordionTableView.register(HoursCell.self, forCellReuseIdentifier: "hoursCell")
+        accordionTableView.register(WeatherCell.self, forCellReuseIdentifier: "weatherCell")
+
         
         accordionTableView.dataSource = self
         accordionTableView.delegate = self
@@ -286,6 +288,28 @@ class HoursCell: UITableViewCell {
     }
 }
 
+class WeatherCell: UITableViewCell {
+
+    var weatherLabel: UILabel!
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        weatherLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
+
+        contentView.addSubview(weatherLabel)
+        
+        NSLayoutConstraint.activate([
+            weatherLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            weatherLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 15),
+            weatherLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
+            weatherLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -15)
+        ])
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
 extension DetailsViewController {
     
    // Helper function to configure Directions cell
@@ -360,6 +384,8 @@ extension DetailsViewController {
            cell.trailNameLabel.text = park.fullName
        }
    }
+
+
 
     @objc func openInGoogleMaps(_ sender: UITapGestureRecognizer) {
           if let addressLabel = sender.view as? UILabel,
@@ -535,6 +561,12 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
             configureHoursCell(cell)
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) as! WeatherCell
+            if let park = selectedPark {
+                cell.weatherLabel.text = park.weatherInfo
+            }
             return cell
         case 3:
            let cell = tableView.dequeueReusableCell(withIdentifier: "contactsCell", for: indexPath) as! ContactsCell
