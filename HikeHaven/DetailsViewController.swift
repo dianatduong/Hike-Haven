@@ -29,8 +29,8 @@ class DetailsViewController: UIViewController {
     var parksArray: [ParkData] = []
     
     //Accordion Data
-    var sections: [String] = ["Directions", "Park Hours", "Alerts", "Park Fees", "Weather", "Contact Info", "History"]
-    var collapsed: [Bool] = [true, true, true, true, true, true, true]
+    var sections: [String] = ["Directions", "Park Hours", "Weather Overview", "Contact Info", "History"]
+    var collapsed: [Bool] = [false, true, true, true, true]
     
     //passed data from VC
     var selectedPark: ParkData?   //property to hold the selected park
@@ -42,7 +42,6 @@ class DetailsViewController: UIViewController {
     var selectedNameLabel: UILabel!
     var textShadowLayer: UIView!
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -51,6 +50,7 @@ class DetailsViewController: UIViewController {
         getData()
         setUpAccordionTableView()
     }
+    
     //set up the user interface elements
     func setUpUI() {
         selectedImageView = UIImageView()
@@ -79,11 +79,11 @@ class DetailsViewController: UIViewController {
             selectedImageView.heightAnchor.constraint(equalToConstant: 270),
             
             textShadowLayer.topAnchor.constraint(equalTo: selectedImageView.topAnchor, constant: 195),
-            textShadowLayer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            textShadowLayer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             textShadowLayer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             
             selectedNameLabel.topAnchor.constraint(equalTo: selectedImageView.topAnchor, constant: 195),
-            selectedNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),
+            selectedNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             selectedNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
             
         ])
@@ -197,7 +197,7 @@ class DirectionsCell: UITableViewCell {
         contentView.addSubview(trailDirectionsInfoLabel)
         
         NSLayoutConstraint.activate([
-            trailNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            trailNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             trailNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             
@@ -582,34 +582,52 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
-
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
-        //set header rows at height of 55
-        if indexPath.row == 0 {
-            return 50
+        //hides "Directions" header for section 0
+        if indexPath.section == 0 {
+            if indexPath.row == 0 {
+                return 0 // Hide the header cell in section 0
+            } else {
+                return UITableView.automaticDimension // Make cell height dynamic for section 0, row 1
+            }
         } else {
+            // For other sections, set the header row's height to 50 and dynamic height for row 1
+            return indexPath.row == 0 ? 50 : UITableView.automaticDimension
+        }
+        
+        /*
+         //displays all headers
+         if indexPath.row == 0 {
+            return 50
+         } else {
             // otherwise for row 1 - make cell height dynamic
             return UITableView.automaticDimension }
+         }
+         */
     }
     
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        
         return sections.count
     }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // Check if the section index is less than the count of the 'collapsed' array
-        if section < collapsed.count {
-            // If expanded, show 2 rows (1 header + 1 detail), otherwise, show 1 row (header only)
-            return collapsed[section] ? 1 : 2
+        if section == 0 {
+            return collapsed[section] ? 1 : 2 // For section 0, return 2 rows (header + cell) if expanded
         } else {
-            // If the section index is not less than the count of the 'collapsed' array, return 0
-            // This could be a default value or an error handling case
-            return 0
+            // For other sections, follow your existing logic
+            if section < collapsed.count {
+                return collapsed[section] ? 1 : 2
+            } else {
+                return 0
+            }
         }
     }
+
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -626,6 +644,3 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 }
-
-
-
