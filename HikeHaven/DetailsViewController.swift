@@ -8,17 +8,6 @@
 
 import UIKit
 
-extension String {
-    func truncate(length: Int) -> String {
-        if self.count > length {
-            let endIndex = self.index(self.startIndex, offsetBy: length)
-            return String(self[..<endIndex])
-        } else {
-            return self
-        }
-    }
-}
-
 func createLabel(font: UIFont) -> UILabel {
     let label = UILabel()
     label.numberOfLines = 0
@@ -217,7 +206,7 @@ class DirectionsCell: UITableViewCell {
             trailAddressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             
-            trailDirectionsInfoLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 15),
+            trailDirectionsInfoLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 5),
             trailDirectionsInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailDirectionsInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             trailDirectionsInfoLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
