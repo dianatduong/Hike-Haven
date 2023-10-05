@@ -8,6 +8,17 @@
 
 import UIKit
 
+extension String {
+    func truncate(length: Int) -> String {
+        if self.count > length {
+            let endIndex = self.index(self.startIndex, offsetBy: length)
+            return String(self[..<endIndex])
+        } else {
+            return self
+        }
+    }
+}
+
 func createLabel(font: UIFont) -> UILabel {
     let label = UILabel()
     label.numberOfLines = 0
@@ -29,8 +40,8 @@ class DetailsViewController: UIViewController {
     var parksArray: [ParkData] = []
     
     //Accordion Data
-    var sections: [String] = ["Directions", "Park Hours", "Weather Overview", "Contact Info", "History"]
-    var collapsed: [Bool] = [false, true, true, true, true]
+    var sections: [String] = ["Directions", "Park Hours", "Weather Overview", "Contact Info"]
+    var collapsed: [Bool] = [false, true, true, true]
     
     //passed data from VC
     var selectedPark: ParkData?   //property to hold the selected park
@@ -188,7 +199,8 @@ class DirectionsCell: UITableViewCell {
         trailStateLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
         trailZipCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
         trailDirectionsInfoLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-
+        trailDirectionsInfoLabel.isUserInteractionEnabled = true
+        
         contentView.addSubview(trailNameLabel)
         contentView.addSubview(trailAddressLabel)
         contentView.addSubview(trailCityLabel)
@@ -205,7 +217,7 @@ class DirectionsCell: UITableViewCell {
             trailAddressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             
-            trailDirectionsInfoLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 5),
+            trailDirectionsInfoLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 15),
             trailDirectionsInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailDirectionsInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             trailDirectionsInfoLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
@@ -299,67 +311,65 @@ class WeatherCell: UITableViewCell {
 
 extension DetailsViewController {
     
-   // Helper function to configure Directions cell
-   func configureDirectionsCell(_ cell: DirectionsCell) {
-       if let park = selectedPark {
-           if let addresses = park.addresses, let firstAddress = addresses.first {
-               let address = "\(firstAddress.line1)"
-               let city = "\(firstAddress.city),"
-               let state = "\(firstAddress.stateCode)"
-               let postalCode = "\(firstAddress.postalCode)"
+ // Helper function to configure Directions cell
+ func configureDirectionsCell(_ cell: DirectionsCell) {
+     if let park = selectedPark {
+         if let addresses = park.addresses, let firstAddress = addresses.first {
+             let address = "\(firstAddress.line1)"
+             let city = "\(firstAddress.city),"
+             let state = "\(firstAddress.stateCode)"
+             let postalCode = "\(firstAddress.postalCode)"
 
-               // Create a tap gesture recognizer for the address label
-               let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openInGoogleMaps(_:)))
-               cell.trailAddressLabel.isUserInteractionEnabled = true
-               cell.trailAddressLabel.addGestureRecognizer(tapGesture)
-               cell.trailAddressLabel.tag = 1 // Set a tag to identify the label
+             // Create a tap gesture recognizer for the address label
+             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openInGoogleMaps(_:)))
+             cell.trailAddressLabel.isUserInteractionEnabled = true
+             cell.trailAddressLabel.addGestureRecognizer(tapGesture)
+             cell.trailAddressLabel.tag = 1 // Set a tag to identify the label
 
-             // Create an attributed string for the address label
-               let attributedAddress = NSMutableAttributedString(string: "\(address) \n\(city) \(state) \(postalCode)\n")
-               let boldFont = UIFont.boldSystemFont(ofSize: cell.trailAddressLabel.font.pointSize)
-               attributedAddress.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: attributedAddress.length))
-
-
-               let paragraphStyle = NSMutableParagraphStyle()
-               paragraphStyle.lineSpacing = 3
-               attributedAddress.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedAddress.length))
-
-               // Construct the Google Maps URL with city, state, and ZIP code
-               let googleMapsQuery = "\(address) \(city) \(state) \(postalCode)"
-               if let encodedQuery = googleMapsQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-                   let googleMapsURL = "googlemaps://?q=\(encodedQuery)"
-                   let linkAttributes: [NSAttributedString.Key: Any] = [
-                       .link: googleMapsURL,
-                       .underlineStyle: NSUnderlineStyle.single.rawValue
-                   ]
-                   attributedAddress.addAttributes(linkAttributes, range: NSRange(location: 0, length: attributedAddress.length))
-               }
-               cell.trailAddressLabel.attributedText = attributedAddress
-            
-           } else {
-               cell.trailAddressLabel.text = "Address not available"
-           }
-
-           if let directions = park.directionsInfo {
-               let fullText = "Directions: \n\(directions)"
-               let attributedText = NSMutableAttributedString(string: fullText)
-               let boldFont = UIFont.boldSystemFont(ofSize: cell.trailDirectionsInfoLabel.font.pointSize)
-               attributedText.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: 11))
-
-               let paragraphStyle = NSMutableParagraphStyle()
-               paragraphStyle.lineSpacing = 3
-               attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
-
-               cell.trailDirectionsInfoLabel.attributedText = attributedText
-           } else {
-               cell.trailDirectionsInfoLabel.text = nil
-           }
-
-           cell.trailNameLabel.text = park.fullName
-       }
-   }
+           // Create an attributed string for the address label
+             let attributedAddress = NSMutableAttributedString(string: "\(address) \(city) \(state) \(postalCode)")
+             let boldFont = UIFont.boldSystemFont(ofSize: cell.trailAddressLabel.font.pointSize)
+             attributedAddress.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: attributedAddress.length))
 
 
+             let paragraphStyle = NSMutableParagraphStyle()
+             paragraphStyle.lineSpacing = 3
+             attributedAddress.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedAddress.length))
+
+             // Construct the Google Maps URL with city, state, and ZIP code
+             let googleMapsQuery = "\(address) \(city) \(state) \(postalCode)"
+             if let encodedQuery = googleMapsQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                 let googleMapsURL = "googlemaps://?q=\(encodedQuery)"
+                 let linkAttributes: [NSAttributedString.Key: Any] = [
+                     .link: googleMapsURL,
+                     .underlineStyle: NSUnderlineStyle.single.rawValue
+                 ]
+                 attributedAddress.addAttributes(linkAttributes, range: NSRange(location: 0, length: attributedAddress.length))
+             }
+             cell.trailAddressLabel.attributedText = attributedAddress
+          
+         } else {
+             cell.trailAddressLabel.text = "Address not available"
+         }
+
+         if let directions = park.directionsInfo {
+             let fullText = "Directions: \n\(directions)"
+             let attributedText = NSMutableAttributedString(string: fullText)
+             let boldFont = UIFont.boldSystemFont(ofSize: cell.trailDirectionsInfoLabel.font.pointSize)
+             attributedText.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: 11))
+
+             let paragraphStyle = NSMutableParagraphStyle()
+             paragraphStyle.lineSpacing = 3
+             attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
+
+             cell.trailDirectionsInfoLabel.attributedText = attributedText
+         } else {
+             cell.trailDirectionsInfoLabel.text = nil
+         }
+
+         cell.trailNameLabel.text = park.fullName
+     }
+ }
 
     @objc func openInGoogleMaps(_ sender: UITapGestureRecognizer) {
           if let addressLabel = sender.view as? UILabel,
@@ -565,15 +575,15 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
             let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
             configureHoursCell(cell)
             return cell
-        case 4:
+        case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) as! WeatherCell
             configureWeatherCell(cell)
             return cell
-        case 5:
+        case 3:
            let cell = tableView.dequeueReusableCell(withIdentifier: "contactsCell", for: indexPath) as! ContactsCell
            configureContactsCell(cell)
            return cell
-        case 6:
+        case 4:
             let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryCell
             configureHistoryCell(cell)
             return cell
