@@ -36,15 +36,54 @@ class ViewController: UITableViewController, UISearchBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         configureSearchBar()
-       // navigationItem.title = "Hike Haven"
         setUpHeader()
         configureTableView()
-        fetchDataAPI()
+        
+        //fetching API data
+       fetchDataAPI()
         fetchImagesAPI()
         fetchWeatherAPI()
 
     }
+    
+    func fetchImagesAPI() {
+        APIManager.shared.fetchImagesAPI(searchTerm: searchTerm) { [weak self] unsplashArray in
+            guard let self = self, let unsplashArray = unsplashArray else {
+                return
+            }
+            self.unsplashArray = unsplashArray
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+
+    func fetchDataAPI() {
+        APIManager.shared.fetchDataAPI(searchTerm: searchTerm) { [weak self] parksArray in
+            guard let self = self, let parksArray = parksArray else {
+                return
+            }
+            self.parksArray = parksArray
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+
+    func fetchWeatherAPI() {
+        APIManager.shared.fetchWeatherAPI { [weak self] weatherArray in
+            guard let self = self, let weatherArray = weatherArray else {
+                return
+            }
+            self.weatherArray = weatherArray
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
+    }
+    
     
     func configureSearchBar() {
         searchBar.searchBarStyle = UISearchBar.Style.default
@@ -81,147 +120,9 @@ class ViewController: UITableViewController, UISearchBarDelegate {
     }
     
 
-    func loadImage(from url: URL, completion: @escaping (UIImage?) -> Void) {
-        if let cachedImage = imageCache.object(forKey: url.absoluteString as NSString) {
-            completion(cachedImage)
-        } else {
-            URLSession.shared.dataTask(with: url) { data, response, error in
-                if let error = error {
-                    print(error.localizedDescription)
-                    completion(nil)
-                }
-                guard let data = data else {
-                    print("No data returned from image URL.")
-                    completion(nil)
-                    return
-                }
-                DispatchQueue.main.async {
-                    if let downloadedImage = UIImage(data: data) {
-                        self.imageCache.setObject(downloadedImage, forKey: url.absoluteString as NSString)
-                        completion(downloadedImage)
-                    }
-                }
-            }.resume()
-        }
-    }
+  
 
-    func fetchImagesAPI() {
-        let url = URL(string: "https://api.unsplash.com/search/photos?client_id=SwsdyqI6m6t38pMRrT8uCyXd-6-AKdT5Dy8I76IpEtc&count=1&query=\(searchTerm)+national+parks&per_page=20&orientation=landscape&order_by=popular")!
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        request.timeoutInterval = Double.infinity
 
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-              print(error.localizedDescription)
-              return
-            }
-            guard let data = data else {
-              print("No data returned from API.")
-              return
-            }
-            do {
-              let parkResponse = try JSONDecoder().decode(UnSplashStruct.self, from: data)
-                self.unsplashArray = parkResponse.results
-             
-              DispatchQueue.main.async {
-                self.tableView.reloadData()
-              }
-            } catch {
-              print(error.localizedDescription)
-            }
-          }
-          task.resume()
-    }
-    
-
-    func fetchDataAPI() {
-        // Define the URL for the API request
-        let url = URL(string: "https://developer.nps.gov/api/v1/parks?limit=20&q=\(searchTerm)")!
-        
-        // Create a URLRequest object
-        var request = URLRequest(url: url)
-        request.addValue("WKsNM1QPZ90IJLcgF7zsufYJQh8nCyACrTtoEABo", forHTTPHeaderField: "x-api-key")
-        request.httpMethod = "GET"
-        
-        // Create a URLSession data task
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            // Handle any errors
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            // Ensure data is returned from the API
-            guard let data = data else {
-                print("No data returned from API.")
-                return
-            }
-            do {
-                // Decode the JSON data into a Park object
-                let parkResponse = try JSONDecoder().decode(Park.self, from: data)
-                
-                // Update the parksArray property with the results
-                self.parksArray = parkResponse.data
-                
-                // Print the results to the console
-                //print(parkResponse.data)
-                
-                // Reload the table view on the main thread
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            } catch {
-                // Handle any decoding errors
-                print(error.localizedDescription)
-            }
-        }
-        // Start the URLSession data task
-        task.resume()
-    }
-
-    func fetchWeatherAPI() {
-        // Define the URL for the API request
-        let url = URL(string: "https://api.weather.gov/gridpoints/TOP/31,80/forecast")!
-        
-        // Create a URLRequest object
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        
-        // Create a URLSession data task
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            // Handle any errors
-            if let error = error {
-                print(error.localizedDescription)
-                return
-            }
-            
-            // Ensure data is returned from the API
-            guard let data = data else {
-                print("No data returned from API.")
-                return
-            }
-            
-            do {
-                // Decode the JSON data into a WeatherData object
-                let weatherResponse = try JSONDecoder().decode(WeatherData.self, from: data)
-                
-                // Update the weatherArray property with the results
-                self.weatherArray = weatherResponse.properties?.periods ?? []
-                
-                // Reload the table view on the main thread
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            } catch {
-                // Handle any decoding errors
-                print(error.localizedDescription)
-            }
-        }
-        
-        // Start the URLSession data task
-        task.resume()
-    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return parksArray.count
@@ -253,13 +154,12 @@ class ViewController: UITableViewController, UISearchBarDelegate {
             //unwrap urls: ImageURLS
             if let imageURLString = unsplashData.urls.regular,
                let imageURL = URL(string: imageURLString) {
-               loadImage(from: imageURL) { image in
+                APIManager.shared.loadImage(from: imageURL) { image in
                    DispatchQueue.main.async {
                        cell.mainImageView.image = image
                    }
                }
             }
-            
             return cell
         }
         

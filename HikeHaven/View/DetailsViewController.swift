@@ -103,7 +103,7 @@ class DetailsViewController: UIViewController {
             // Load and display the image via loadImage function from vc
             if let imageURLString = unsplashData.urls.regular,
                 let imageURL = URL(string: imageURLString) {
-                vc.loadImage(from: imageURL) { image in
+                APIManager.shared.loadImage(from: imageURL) { image in
                     DispatchQueue.main.async {
                         self.selectedImageView.image = image
                     }
