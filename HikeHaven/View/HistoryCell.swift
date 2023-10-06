@@ -10,13 +10,21 @@ import UIKit
 
 class HistoryCell: UITableViewCell {
     
-    var trailHistoryLabel: UILabel!
+    lazy var trailHistoryLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = true
+        label.font =  UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        trailHistoryLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        
+                
         // Add the trailHoursLabel to the cell's content view
         contentView.addSubview(trailHistoryLabel)
         

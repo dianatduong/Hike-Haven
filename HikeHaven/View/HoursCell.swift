@@ -10,6 +10,17 @@ import UIKit
 
 class HoursCell: UITableViewCell {
     
+    func createLabel(font: UIFont) -> UILabel {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = true
+        label.font = font
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }
+    
     var trailHoursLabel: UILabel!
     var trailHolidayHours: UILabel!
     

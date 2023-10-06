@@ -8,21 +8,12 @@
 
 import UIKit
 
-func createLabel(font: UIFont) -> UILabel {
-    let label = UILabel()
-    label.numberOfLines = 0
-    label.lineBreakMode = .byWordWrapping
-    label.adjustsFontSizeToFitWidth = true
-    label.font = font
-    label.textAlignment = .left
-    label.translatesAutoresizingMaskIntoConstraints = false
-    return label
-}
+
 
 class DetailsViewController: UIViewController {
     
     let vc = ViewController()
-    
+        
     //API
     var accordionData: [OperatingHours] = []
     var parksArray: [ParkData] = []
@@ -37,66 +28,25 @@ class DetailsViewController: UIViewController {
     var selectedPark: ParkData?   //property to hold the selected park
     var selectedUnsplashData: UnSplashData?
     //var selectedWeatherData: Periods?
-    
-    //UI Elements
-    var selectedImageView: UIImageView!
-    var selectedNameLabel: UILabel!
-    var textShadowLayer: UIView!
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        setUpUI()
+        UIManager.shared.setUpUI(forView: view)
         getData()
         setUpAccordionTableView()
     }
     
-    //set up the user interface elements
-    func setUpUI() {
-        selectedImageView = UIImageView()
-        selectedNameLabel = createLabel(font: UIFont.systemFont(ofSize: 25, weight: .bold))
-        selectedNameLabel.textColor = UIColor.white
-        
-        // adds shadow on white text for selectedNameLabel
-        textShadowLayer = UIView()
-        textShadowLayer.layer.shadowColor = UIColor.black.cgColor
-        textShadowLayer.layer.shadowOpacity = 0.9
-        textShadowLayer.layer.shadowOffset = CGSize(width: 1, height: 1)
-        textShadowLayer.layer.shadowRadius = 1
-        
-        view.addSubview(selectedImageView)
-        selectedImageView.addSubview(textShadowLayer)
-        textShadowLayer.addSubview(selectedNameLabel)
-        
-        selectedImageView.translatesAutoresizingMaskIntoConstraints = false
-        selectedNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        textShadowLayer.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            selectedImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            selectedImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            selectedImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            selectedImageView.heightAnchor.constraint(equalToConstant: 270),
-            
-            textShadowLayer.topAnchor.constraint(equalTo: selectedImageView.topAnchor, constant: 195),
-            textShadowLayer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            textShadowLayer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            
-            selectedNameLabel.topAnchor.constraint(equalTo: selectedImageView.topAnchor, constant: 195),
-            selectedNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            selectedNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            
-        ])
-    }
-    
+   
     //used to populate the UI elements with data received from ViewController
     func getData() {
         // Update labels with the park data
         if let park = selectedPark, let unsplashData = selectedUnsplashData {
             
             //Park Name
-            selectedNameLabel.text = park.fullName
+            UIManager.shared.selectedNameLabel.text = park.fullName
             navigationItem.largeTitleDisplayMode = .never
             title = park.fullName
             
@@ -105,7 +55,7 @@ class DetailsViewController: UIViewController {
                 let imageURL = URL(string: imageURLString) {
                 APIManager.shared.loadImage(from: imageURL) { image in
                     DispatchQueue.main.async {
-                        self.selectedImageView.image = image
+                        UIManager.shared.selectedImageView.image = image
                     }
                 }
             }
@@ -133,7 +83,7 @@ class DetailsViewController: UIViewController {
         view.addSubview(accordionTableView)
         
         NSLayoutConstraint.activate([
-            accordionTableView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 5),
+            accordionTableView.topAnchor.constraint(equalTo: UIManager.shared.selectedImageView.bottomAnchor, constant: 5),
             accordionTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             accordionTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             accordionTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)

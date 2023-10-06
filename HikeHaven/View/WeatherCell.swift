@@ -9,12 +9,20 @@
 import UIKit
 
 class WeatherCell: UITableViewCell {
-
-    var weatherLabel: UILabel!
     
+    lazy var weatherLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
+        label.adjustsFontSizeToFitWidth = true
+        label.font =  UIFont.systemFont(ofSize: 17, weight: .regular)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        weatherLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
 
         contentView.addSubview(weatherLabel)
         

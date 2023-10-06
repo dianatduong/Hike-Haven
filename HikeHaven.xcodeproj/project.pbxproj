@@ -14,6 +14,9 @@
 		A3266E652AD08444007C63C1 /* ContactsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3266E642AD08444007C63C1 /* ContactsCell.swift */; };
 		A3266E6D2AD08728007C63C1 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3266E6C2AD08728007C63C1 /* APIManager.swift */; };
 		A3266E6F2AD09355007C63C1 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3266E6E2AD09355007C63C1 /* HeaderView.swift */; };
+		A3266E712AD09481007C63C1 /* TableVIewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3266E702AD09481007C63C1 /* TableVIewManager.swift */; };
+		A3266E732AD09500007C63C1 /* SearchBarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3266E722AD09500007C63C1 /* SearchBarManager.swift */; };
+		A3266E762AD09AC4007C63C1 /* UIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3266E752AD09AC4007C63C1 /* UIManager.swift */; };
 		A37A5B232AB2AA1D004F9007 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37A5B222AB2AA1D004F9007 /* AppDelegate.swift */; };
 		A37A5B252AB2AA1D004F9007 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37A5B242AB2AA1D004F9007 /* SceneDelegate.swift */; };
 		A37A5B272AB2AA1D004F9007 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37A5B262AB2AA1D004F9007 /* ViewController.swift */; };
@@ -35,6 +38,9 @@
 		A3266E642AD08444007C63C1 /* ContactsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCell.swift; sourceTree = "<group>"; };
 		A3266E6C2AD08728007C63C1 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		A3266E6E2AD09355007C63C1 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		A3266E702AD09481007C63C1 /* TableVIewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableVIewManager.swift; sourceTree = "<group>"; };
+		A3266E722AD09500007C63C1 /* SearchBarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarManager.swift; sourceTree = "<group>"; };
+		A3266E752AD09AC4007C63C1 /* UIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIManager.swift; sourceTree = "<group>"; };
 		A37A5B1F2AB2AA1D004F9007 /* HikeHaven.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HikeHaven.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A37A5B222AB2AA1D004F9007 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A37A5B242AB2AA1D004F9007 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -75,22 +81,12 @@
 			isa = PBXGroup;
 			children = (
 				A37A5B3C2AB2B47D004F9007 /* MainTableViewCell.swift */,
-				A3266E5C2AD083A7007C63C1 /* DirectionsCell.swift */,
-				A3266E5E2AD083CD007C63C1 /* HistoryCell.swift */,
-				A3266E642AD08444007C63C1 /* ContactsCell.swift */,
 				A3266E6E2AD09355007C63C1 /* HeaderView.swift */,
-				A3266E622AD0841C007C63C1 /* WeatherCell.swift */,
-				A3266E602AD083F5007C63C1 /* HoursCell.swift */,
-				A3266E692AD0861C007C63C1 /* New Group */,
+				A3266E702AD09481007C63C1 /* TableVIewManager.swift */,
+				A3266E722AD09500007C63C1 /* SearchBarManager.swift */,
+				A3266E742AD09A6E007C63C1 /* DetailsVC */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		A3266E692AD0861C007C63C1 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "New Group";
 			sourceTree = "<group>";
 		};
 		A3266E6A2AD08668007C63C1 /* Model */ = {
@@ -112,6 +108,19 @@
 			);
 			name = Controller;
 			path = View;
+			sourceTree = "<group>";
+		};
+		A3266E742AD09A6E007C63C1 /* DetailsVC */ = {
+			isa = PBXGroup;
+			children = (
+				A3266E752AD09AC4007C63C1 /* UIManager.swift */,
+				A3266E622AD0841C007C63C1 /* WeatherCell.swift */,
+				A3266E602AD083F5007C63C1 /* HoursCell.swift */,
+				A3266E5C2AD083A7007C63C1 /* DirectionsCell.swift */,
+				A3266E642AD08444007C63C1 /* ContactsCell.swift */,
+				A3266E5E2AD083CD007C63C1 /* HistoryCell.swift */,
+			);
+			name = DetailsVC;
 			sourceTree = "<group>";
 		};
 		A37A5B162AB2AA1D004F9007 = {
@@ -215,6 +224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3266E6D2AD08728007C63C1 /* APIManager.swift in Sources */,
+				A3266E712AD09481007C63C1 /* TableVIewManager.swift in Sources */,
 				A37A5B432AB384C8004F9007 /* WeatherTableViewCell.swift in Sources */,
 				A37A5B3B2AB2B13F004F9007 /* Images.swift in Sources */,
 				A3266E652AD08444007C63C1 /* ContactsCell.swift in Sources */,
@@ -225,8 +235,10 @@
 				A37A5B412AB2BD16004F9007 /* DetailsViewController.swift in Sources */,
 				A3266E632AD0841C007C63C1 /* WeatherCell.swift in Sources */,
 				A3266E5F2AD083CD007C63C1 /* HistoryCell.swift in Sources */,
+				A3266E732AD09500007C63C1 /* SearchBarManager.swift in Sources */,
 				A37A5B492AB385D9004F9007 /* WeatherData.swift in Sources */,
 				A37A5B232AB2AA1D004F9007 /* AppDelegate.swift in Sources */,
+				A3266E762AD09AC4007C63C1 /* UIManager.swift in Sources */,
 				A3266E5D2AD083A7007C63C1 /* DirectionsCell.swift in Sources */,
 				A3266E612AD083F5007C63C1 /* HoursCell.swift in Sources */,
 				A37A5B452AB38511004F9007 /* AccordionViewController.swift in Sources */,
