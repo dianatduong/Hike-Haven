@@ -25,8 +25,9 @@ class DetailsViewController: UIViewController {
     
     //API
     var accordionData: [OperatingHours] = []
-    var weatherArray: [Periods] = []
     var parksArray: [ParkData] = []
+    // var weatherArray: [Periods] = []
+
     
     //Accordion Data
     var sections: [String] = ["Directions", "Park Hours", "Weather Overview", "Contact Info"]
@@ -35,7 +36,7 @@ class DetailsViewController: UIViewController {
     //passed data from VC
     var selectedPark: ParkData?   //property to hold the selected park
     var selectedUnsplashData: UnSplashData?
-    var selectedWeatherData: Periods?
+    //var selectedWeatherData: Periods?
     
     //UI Elements
     var selectedImageView: UIImageView!
@@ -137,164 +138,6 @@ class DetailsViewController: UIViewController {
             accordionTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             accordionTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-    }
-}
-
-class ContactsCell: UITableViewCell {
-    
-    var phoneNumberLabel: UILabel!
-    var emailAddressLabel: UILabel!
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        phoneNumberLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        emailAddressLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-
-        contentView.addSubview(phoneNumberLabel)
-        contentView.addSubview(emailAddressLabel)
-   
-        NSLayoutConstraint.activate([
-            phoneNumberLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            phoneNumberLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            phoneNumberLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            
-            emailAddressLabel.topAnchor.constraint(equalTo: phoneNumberLabel.bottomAnchor, constant: 15),
-            emailAddressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            emailAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            emailAddressLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
-
-        ])
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class DirectionsCell: UITableViewCell {
-    
-    var trailNameLabel: UILabel!
-    var trailAddressLabel: UILabel!
-    var trailCityLabel: UILabel!
-    var trailStateLabel: UILabel!
-    var trailZipCodeLabel: UILabel!
-    var trailDirectionsInfoLabel: UILabel!
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        trailNameLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .semibold))
-        trailAddressLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        trailCityLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        trailStateLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        trailZipCodeLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        trailDirectionsInfoLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        trailDirectionsInfoLabel.isUserInteractionEnabled = true
-        
-        contentView.addSubview(trailNameLabel)
-        contentView.addSubview(trailAddressLabel)
-        contentView.addSubview(trailCityLabel)
-        contentView.addSubview(trailStateLabel)
-        contentView.addSubview(trailZipCodeLabel)
-        contentView.addSubview(trailDirectionsInfoLabel)
-        
-        NSLayoutConstraint.activate([
-            trailNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            trailNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            trailNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            
-            trailAddressLabel.topAnchor.constraint(equalTo: trailNameLabel.bottomAnchor, constant: 4),
-            trailAddressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            trailAddressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            
-            trailDirectionsInfoLabel.topAnchor.constraint(equalTo: trailAddressLabel.bottomAnchor, constant: 5),
-            trailDirectionsInfoLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            trailDirectionsInfoLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            trailDirectionsInfoLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
-
-        ])
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-
-class HistoryCell: UITableViewCell {
-    
-    var trailHistoryLabel: UILabel!
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        trailHistoryLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        
-        // Add the trailHoursLabel to the cell's content view
-        contentView.addSubview(trailHistoryLabel)
-        
-        // Configure constraints for trailHoursLabel
-        NSLayoutConstraint.activate([
-            trailHistoryLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            trailHistoryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            trailHistoryLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            trailHistoryLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
-        ])
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class HoursCell: UITableViewCell {
-    
-    var trailHoursLabel: UILabel!
-    var trailHolidayHours: UILabel!
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        trailHoursLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-        trailHolidayHours = createLabel(font: UIFont.italicSystemFont(ofSize: 16))
-
-        // Add the trailHoursLabel to the cell's content view
-        contentView.addSubview(trailHoursLabel)
-        contentView.addSubview(trailHolidayHours)
-
-        // Configure constraints for trailHoursLabel
-        NSLayoutConstraint.activate([
-            trailHoursLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            trailHoursLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            trailHoursLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            
-            trailHolidayHours.topAnchor.constraint(equalTo: trailHoursLabel.bottomAnchor, constant: 20),
-            trailHolidayHours.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            trailHolidayHours.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            trailHolidayHours.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
-        ])
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class WeatherCell: UITableViewCell {
-
-    var weatherLabel: UILabel!
-    
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        weatherLabel = createLabel(font: UIFont.systemFont(ofSize: 17, weight: .regular))
-
-        contentView.addSubview(weatherLabel)
-        
-        NSLayoutConstraint.activate([
-            weatherLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            weatherLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            weatherLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
-            weatherLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
-        ])
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 }
 

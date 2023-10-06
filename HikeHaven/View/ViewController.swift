@@ -272,18 +272,13 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         let unsplashData = unsplashArray[indexPath.row]
         //let weather = weatherArray[indexPath.row]
 
-
         // Create instances of both view controllers
         let detailsVC = DetailsViewController()
-       // let accordionVC = AccordionViewController()
     
         // Pass data to DetailsViewController
         detailsVC.selectedPark = park
         detailsVC.selectedUnsplashData = unsplashData
        // detailsVC.selectedWeatherData = weather
-
-        // Add the AccordionViewController as a child view controller of DetailsViewController
-        //detailsVC.addChild(accordionVC)
 
         // Push the DetailsViewController onto the navigation stack
         navigationController?.pushViewController(detailsVC, animated: true)
