@@ -10,41 +10,69 @@ import UIKit
 
 
 
-class DetailsViewController: UIViewController {
+class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    let vc = ViewController()
-        
     //API
-    var accordionData: [OperatingHours] = []
     var parksArray: [ParkData] = []
     // var weatherArray: [Periods] = []
-
     
-    //Accordion Data
+    //passed data from VC
+    var selectedPark: ParkData?
+    var selectedUnsplashData: UnSplashData?
+    //var selectedWeatherData: Periods?
+    
+    //data for the accordion sections
     var sections: [String] = ["Directions", "Park Hours", "Weather Overview", "Contact Info"]
     var collapsed: [Bool] = [false, true, true, true]
     
-    //passed data from VC
-    var selectedPark: ParkData?   //property to hold the selected park
-    var selectedUnsplashData: UnSplashData?
-    //var selectedWeatherData: Periods?
-   
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         
+        //contstraints for image + name
         UIManager.shared.setUpUI(forView: view)
-        getData()
+        
+        //fetching api for image + name data
+        getUIData()
+        
         setUpAccordionTableView()
     }
     
-   
-    //used to populate the UI elements with data received from ViewController
-    func getData() {
+    
+    //UITableView for the accordion-style view
+    func setUpAccordionTableView() {
+        let accordionTableView = UITableView()
+        accordionTableView.translatesAutoresizingMaskIntoConstraints = false
+        accordionTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        accordionTableView.register(ContactsCell.self, forCellReuseIdentifier: "contactsCell")
+        accordionTableView.register(DirectionsCell.self, forCellReuseIdentifier: "directionsCell")
+        accordionTableView.register(HistoryCell.self, forCellReuseIdentifier: "historyCell")
+        accordionTableView.register(HoursCell.self, forCellReuseIdentifier: "hoursCell")
+        accordionTableView.register(WeatherCell.self, forCellReuseIdentifier: "weatherCell")
+        
+        accordionTableView.dataSource = self
+        accordionTableView.delegate = self
+        
+        accordionTableView.separatorStyle = .none
+        accordionTableView.rowHeight = UITableView.automaticDimension // dynamic row height
+        
+        view.addSubview(accordionTableView)
+        
+        NSLayoutConstraint.activate([
+            accordionTableView.topAnchor.constraint(equalTo: UIManager.shared.selectedImageView.bottomAnchor, constant: 5),
+            accordionTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            accordionTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            accordionTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+    }
+    
+    
+    //populate the UI elements with data received from ViewController
+    func getUIData() {
         // Update labels with the park data
         if let park = selectedPark, let unsplashData = selectedUnsplashData {
-            
+        
             //Park Name
             UIManager.shared.selectedNameLabel.text = park.fullName
             navigationItem.largeTitleDisplayMode = .never
@@ -62,122 +90,93 @@ class DetailsViewController: UIViewController {
         }
     }
     
-    //UITableView for the accordion-style view
-    func setUpAccordionTableView() {
-        let accordionTableView = UITableView()
-        accordionTableView.translatesAutoresizingMaskIntoConstraints = false
-        accordionTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        accordionTableView.register(ContactsCell.self, forCellReuseIdentifier: "contactsCell")
-        accordionTableView.register(DirectionsCell.self, forCellReuseIdentifier: "directionsCell")
-        accordionTableView.register(HistoryCell.self, forCellReuseIdentifier: "historyCell")
-        accordionTableView.register(HoursCell.self, forCellReuseIdentifier: "hoursCell")
-        accordionTableView.register(WeatherCell.self, forCellReuseIdentifier: "weatherCell")
-
+    // Helper function to configure Directions cell
+    func configureDirectionsCell(_ cell: DirectionsCell) {
         
-        accordionTableView.dataSource = self
-        accordionTableView.delegate = self
-        accordionTableView.separatorStyle = .none
-        accordionTableView.estimatedRowHeight = 100 // Set an estimated row height
-        accordionTableView.rowHeight = UITableView.automaticDimension
-        
-        view.addSubview(accordionTableView)
-        
-        NSLayoutConstraint.activate([
-            accordionTableView.topAnchor.constraint(equalTo: UIManager.shared.selectedImageView.bottomAnchor, constant: 5),
-            accordionTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            accordionTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            accordionTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        //ADDRESS
+        if let park = selectedPark {
+            if let addresses = park.addresses, let firstAddress = addresses.first {
+                let address = "\(firstAddress.line1)"
+                let city = "\(firstAddress.city),"
+                let state = "\(firstAddress.stateCode)"
+                let postalCode = "\(firstAddress.postalCode)"
+                
+                // Create a tap gesture recognizer for the address label
+                let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openInGoogleMaps(_:)))
+                cell.trailAddressLabel.isUserInteractionEnabled = true
+                cell.trailAddressLabel.addGestureRecognizer(tapGesture)
+                cell.trailAddressLabel.tag = 1 // Set a tag to identify the label
+                
+                // Create an attributed string for the address label
+                let attributedAddress = NSMutableAttributedString(string: "\(address) \(city) \(state) \(postalCode)")
+                let boldFont = UIFont.boldSystemFont(ofSize: cell.trailAddressLabel.font.pointSize)
+                attributedAddress.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: attributedAddress.length))
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = 3
+                attributedAddress.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedAddress.length))
+                
+                // Construct the Google Maps URL with city, state, and ZIP code
+                let googleMapsQuery = "\(address) \(city) \(state) \(postalCode)"
+                if let encodedQuery = googleMapsQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                    let googleMapsURL = "googlemaps://?q=\(encodedQuery)"
+                    let linkAttributes: [NSAttributedString.Key: Any] = [
+                        .link: googleMapsURL,
+                        .underlineStyle: NSUnderlineStyle.single.rawValue
+                    ]
+                    attributedAddress.addAttributes(linkAttributes, range: NSRange(location: 0, length: attributedAddress.length))
+                }
+                cell.trailAddressLabel.attributedText = attributedAddress
+                
+            } else {
+                cell.trailAddressLabel.text = "Address not available"
+            }
+            
+            //DIRECTIONS INFO
+            if let directions = park.directionsInfo {
+                let fullText = "Directions: \n\(directions)"
+                let attributedText = NSMutableAttributedString(string: fullText)
+                let boldFont = UIFont.boldSystemFont(ofSize: cell.trailDirectionsInfoLabel.font.pointSize)
+                attributedText.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: 11))
+                
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = 3
+                attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
+                
+                cell.trailDirectionsInfoLabel.attributedText = attributedText
+            } else {
+                cell.trailDirectionsInfoLabel.text = nil
+            }
+            //PARK NAME
+            cell.trailNameLabel.text = park.fullName
+        }
     }
-}
-
-extension DetailsViewController {
-    
- // Helper function to configure Directions cell
- func configureDirectionsCell(_ cell: DirectionsCell) {
-     if let park = selectedPark {
-         if let addresses = park.addresses, let firstAddress = addresses.first {
-             let address = "\(firstAddress.line1)"
-             let city = "\(firstAddress.city),"
-             let state = "\(firstAddress.stateCode)"
-             let postalCode = "\(firstAddress.postalCode)"
-
-             // Create a tap gesture recognizer for the address label
-             let tapGesture = UITapGestureRecognizer(target: self, action: #selector(openInGoogleMaps(_:)))
-             cell.trailAddressLabel.isUserInteractionEnabled = true
-             cell.trailAddressLabel.addGestureRecognizer(tapGesture)
-             cell.trailAddressLabel.tag = 1 // Set a tag to identify the label
-
-           // Create an attributed string for the address label
-             let attributedAddress = NSMutableAttributedString(string: "\(address) \(city) \(state) \(postalCode)")
-             let boldFont = UIFont.boldSystemFont(ofSize: cell.trailAddressLabel.font.pointSize)
-             attributedAddress.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: attributedAddress.length))
-
-
-             let paragraphStyle = NSMutableParagraphStyle()
-             paragraphStyle.lineSpacing = 3
-             attributedAddress.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedAddress.length))
-
-             // Construct the Google Maps URL with city, state, and ZIP code
-             let googleMapsQuery = "\(address) \(city) \(state) \(postalCode)"
-             if let encodedQuery = googleMapsQuery.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-                 let googleMapsURL = "googlemaps://?q=\(encodedQuery)"
-                 let linkAttributes: [NSAttributedString.Key: Any] = [
-                     .link: googleMapsURL,
-                     .underlineStyle: NSUnderlineStyle.single.rawValue
-                 ]
-                 attributedAddress.addAttributes(linkAttributes, range: NSRange(location: 0, length: attributedAddress.length))
-             }
-             cell.trailAddressLabel.attributedText = attributedAddress
-          
-         } else {
-             cell.trailAddressLabel.text = "Address not available"
-         }
-
-         if let directions = park.directionsInfo {
-             let fullText = "Directions: \n\(directions)"
-             let attributedText = NSMutableAttributedString(string: fullText)
-             let boldFont = UIFont.boldSystemFont(ofSize: cell.trailDirectionsInfoLabel.font.pointSize)
-             attributedText.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: 11))
-
-             let paragraphStyle = NSMutableParagraphStyle()
-             paragraphStyle.lineSpacing = 3
-             attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
-
-             cell.trailDirectionsInfoLabel.attributedText = attributedText
-         } else {
-             cell.trailDirectionsInfoLabel.text = nil
-         }
-
-         cell.trailNameLabel.text = park.fullName
-     }
- }
-
     @objc func openInGoogleMaps(_ sender: UITapGestureRecognizer) {
-          if let addressLabel = sender.view as? UILabel,
-              let park = selectedPark,
-              let addresses = park.addresses,
-              let firstAddress = addresses.first,
-              addressLabel.tag == 1 { // Check if it's the address label
+        if let addressLabel = sender.view as? UILabel,
+            let park = selectedPark,
+            let addresses = park.addresses,
+            let firstAddress = addresses.first,
+            addressLabel.tag == 1 { // Check if it's the address label
 
-              let address = "\(firstAddress.line1), \(firstAddress.city), \(firstAddress.stateCode) \(firstAddress.postalCode)"
-              if let encodedAddress = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-                  let urlString = "https://www.google.com/maps/search/?api=1&query=\(encodedAddress)"
-                  if let url = URL(string: urlString) {
-                      if UIApplication.shared.canOpenURL(url) {
-                          UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                      } else {
-                          // Handle the case where Google Maps cannot be opened
-                          let alertController = UIAlertController(title: "Error", message: "Google Maps or Safari cannot be opened.", preferredStyle: .alert)
-                          let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-                          alertController.addAction(okAction)
-                          present(alertController, animated: true, completion: nil)
-                      }
-                  }
-              }
-          }
-      }
-
+            let address = "\(firstAddress.line1), \(firstAddress.city), \(firstAddress.stateCode) \(firstAddress.postalCode)"
+            if let encodedAddress = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                let urlString = "https://www.google.com/maps/search/?api=1&query=\(encodedAddress)"
+                if let url = URL(string: urlString) {
+                    if UIApplication.shared.canOpenURL(url) {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    } else {
+                        // Handle the case where Google Maps cannot be opened
+                        let alertController = UIAlertController(title: "Error", message: "Google Maps or Safari cannot be opened.", preferredStyle: .alert)
+                        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+                        alertController.addAction(okAction)
+                        present(alertController, animated: true, completion: nil)
+                    }
+                }
+            }
+        }
+    }
+    
+    
     // Helper function to configure Hours cell
     func configureHoursCell(_ cell: HoursCell) {
         if let park = selectedPark,
@@ -216,7 +215,6 @@ extension DetailsViewController {
         guard digitsOnly.count == 10 else {
             return "Invalid phone number"
         }
-        
         // Split the digits into groups and format
         let areaCode = digitsOnly.prefix(3)
         let prefix = digitsOnly.dropFirst(3).prefix(3)
@@ -227,52 +225,49 @@ extension DetailsViewController {
     }
     
     // Helper function to configure History cell
- func configureContactsCell(_ cell: ContactsCell) {
-       if let park = selectedPark, let contacts = park.contacts {
-           // Create attributed strings with bold text for labels
-           let phoneNumberText = "Phone Number:  \n"
-           let emailAddressText = "Email Address:  \n"
-           let boldAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17)]
-           
-           // Define line height
-           let lineHeight: CGFloat = 5.0
-           
-           // Unwrap phone numbers
-           if let phoneNumber = contacts.phoneNumbers.first?.phoneNumber {
-               let formattedPhoneNumber = formatPhoneNumber(phoneNumber)
-               let attributedPhoneNumber = NSMutableAttributedString(string: phoneNumberText, attributes: boldAttributes)
-               attributedPhoneNumber.append(NSAttributedString(string: formattedPhoneNumber))
-               
-               // Apply line height to the entire attributed string
-               let paragraphStyle = NSMutableParagraphStyle()
-               paragraphStyle.lineSpacing = lineHeight
-               attributedPhoneNumber.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedPhoneNumber.length))
-               
-               cell.phoneNumberLabel.attributedText = attributedPhoneNumber
-           } else {
-               cell.phoneNumberLabel.text = "Phone Number not available"
-           }
-           
-           // Unwrap email addresses
-           if let emailAddress = contacts.emailAddresses.first?.emailAddress {
-               let attributedEmailAddress = NSMutableAttributedString(string: emailAddressText, attributes: boldAttributes)
-               attributedEmailAddress.append(NSAttributedString(string: emailAddress))
-               
-               // Apply line height to the entire attributed string
-               let paragraphStyle = NSMutableParagraphStyle()
-               paragraphStyle.lineSpacing = lineHeight
-               attributedEmailAddress.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedEmailAddress.length))
-               
-               cell.emailAddressLabel.attributedText = attributedEmailAddress
-           } else {
-               cell.emailAddressLabel.text = "Email Address not available"
-           }
-       }
-   }
-
-
-
-
+    func configureContactsCell(_ cell: ContactsCell) {
+        if let park = selectedPark, let contacts = park.contacts {
+            // Create attributed strings with bold text for labels
+            let phoneNumberText = "Phone Number:  \n"
+            let emailAddressText = "Email Address:  \n"
+            let boldAttributes: [NSAttributedString.Key: Any] = [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize: 17)]
+            
+            // Define line height
+            let lineHeight: CGFloat = 5.0
+            
+            // Unwrap phone numbers
+            if let phoneNumber = contacts.phoneNumbers.first?.phoneNumber {
+                let formattedPhoneNumber = formatPhoneNumber(phoneNumber)
+                let attributedPhoneNumber = NSMutableAttributedString(string: phoneNumberText, attributes: boldAttributes)
+                attributedPhoneNumber.append(NSAttributedString(string: formattedPhoneNumber))
+                
+                // Apply line height to the entire attributed string
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = lineHeight
+                attributedPhoneNumber.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedPhoneNumber.length))
+                
+                cell.phoneNumberLabel.attributedText = attributedPhoneNumber
+            } else {
+                cell.phoneNumberLabel.text = "Phone Number not available"
+            }
+            
+            // Unwrap email addresses
+            if let emailAddress = contacts.emailAddresses.first?.emailAddress {
+                let attributedEmailAddress = NSMutableAttributedString(string: emailAddressText, attributes: boldAttributes)
+                attributedEmailAddress.append(NSAttributedString(string: emailAddress))
+                
+                // Apply line height to the entire attributed string
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = lineHeight
+                attributedEmailAddress.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedEmailAddress.length))
+                
+                cell.emailAddressLabel.attributedText = attributedEmailAddress
+            } else {
+                cell.emailAddressLabel.text = "Email Address not available"
+            }
+        }
+    }
+    
     
     // Helper function to configure History cell
     func configureHistoryCell(_ cell: HistoryCell) {
@@ -299,7 +294,6 @@ extension DetailsViewController {
             }
         }
     }
-
     
     // Helper function to configure Weather cell
     func configureWeatherCell(_ cell: WeatherCell) {
@@ -308,6 +302,7 @@ extension DetailsViewController {
                 let fullText = "\(weather)"
                 let attributedText = NSMutableAttributedString(string: fullText)
                 
+                //Styling the first two words to bold text
                 let words = weather.components(separatedBy: " ")
                 if let firstWord = words.first, let secondWord = words.dropFirst().first {
                     let lengthOfFirstTwoWords = firstWord.count + secondWord.count + 1
@@ -315,28 +310,24 @@ extension DetailsViewController {
                     let boldFont = UIFont.boldSystemFont(ofSize: cell.weatherLabel.font.pointSize)
                     attributedText.addAttribute(.font, value: boldFont, range: range)
                 }
-                
+                //line height
                 let paragraphStyle = NSMutableParagraphStyle()
                 paragraphStyle.lineSpacing = 3
                 attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
                 
                 cell.weatherLabel.attributedText = attributedText
-            } else {
+                } else {
                 cell.weatherLabel.text = "Weather info is unavailable at this time"
             }
         }
     }
     
-}
-
-
-extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
-    
-    // Update tableView(_:cellForRowAt:) method
+    //ACCORDION SECTIONS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let sectionName = sections[indexPath.section]
         let lightGray = UIColor(white: 0.9, alpha: 1.0)
         
+        //stylizing the first row
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             cell.textLabel?.text = sectionName
@@ -348,29 +339,30 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
             return cell
         }
         
+        //configuring the contents of each accordion cell
         switch indexPath.section {
-        case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "directionsCell", for: indexPath) as! DirectionsCell
-            configureDirectionsCell(cell)
-            return cell
-        case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
-            configureHoursCell(cell)
-            return cell
-        case 2:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) as! WeatherCell
-            configureWeatherCell(cell)
-            return cell
-        case 3:
-           let cell = tableView.dequeueReusableCell(withIdentifier: "contactsCell", for: indexPath) as! ContactsCell
-           configureContactsCell(cell)
-           return cell
-        case 4:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryCell
-            configureHistoryCell(cell)
-            return cell
-        default:
-            return UITableViewCell()
+            case 0:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "directionsCell", for: indexPath) as! DirectionsCell
+                    configureDirectionsCell(cell)
+                return cell
+            case 1:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
+                    configureHoursCell(cell)
+                return cell
+            case 2:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) as! WeatherCell
+                    configureWeatherCell(cell)
+                return cell
+            case 3:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "contactsCell", for: indexPath) as! ContactsCell
+                    configureContactsCell(cell)
+                return cell
+            case 4:
+                let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryCell
+                    configureHistoryCell(cell)
+                return cell
+            default:
+                return UITableViewCell()
         }
     }
     
@@ -388,16 +380,6 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
             // For other sections, set the header row's height to 50 and dynamic height for row 1
             return indexPath.row == 0 ? 50 : UITableView.automaticDimension
         }
-        
-        /*
-         //displays all headers
-         if indexPath.row == 0 {
-            return 50
-         } else {
-            // otherwise for row 1 - make cell height dynamic
-            return UITableView.automaticDimension }
-         }
-         */
     }
     
     
@@ -408,6 +390,8 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        //Configuring collapse/expand for section header
         if section == 0 {
             return collapsed[section] ? 1 : 2 // For section 0, return 2 rows (header + cell) if expanded
         } else {
@@ -419,8 +403,6 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
             }
         }
     }
-
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // If user tapped the first row
@@ -436,3 +418,5 @@ extension DetailsViewController: UITableViewDataSource, UITableViewDelegate {
         }
     }
 }
+
+

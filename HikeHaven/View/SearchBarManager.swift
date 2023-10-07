@@ -8,12 +8,30 @@
 
 import UIKit
 
-class SearchBarManager {
-    static func configureSearchBar(_ searchBar: UISearchBar, withDelegate delegate: UISearchBarDelegate) {
-        searchBar.searchBarStyle = UISearchBar.Style.default
+class SearchBarManager: NSObject, UISearchBarDelegate {
+    let searchBar: UISearchBar
+    var searchTerm: String = "hiking"
+    
+    init(searchBar: UISearchBar) {
+        self.searchBar = searchBar
+        super.init()
+        
+        searchBar.delegate = self
+        configureSearchBar()
+    }
+    
+    func configureSearchBar() {
+        searchBar.searchBarStyle = .default
         searchBar.placeholder = " Search..."
         searchBar.sizeToFit()
         searchBar.isTranslucent = false
-        searchBar.delegate = delegate
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchTerm = searchText
+        // Call a delegate method or closure to notify the parent view controller about text changes if needed.
+       
     }
 }
+
+

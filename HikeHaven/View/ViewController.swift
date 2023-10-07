@@ -12,15 +12,18 @@ import MapKit
 
 class ViewController: UITableViewController, UISearchBarDelegate {
     
-    var searchBar: UISearchBar = UISearchBar()
-    var searchTerm: String = "hiking"
+    /*
+     var searchBar: UISearchBar = UISearchBar()
+      var searchManager: SearchBarManager! // Add this property
     
+*/
+    var searchTerm: String = "hiking"
     //API
     var unsplashArray: [UnSplashData] = []
     var parksArray: [ParkData] = []
     var weatherArray: [Periods] = []
     
-    let imageCache = NSCache<NSString, UIImage>()
+    //let imageCache = NSCache<NSString, UIImage>()
     
     var headerView: HeaderView!
     
@@ -28,9 +31,12 @@ class ViewController: UITableViewController, UISearchBarDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Configure the search bar using the SearchBarManager
-        SearchBarManager.configureSearchBar(searchBar, withDelegate: self)
+        //searchBar.delegate = self
+
         
+        // Configure the search bar using the SearchBarManager
+        //searchManager = SearchBarManager(searchBar: searchBar)
+
         // Configure the table view using the TableViewManager
         TableViewManager.configureTableView(for: tableView, withDelegate: self)
         
@@ -43,12 +49,6 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         
     }
     
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        searchTerm = searchText
-        fetchDataAPI()
-        fetchImagesAPI()
-        fetchWeatherAPI()
-    }
     
     func setupHeader() {
         headerView = HeaderView()

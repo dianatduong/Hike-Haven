@@ -157,12 +157,3 @@ class APIManager {
 }
 
 
-
-
-
-/*
-// Reload the table view on the main thread
-DispatchQueue.main.async {
-    self.vc.tableView.reloadData()
-}
-*/
