@@ -28,43 +28,16 @@ class DetailsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .white
         
         //contstraints for image + name
         UIManager.shared.setUpUI(forView: view)
+        UIManager.shared.accordionTableView.dataSource = self
+        UIManager.shared.accordionTableView.delegate = self
         
         //fetching api for image + name data
         getUIData()
-        
-        setUpAccordionTableView()
-    }
-    
-    
-    //UITableView for the accordion-style view
-    func setUpAccordionTableView() {
-        let accordionTableView = UITableView()
-        accordionTableView.translatesAutoresizingMaskIntoConstraints = false
-        accordionTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        accordionTableView.register(ContactsCell.self, forCellReuseIdentifier: "contactsCell")
-        accordionTableView.register(DirectionsCell.self, forCellReuseIdentifier: "directionsCell")
-        accordionTableView.register(HistoryCell.self, forCellReuseIdentifier: "historyCell")
-        accordionTableView.register(HoursCell.self, forCellReuseIdentifier: "hoursCell")
-        accordionTableView.register(WeatherCell.self, forCellReuseIdentifier: "weatherCell")
-        
-        accordionTableView.dataSource = self
-        accordionTableView.delegate = self
-        
-        accordionTableView.separatorStyle = .none
-        accordionTableView.rowHeight = UITableView.automaticDimension // dynamic row height
-        
-        view.addSubview(accordionTableView)
-        
-        NSLayoutConstraint.activate([
-            accordionTableView.topAnchor.constraint(equalTo: UIManager.shared.selectedImageView.bottomAnchor, constant: 5),
-            accordionTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            accordionTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            accordionTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
     }
     
     
