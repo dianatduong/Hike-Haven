@@ -10,7 +10,7 @@ import UIKit
 
 
 
-class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class DetailsViewController: UIViewController {
     
     //API
     var parksArray: [ParkData] = []
@@ -72,7 +72,7 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
     func getUIData() {
         // Update labels with the park data
         if let park = selectedPark, let unsplashData = selectedUnsplashData {
-        
+            
             //Park Name
             UIManager.shared.selectedNameLabel.text = park.fullName
             navigationItem.largeTitleDisplayMode = .never
@@ -157,7 +157,7 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
             let addresses = park.addresses,
             let firstAddress = addresses.first,
             addressLabel.tag == 1 { // Check if it's the address label
-
+            
             let address = "\(firstAddress.line1), \(firstAddress.city), \(firstAddress.stateCode) \(firstAddress.postalCode)"
             if let encodedAddress = address.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
                 let urlString = "https://www.google.com/maps/search/?api=1&query=\(encodedAddress)"
@@ -316,11 +316,16 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
                 attributedText.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedText.length))
                 
                 cell.weatherLabel.attributedText = attributedText
-                } else {
+            } else {
                 cell.weatherLabel.text = "Weather info is unavailable at this time"
             }
         }
     }
+    
+} // end class
+
+
+extension DetailsViewController: UITableViewDataSource {
     
     //ACCORDION SECTIONS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -341,31 +346,49 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         //configuring the contents of each accordion cell
         switch indexPath.section {
-            case 0:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "directionsCell", for: indexPath) as! DirectionsCell
-                    configureDirectionsCell(cell)
-                return cell
-            case 1:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
-                    configureHoursCell(cell)
-                return cell
-            case 2:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) as! WeatherCell
-                    configureWeatherCell(cell)
-                return cell
-            case 3:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "contactsCell", for: indexPath) as! ContactsCell
-                    configureContactsCell(cell)
-                return cell
-            case 4:
-                let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryCell
-                    configureHistoryCell(cell)
-                return cell
-            default:
-                return UITableViewCell()
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "directionsCell", for: indexPath) as! DirectionsCell
+            configureDirectionsCell(cell)
+            return cell
+        case 1:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
+            configureHoursCell(cell)
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) as! WeatherCell
+            configureWeatherCell(cell)
+            return cell
+        case 3:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "contactsCell", for: indexPath) as! ContactsCell
+            configureContactsCell(cell)
+            return cell
+        case 4:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryCell
+            configureHistoryCell(cell)
+            return cell
+        default:
+            return UITableViewCell()
         }
     }
     
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        //Configuring collapse/expand for section header
+        if section == 0 {
+            return collapsed[section] ? 1 : 2 // For section 0, return 2 rows (header + cell) if expanded
+        } else {
+            // For other sections, follow your existing logic
+            if section < collapsed.count {
+                return collapsed[section] ? 1 : 2
+            } else {
+                return 0
+            }
+        }
+    }
+}
+
+
+extension DetailsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         
@@ -389,21 +412,6 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        //Configuring collapse/expand for section header
-        if section == 0 {
-            return collapsed[section] ? 1 : 2 // For section 0, return 2 rows (header + cell) if expanded
-        } else {
-            // For other sections, follow your existing logic
-            if section < collapsed.count {
-                return collapsed[section] ? 1 : 2
-            } else {
-                return 0
-            }
-        }
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // If user tapped the first row
         if indexPath.row == 0 {
@@ -417,6 +425,5 @@ class DetailsViewController: UIViewController, UITableViewDelegate, UITableViewD
             tableView.deselectRow(at: indexPath, animated: true)
         }
     }
+    
 }
-
-

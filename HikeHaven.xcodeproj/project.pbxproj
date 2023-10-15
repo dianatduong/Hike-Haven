@@ -84,7 +84,7 @@
 				A3266E6E2AD09355007C63C1 /* HeaderView.swift */,
 				A3266E702AD09481007C63C1 /* TableVIewManager.swift */,
 				A3266E722AD09500007C63C1 /* SearchBarManager.swift */,
-				A3266E742AD09A6E007C63C1 /* DetailsVC */,
+				A3266E742AD09A6E007C63C1 /* DetailsView */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -94,6 +94,7 @@
 			children = (
 				A37A5B382AB2B068004F9007 /* Park.swift */,
 				A37A5B3A2AB2B13F004F9007 /* Images.swift */,
+				A3266E6C2AD08728007C63C1 /* APIManager.swift */,
 			);
 			name = Model;
 			path = View;
@@ -104,13 +105,12 @@
 			children = (
 				A37A5B262AB2AA1D004F9007 /* ViewController.swift */,
 				A37A5B402AB2BD16004F9007 /* DetailsViewController.swift */,
-				A3266E6C2AD08728007C63C1 /* APIManager.swift */,
 			);
 			name = Controller;
 			path = View;
 			sourceTree = "<group>";
 		};
-		A3266E742AD09A6E007C63C1 /* DetailsVC */ = {
+		A3266E742AD09A6E007C63C1 /* DetailsView */ = {
 			isa = PBXGroup;
 			children = (
 				A3266E752AD09AC4007C63C1 /* UIManager.swift */,
@@ -120,7 +120,7 @@
 				A3266E642AD08444007C63C1 /* ContactsCell.swift */,
 				A3266E5E2AD083CD007C63C1 /* HistoryCell.swift */,
 			);
-			name = DetailsVC;
+			name = DetailsView;
 			sourceTree = "<group>";
 		};
 		A37A5B162AB2AA1D004F9007 = {
