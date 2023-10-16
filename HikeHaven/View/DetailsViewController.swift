@@ -37,6 +37,7 @@ class DetailsViewController: UIViewController {
         AccordionManager.shared.accordionTableView.dataSource = self
         AccordionManager.shared.accordionTableView.delegate = self
         AccordionManager.shared.setUpAccordion(forView: view)
+        
         //fetching api for image + name data
         getUIData()
     }
@@ -63,6 +64,9 @@ class DetailsViewController: UIViewController {
             }
         }
     }
+    
+    
+    // MARK: Accordion Cells configurations
     
     // Helper function to configure Directions cell
     func configureDirectionsCell(_ cell: DirectionsCell) {
@@ -298,6 +302,7 @@ class DetailsViewController: UIViewController {
     
 } // end class
 
+//MARK: UITableViewCells
 
 extension DetailsViewController: UITableViewDataSource {
     
