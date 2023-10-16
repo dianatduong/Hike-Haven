@@ -17,6 +17,9 @@ class APIManager {
     
     private init() {}
     
+    
+    //MARK: - Fetch images from Unsplash
+    
     func fetchImagesAPI(searchTerm: String, completion: @escaping ([UnSplashData]?) -> Void) {
         let url = URL(string: "https://api.unsplash.com/search/photos?client_id=SwsdyqI6m6t38pMRrT8uCyXd-6-AKdT5Dy8I76IpEtc&count=1&query=\(searchTerm)+national+parks&per_page=20&orientation=landscape&order_by=popular")!
         
@@ -71,7 +74,8 @@ class APIManager {
         }
     }
 
-
+    //MARK: -  Fetch API from NPS.gov
+    
     func fetchDataAPI(searchTerm: String, completion: @escaping ([ParkData]?) -> Void) {
         
         // Define the URL for the API request
@@ -112,6 +116,9 @@ class APIManager {
         // Start the URLSession data task
         task.resume()
     }
+    
+    
+    //MARK: - Fetch weather from Weather.gov
     
     func fetchWeatherAPI(completion: @escaping ([Periods]?) -> Void) {
            // Define the URL for the API request

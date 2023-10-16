@@ -57,6 +57,9 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         tableView.tableHeaderView?.frame.size.height = 65
     }
     
+    
+    //MARK: -  Fetching APIs
+    
     func fetchImagesAPI() {
         APIManager.shared.fetchImagesAPI(searchTerm: searchTerm) { [weak self] unsplashArray in
             guard let self = self, let unsplashArray = unsplashArray else {
@@ -93,6 +96,8 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         }
     }
     
+    
+    //MARK: - TableViews
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         

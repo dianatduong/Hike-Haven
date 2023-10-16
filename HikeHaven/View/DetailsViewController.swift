@@ -66,7 +66,7 @@ class DetailsViewController: UIViewController {
     }
     
     
-    // MARK: Accordion Cells configurations
+//MARK: -  Accordion TableViewCells configurations
     
     // Helper function to configure Directions cell
     func configureDirectionsCell(_ cell: DirectionsCell) {
@@ -302,7 +302,8 @@ class DetailsViewController: UIViewController {
     
 } // end class
 
-//MARK: UITableViewCells
+
+//MARK: - UITableViewCells
 
 extension DetailsViewController: UITableViewDataSource {
     
@@ -406,3 +407,5 @@ extension DetailsViewController: UITableViewDelegate {
     }
     
 }
+
+
