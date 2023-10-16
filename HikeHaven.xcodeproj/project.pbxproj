@@ -28,6 +28,7 @@
 		A37A5B432AB384C8004F9007 /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37A5B422AB384C8004F9007 /* WeatherTableViewCell.swift */; };
 		A37A5B452AB38511004F9007 /* AccordionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37A5B442AB38511004F9007 /* AccordionViewController.swift */; };
 		A37A5B492AB385D9004F9007 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37A5B482AB385D9004F9007 /* WeatherData.swift */; };
+		A37FA5472ADCF34700C21A08 /* AccordionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37FA5462ADCF34700C21A08 /* AccordionManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		A37A5B422AB384C8004F9007 /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
 		A37A5B442AB38511004F9007 /* AccordionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccordionViewController.swift; sourceTree = "<group>"; };
 		A37A5B482AB385D9004F9007 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
+		A37FA5462ADCF34700C21A08 /* AccordionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccordionManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,10 +116,11 @@
 			isa = PBXGroup;
 			children = (
 				A3266E752AD09AC4007C63C1 /* UIManager.swift */,
-				A3266E622AD0841C007C63C1 /* WeatherCell.swift */,
-				A3266E602AD083F5007C63C1 /* HoursCell.swift */,
+				A37FA5462ADCF34700C21A08 /* AccordionManager.swift */,
 				A3266E5C2AD083A7007C63C1 /* DirectionsCell.swift */,
+				A3266E602AD083F5007C63C1 /* HoursCell.swift */,
 				A3266E642AD08444007C63C1 /* ContactsCell.swift */,
+				A3266E622AD0841C007C63C1 /* WeatherCell.swift */,
 				A3266E5E2AD083CD007C63C1 /* HistoryCell.swift */,
 			);
 			name = DetailsView;
@@ -229,6 +232,7 @@
 				A37A5B3B2AB2B13F004F9007 /* Images.swift in Sources */,
 				A3266E652AD08444007C63C1 /* ContactsCell.swift in Sources */,
 				A37A5B272AB2AA1D004F9007 /* ViewController.swift in Sources */,
+				A37FA5472ADCF34700C21A08 /* AccordionManager.swift in Sources */,
 				A37A5B3D2AB2B47D004F9007 /* MainTableViewCell.swift in Sources */,
 				A3266E6F2AD09355007C63C1 /* HeaderView.swift in Sources */,
 				A37A5B392AB2B068004F9007 /* Park.swift in Sources */,

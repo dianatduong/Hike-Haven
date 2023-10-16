@@ -33,9 +33,10 @@ class DetailsViewController: UIViewController {
         
         //contstraints for image + name
         UIManager.shared.setUpUI(forView: view)
-        UIManager.shared.accordionTableView.dataSource = self
-        UIManager.shared.accordionTableView.delegate = self
         
+        AccordionManager.shared.accordionTableView.dataSource = self
+        AccordionManager.shared.accordionTableView.delegate = self
+        AccordionManager.shared.setUpAccordion(forView: view)
         //fetching api for image + name data
         getUIData()
     }

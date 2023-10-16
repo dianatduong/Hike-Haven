@@ -9,7 +9,9 @@
 import UIKit
 
 
-class UIManager: UITableViewController{
+class UIManager {
+    
+    static let shared = UIManager()
     
     func createLabel(font: UIFont) -> UILabel {
         let label = UILabel()
@@ -27,13 +29,6 @@ class UIManager: UITableViewController{
     var selectedNameLabel: UILabel!
     var textShadowLayer: UIView!
     
-    let accordionTableView: UITableView = UITableView()
-    
-    static let shared = UIManager()
-    
-    init() {
-        super.init(style: .plain)
-    }
     
     //set up the user interface elements
     func setUpUI(forView view: UIView) {
@@ -57,19 +52,6 @@ class UIManager: UITableViewController{
         selectedNameLabel.translatesAutoresizingMaskIntoConstraints = false
         textShadowLayer.translatesAutoresizingMaskIntoConstraints = false
         
-        //ACCORDION TABLE
-        view.addSubview(accordionTableView)
-        accordionTableView.translatesAutoresizingMaskIntoConstraints = false
-        accordionTableView.separatorStyle = .none
-        accordionTableView.rowHeight = UITableView.automaticDimension // dynamic row height
-        
-        accordionTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        accordionTableView.register(ContactsCell.self, forCellReuseIdentifier: "contactsCell")
-        accordionTableView.register(DirectionsCell.self, forCellReuseIdentifier: "directionsCell")
-        accordionTableView.register(HistoryCell.self, forCellReuseIdentifier: "historyCell")
-        accordionTableView.register(HoursCell.self, forCellReuseIdentifier: "hoursCell")
-        accordionTableView.register(WeatherCell.self, forCellReuseIdentifier: "weatherCell")
-        
         NSLayoutConstraint.activate([
             selectedImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             selectedImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -82,19 +64,8 @@ class UIManager: UITableViewController{
             
             selectedNameLabel.topAnchor.constraint(equalTo: selectedImageView.topAnchor, constant: 195),
             selectedNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            selectedNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30),
-            
-            //ACCORDION TABLE
-            accordionTableView.topAnchor.constraint(equalTo: selectedImageView.bottomAnchor, constant: 5),
-            accordionTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            accordionTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            accordionTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            selectedNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -30)
             
         ])
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
 }
