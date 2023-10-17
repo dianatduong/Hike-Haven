@@ -9,6 +9,8 @@
 import UIKit
 
 class MainTableViewCell: UITableViewCell {
+    
+    static let shared = MainTableViewCell()
 
     var mainImageView: UIImageView = {
       let imageView = UIImageView()
@@ -71,10 +73,10 @@ class MainTableViewCell: UITableViewCell {
 
         
         NSLayoutConstraint.activate([
-            shadowView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            shadowView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
             shadowView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             shadowView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            mainImageView.topAnchor.constraint(equalTo: shadowView.topAnchor),
+            mainImageView.topAnchor.constraint(equalTo: shadowView.topAnchor, constant: 30),
             mainImageView.leadingAnchor.constraint(equalTo: shadowView.leadingAnchor, constant: 15),
             mainImageView.trailingAnchor.constraint(equalTo: shadowView.trailingAnchor, constant: -15),
             mainImageView.heightAnchor.constraint(equalToConstant: 225),

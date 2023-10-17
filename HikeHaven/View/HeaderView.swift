@@ -15,7 +15,7 @@ class HeaderView: UIView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        label.textAlignment = .left
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -23,9 +23,12 @@ class HeaderView: UIView {
     let stateCodePicker = UIPickerView()
 
 
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupSubviews()
+        
+
          
     }
 
@@ -40,14 +43,19 @@ class HeaderView: UIView {
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         stateCodePicker.translatesAutoresizingMaskIntoConstraints = false
+        stateCodePicker.isUserInteractionEnabled = true
 
-        NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 15),
-            titleLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+
+       NSLayoutConstraint.activate([
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
             
-            stateCodePicker.topAnchor.constraint(equalTo: topAnchor, constant: -75),
-            stateCodePicker.leadingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: 20),
-            stateCodePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
+            stateCodePicker.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: -80),
+            stateCodePicker.centerXAnchor.constraint(equalTo: centerXAnchor),
+            stateCodePicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            stateCodePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
+            //stateCodePicker.bottomAnchor.constraint(equalTo: bottomAnchor)
+
         ])
     }
 

@@ -20,7 +20,14 @@ class ViewController: UITableViewController {
     var searchTerm: String = "Hiking"
     
     
-    let stateCodes = ["CA", "NY", "TX", "FL", "IL", "WA"]
+    let stateCodes = [
+        "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
+        "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
+        "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
+        "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
+        "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
+    ]
+    
     var selectedStateCode: String?
     
     override func viewDidLoad() {
@@ -35,19 +42,18 @@ class ViewController: UITableViewController {
         fetchDataAPI()
         fetchImagesAPI()
         fetchWeatherAPI()
-        
+                
     }
-
     
     func setupHeader() {
         headerView = HeaderView()
-        headerView.setTitle("Hiking Trails in")
+        headerView.setTitle("Explore Hiking Trails:")
         
         headerView.stateCodePicker.delegate = self // Set the delegate to ViewController
         headerView.stateCodePicker.dataSource = self // Set the data source to ViewController
         
         tableView.tableHeaderView = headerView
-        tableView.tableHeaderView?.frame.size.height = 65
+        tableView.tableHeaderView?.frame.size.height = 100
     }
     
     
@@ -162,10 +168,9 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return stateCodes.count
+        return 3
+        
     }
-
-    
     
     // MARK: UIPickerViewDelegate methods
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
