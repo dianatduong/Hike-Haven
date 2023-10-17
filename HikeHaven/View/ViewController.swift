@@ -9,7 +9,7 @@
 import UIKit
 
 
-class ViewController: UITableViewController, UISearchBarDelegate {
+class ViewController: UITableViewController {
     
     //API
     var unsplashArray: [UnSplashData] = []
@@ -17,7 +17,11 @@ class ViewController: UITableViewController, UISearchBarDelegate {
     var weatherArray: [Periods] = []
         
     var headerView: HeaderView!
-    var searchTerm: String = "hiking"
+    var searchTerm: String = "Hiking"
+    
+    
+    let stateCodes = ["CA", "NY", "TX", "FL", "IL", "WA"]
+    var selectedStateCode: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,13 +35,17 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         fetchDataAPI()
         fetchImagesAPI()
         fetchWeatherAPI()
-
+        
     }
 
     
     func setupHeader() {
         headerView = HeaderView()
-        headerView.setTitle("Hiking Trails")
+        headerView.setTitle("Hiking Trails in")
+        
+        headerView.stateCodePicker.delegate = self // Set the delegate to ViewController
+        headerView.stateCodePicker.dataSource = self // Set the data source to ViewController
+        
         tableView.tableHeaderView = headerView
         tableView.tableHeaderView?.frame.size.height = 65
     }
@@ -146,8 +154,33 @@ class ViewController: UITableViewController, UISearchBarDelegate {
 }
 
 
+extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+    
+ // MARK: UIPickerViewDataSource methods
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return stateCodes.count
+    }
+
+    
+    
+    // MARK: UIPickerViewDelegate methods
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return stateCodes[row]
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        selectedStateCode = stateCodes[row]
+    }
+    
+}
 
   /*
+ 
+ UISearchBarDelegate
      var searchBar: UISearchBar = UISearchBar()
       var searchManager: SearchBarManager! // Add this property
     //let imageCache = NSCache<NSString, UIImage>()
