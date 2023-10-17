@@ -7,35 +7,20 @@
 //
 
 import UIKit
-import MapKit
 
 
 class ViewController: UITableViewController, UISearchBarDelegate {
     
-    /*
-     var searchBar: UISearchBar = UISearchBar()
-      var searchManager: SearchBarManager! // Add this property
-    
-*/
-    var searchTerm: String = "hiking"
     //API
     var unsplashArray: [UnSplashData] = []
     var parksArray: [ParkData] = []
     var weatherArray: [Periods] = []
-    
-    //let imageCache = NSCache<NSString, UIImage>()
-    
+        
     var headerView: HeaderView!
-    
+    var searchTerm: String = "hiking"
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //searchBar.delegate = self
-
-        
-        // Configure the search bar using the SearchBarManager
-        //searchManager = SearchBarManager(searchBar: searchBar)
 
         // Configure the table view using the TableViewManager
         TableViewManager.configureTableView(for: tableView, withDelegate: self)
@@ -46,9 +31,9 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         fetchDataAPI()
         fetchImagesAPI()
         fetchWeatherAPI()
-        
+
     }
-    
+
     
     func setupHeader() {
         headerView = HeaderView()
@@ -159,3 +144,17 @@ class ViewController: UITableViewController, UISearchBarDelegate {
         navigationController?.pushViewController(detailsVC, animated: true)
     }
 }
+
+
+
+  /*
+     var searchBar: UISearchBar = UISearchBar()
+      var searchManager: SearchBarManager! // Add this property
+    //let imageCache = NSCache<NSString, UIImage>()
+ 
+ 
+ // Configure the search bar using the SearchBarManager
+ //searchBar.delegate = self
+ //searchManager = SearchBarManager(searchBar: searchBar)
+
+*/
