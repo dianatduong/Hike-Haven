@@ -48,7 +48,7 @@ class HeaderView: UIView {
 
        NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 15),
             
             stateCodePicker.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: -80),
             stateCodePicker.centerXAnchor.constraint(equalTo: centerXAnchor),
