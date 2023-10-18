@@ -14,7 +14,7 @@ class HeaderView: UIView {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 33, weight: .bold)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -50,12 +50,10 @@ class HeaderView: UIView {
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 15),
             
-            stateCodePicker.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: -80),
+            stateCodePicker.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: -75),
             stateCodePicker.centerXAnchor.constraint(equalTo: centerXAnchor),
             stateCodePicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            stateCodePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20),
-            //stateCodePicker.bottomAnchor.constraint(equalTo: bottomAnchor)
-
+            stateCodePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
         ])
     }
 

@@ -14,7 +14,7 @@
 		A3266E652AD08444007C63C1 /* ContactsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3266E642AD08444007C63C1 /* ContactsCell.swift */; };
 		A3266E6D2AD08728007C63C1 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3266E6C2AD08728007C63C1 /* APIManager.swift */; };
 		A3266E6F2AD09355007C63C1 /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3266E6E2AD09355007C63C1 /* HeaderView.swift */; };
-		A3266E712AD09481007C63C1 /* TableVIewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3266E702AD09481007C63C1 /* TableVIewManager.swift */; };
+		A3266E712AD09481007C63C1 /* TableViewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3266E702AD09481007C63C1 /* TableViewManager.swift */; };
 		A3266E732AD09500007C63C1 /* SearchBarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3266E722AD09500007C63C1 /* SearchBarManager.swift */; };
 		A3266E762AD09AC4007C63C1 /* UIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3266E752AD09AC4007C63C1 /* UIManager.swift */; };
 		A37A5B232AB2AA1D004F9007 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A37A5B222AB2AA1D004F9007 /* AppDelegate.swift */; };
@@ -39,7 +39,7 @@
 		A3266E642AD08444007C63C1 /* ContactsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsCell.swift; sourceTree = "<group>"; };
 		A3266E6C2AD08728007C63C1 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		A3266E6E2AD09355007C63C1 /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
-		A3266E702AD09481007C63C1 /* TableVIewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableVIewManager.swift; sourceTree = "<group>"; };
+		A3266E702AD09481007C63C1 /* TableViewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewManager.swift; sourceTree = "<group>"; };
 		A3266E722AD09500007C63C1 /* SearchBarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarManager.swift; sourceTree = "<group>"; };
 		A3266E752AD09AC4007C63C1 /* UIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIManager.swift; sourceTree = "<group>"; };
 		A37A5B1F2AB2AA1D004F9007 /* HikeHaven.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HikeHaven.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,7 +84,7 @@
 			children = (
 				A37A5B3C2AB2B47D004F9007 /* MainTableViewCell.swift */,
 				A3266E6E2AD09355007C63C1 /* HeaderView.swift */,
-				A3266E702AD09481007C63C1 /* TableVIewManager.swift */,
+				A3266E702AD09481007C63C1 /* TableViewManager.swift */,
 				A3266E722AD09500007C63C1 /* SearchBarManager.swift */,
 				A3266E742AD09A6E007C63C1 /* DetailsView */,
 			);
@@ -227,7 +227,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A3266E6D2AD08728007C63C1 /* APIManager.swift in Sources */,
-				A3266E712AD09481007C63C1 /* TableVIewManager.swift in Sources */,
+				A3266E712AD09481007C63C1 /* TableViewManager.swift in Sources */,
 				A37A5B432AB384C8004F9007 /* WeatherTableViewCell.swift in Sources */,
 				A37A5B3B2AB2B13F004F9007 /* ImagesData.swift in Sources */,
 				A3266E652AD08444007C63C1 /* ContactsCell.swift in Sources */,

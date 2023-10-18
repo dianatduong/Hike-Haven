@@ -17,6 +17,7 @@ class MainTableViewCell: UITableViewCell {
       imageView.layer.cornerRadius = 10.0
       imageView.layer.masksToBounds = true
       imageView.isUserInteractionEnabled = true
+       
       return imageView
     }()
 
@@ -70,16 +71,18 @@ class MainTableViewCell: UITableViewCell {
         cityLabel.translatesAutoresizingMaskIntoConstraints = false
         stateLabel.translatesAutoresizingMaskIntoConstraints = false
         postCodeLabel.translatesAutoresizingMaskIntoConstraints = false
+      
 
         
         NSLayoutConstraint.activate([
-            shadowView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 30),
+            shadowView.topAnchor.constraint(equalTo: contentView.topAnchor,constant: 30),
             shadowView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             shadowView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            mainImageView.topAnchor.constraint(equalTo: shadowView.topAnchor, constant: 30),
+            
+            mainImageView.topAnchor.constraint(equalTo: shadowView.topAnchor),
             mainImageView.leadingAnchor.constraint(equalTo: shadowView.leadingAnchor, constant: 15),
             mainImageView.trailingAnchor.constraint(equalTo: shadowView.trailingAnchor, constant: -15),
-            mainImageView.heightAnchor.constraint(equalToConstant: 225),
+            mainImageView.heightAnchor.constraint(equalToConstant: 230),
             
             nameLabel.topAnchor.constraint(equalTo: mainImageView.bottomAnchor, constant: 10),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),

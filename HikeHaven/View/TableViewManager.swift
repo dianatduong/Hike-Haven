@@ -11,6 +11,7 @@ import UIKit
 class TableViewManager {
     
     static func configureTableView(for tableView: UITableView, withDelegate delegate: UITableViewDelegate & UITableViewDataSource) {
+        
         tableView.register(MainTableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.rowHeight = 320
         tableView.dataSource = delegate

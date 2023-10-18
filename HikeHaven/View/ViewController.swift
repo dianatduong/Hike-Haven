@@ -47,7 +47,7 @@ class ViewController: UITableViewController {
     
     func setupHeader() {
         headerView = HeaderView()
-        headerView.setTitle("Explore Hiking Trails:")
+        headerView.setTitle("Explore Hiking Trails")
         
         headerView.stateCodePicker.delegate = self // Set the delegate to ViewController
         headerView.stateCodePicker.dataSource = self // Set the data source to ViewController
@@ -168,7 +168,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 3
+        return 2
         
     }
     
