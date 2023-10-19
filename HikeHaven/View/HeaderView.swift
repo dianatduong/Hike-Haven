@@ -28,8 +28,11 @@ class HeaderView: UIView {
         super.init(frame: frame)
         
         setupSubviews()
+    
 
     }
+    
+    
     
     func setupSubviews() {
         addSubview(titleLabel)

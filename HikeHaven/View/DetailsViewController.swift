@@ -20,13 +20,13 @@ class DetailsViewController: UIViewController {
     //var selectedWeatherData: Periods?
     
     //data for the accordion sections
-    var sections: [String] = ["Directions", "Park Hours", "Weather Overview", "Contact Info"]
-    var collapsed: [Bool] = [false, true, true, true]
+    var sections: [String] = ["Directions", "History", "Weather Overview", "Park Hours", "Contact Info"]
+    var collapsed: [Bool] = [false, true, true, true, true]
         
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor.systemGray6
         
         //contstraints for image + name
         UIManager.shared.setUpUI(forView: view)
@@ -83,7 +83,7 @@ class DetailsViewController: UIViewController {
                 cell.trailAddressLabel.tag = 1 // Set a tag to identify the label
                 
                 // Create an attributed string for the address label
-                let attributedAddress = NSMutableAttributedString(string: "\(address) \(city) \(state) \(postalCode)")
+                let attributedAddress = NSMutableAttributedString(string: "\(address)\n \(city) \(state) \(postalCode)")
                 let boldFont = UIFont.boldSystemFont(ofSize: cell.trailAddressLabel.font.pointSize)
                 attributedAddress.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: attributedAddress.length))
                 
@@ -307,16 +307,15 @@ extension DetailsViewController: UITableViewDataSource {
     //ACCORDION SECTIONS
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let sectionName = sections[indexPath.section]
-        let lightGray = UIColor(white: 0.9, alpha: 1.0)
         
         //stylizing the first row
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
             cell.textLabel?.text = sectionName
             cell.accessoryType = .disclosureIndicator
-            cell.backgroundColor = lightGray
+            cell.backgroundColor = UIColor.systemGray2
             cell.layer.borderWidth = 3.0
-            cell.layer.borderColor = UIColor.white.cgColor
+            cell.layer.borderColor = UIColor.systemGray6.cgColor
             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 18.0)
             return cell
         }
@@ -328,20 +327,20 @@ extension DetailsViewController: UITableViewDataSource {
             configureDirectionsCell(cell)
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
-            configureHoursCell(cell)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryCell
+            configureHistoryCell(cell)
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) as! WeatherCell
             configureWeatherCell(cell)
             return cell
         case 3:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "contactsCell", for: indexPath) as! ContactsCell
-            configureContactsCell(cell)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
+            configureHoursCell(cell)
             return cell
         case 4:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryCell
-            configureHistoryCell(cell)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "contactsCell", for: indexPath) as! ContactsCell
+            configureContactsCell(cell)
             return cell
         default:
             return UITableViewCell()
