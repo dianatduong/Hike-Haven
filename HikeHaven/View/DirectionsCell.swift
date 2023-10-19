@@ -46,7 +46,7 @@ class DirectionsCell: UITableViewCell {
         contentView.addSubview(trailDirectionsInfoLabel)
         
         NSLayoutConstraint.activate([
-            trailNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            trailNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             trailNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailNameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             

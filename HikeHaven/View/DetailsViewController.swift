@@ -20,9 +20,9 @@ class DetailsViewController: UIViewController {
     //var selectedWeatherData: Periods?
     
     //data for the accordion sections
-    var sections: [String] = ["Directions", "History", "Weather Overview", "Park Hours", "Contact Info"]
+    var sections: [String] = ["History", "Weather Overview", "Directions", "Park Hours", "Contact Info"]
     var collapsed: [Bool] = [false, true, true, true, true]
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -63,7 +63,7 @@ class DetailsViewController: UIViewController {
     }
     
     
-//MARK: -  Accordion TableViewCells configurations
+    //MARK: -  Accordion TableViewCells configurations
     
     // Helper function to configure Directions cell
     func configureDirectionsCell(_ cell: DirectionsCell) {
@@ -83,7 +83,7 @@ class DetailsViewController: UIViewController {
                 cell.trailAddressLabel.tag = 1 // Set a tag to identify the label
                 
                 // Create an attributed string for the address label
-                let attributedAddress = NSMutableAttributedString(string: "\(address)\n \(city) \(state) \(postalCode)")
+                let attributedAddress = NSMutableAttributedString(string: "\(address)\n\(city) \(state) \(postalCode)")
                 let boldFont = UIFont.boldSystemFont(ofSize: cell.trailAddressLabel.font.pointSize)
                 attributedAddress.addAttribute(.font, value: boldFont, range: NSRange(location: 0, length: attributedAddress.length))
                 
@@ -323,16 +323,16 @@ extension DetailsViewController: UITableViewDataSource {
         //configuring the contents of each accordion cell
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "directionsCell", for: indexPath) as! DirectionsCell
-            configureDirectionsCell(cell)
-            return cell
-        case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "historyCell", for: indexPath) as! HistoryCell
             configureHistoryCell(cell)
             return cell
-        case 2:
+        case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "weatherCell", for: indexPath) as! WeatherCell
             configureWeatherCell(cell)
+            return cell
+        case 2:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "directionsCell", for: indexPath) as! DirectionsCell
+            configureDirectionsCell(cell)
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "hoursCell", for: indexPath) as! HoursCell
