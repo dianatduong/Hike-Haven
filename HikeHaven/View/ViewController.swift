@@ -53,7 +53,7 @@ class ViewController: UITableViewController {
         headerView.stateCodePicker.dataSource = self
         
         headerView.setTitle("Explore Hiking Trails:")
-        headerView.textField.placeholder = "Select a State"
+        headerView.textField.placeholder = "Select State"
     }
     
     
