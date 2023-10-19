@@ -15,52 +15,55 @@ class HeaderView: UIView {
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 33, weight: .bold)
-        label.textAlignment = .center
+        //label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let stateCodePicker = UIPickerView()
-
-
-
+    let textField = UITextField()
+        
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
         setupSubviews()
-        
 
-         
     }
-
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        
-    }
-
+    
     func setupSubviews() {
         addSubview(titleLabel)
-        addSubview(stateCodePicker)
+        addSubview(textField)
+        textField.inputView = stateCodePicker
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
+      
+        textField.textAlignment = .center
+        textField.font = UIFont.systemFont(ofSize: 20, weight: .semibold)
+        textField.borderStyle = .roundedRect
+
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.isUserInteractionEnabled = true
+        
         stateCodePicker.translatesAutoresizingMaskIntoConstraints = false
         stateCodePicker.isUserInteractionEnabled = true
+        
 
-
-       NSLayoutConstraint.activate([
+        NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 15),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
             
-            stateCodePicker.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: -75),
-            stateCodePicker.centerXAnchor.constraint(equalTo: centerXAnchor),
-            stateCodePicker.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
-            stateCodePicker.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20)
+            textField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
+            textField.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
-
+    
     func setTitle(_ title: String) {
         titleLabel.text = title
     }
     
- 
+    required init?(coder aDecoder: NSCoder) {
+           super.init(coder: aDecoder)
+           
+       }
 }
-

@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import CoreLocation
-
 
 class DetailsViewController: UIViewController {
     
@@ -24,9 +22,7 @@ class DetailsViewController: UIViewController {
     //data for the accordion sections
     var sections: [String] = ["Directions", "Park Hours", "Weather Overview", "Contact Info"]
     var collapsed: [Bool] = [false, true, true, true]
-    
-      var locationManager: CLLocationManager!
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -38,13 +34,6 @@ class DetailsViewController: UIViewController {
         AccordionManager.shared.accordionTableView.dataSource = self
         AccordionManager.shared.accordionTableView.delegate = self
         AccordionManager.shared.setUpAccordion(forView: view)
-        
-        // Initialize and configure the location manager
-      locationManager = CLLocationManager()
-       //must be declared before the other methods
-      locationManager.delegate = self
-      locationManager.requestWhenInUseAuthorization()
-      locationManager.requestLocation()
         
         //fetching api for image + name data
         getUIData()
@@ -414,26 +403,4 @@ extension DetailsViewController: UITableViewDelegate {
         }
     }
     
-}
-
-
-//MARK: - CLLocationManagerDelegate
-
-extension DetailsViewController: CLLocationManagerDelegate {
-    
-    //didUpdateLocations delegate method
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.last {
-            let lat = location.coordinate.latitude
-            let lon = location.coordinate.longitude
-           // fetchWeatherAPI()
-            print(lat)
-            print(lon)
-        }
-    }
-
-     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-         print(error)
-     }
-
 }

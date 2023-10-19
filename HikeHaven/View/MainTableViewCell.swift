@@ -71,11 +71,18 @@ class MainTableViewCell: UITableViewCell {
         cityLabel.translatesAutoresizingMaskIntoConstraints = false
         stateLabel.translatesAutoresizingMaskIntoConstraints = false
         postCodeLabel.translatesAutoresizingMaskIntoConstraints = false
-      
+    
+        nameLabel.numberOfLines = 1
+        nameLabel.lineBreakMode = .byTruncatingTail
+        nameLabel.adjustsFontSizeToFitWidth = false
+
+        addressLabel.numberOfLines = 1
+        addressLabel.lineBreakMode = .byTruncatingTail
+        addressLabel.adjustsFontSizeToFitWidth = false
 
         
         NSLayoutConstraint.activate([
-            shadowView.topAnchor.constraint(equalTo: contentView.topAnchor,constant: 30),
+            shadowView.topAnchor.constraint(equalTo: contentView.topAnchor),
             shadowView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             shadowView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             
@@ -91,6 +98,7 @@ class MainTableViewCell: UITableViewCell {
             addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 3),
             addressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             addressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+           
             cityLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 2),
             cityLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             stateLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 2),

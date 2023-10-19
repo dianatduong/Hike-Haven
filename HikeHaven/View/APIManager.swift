@@ -15,7 +15,7 @@ class APIManager {
     // Add the imageCache property
     private let imageCache = NSCache<NSString, UIImage>()
     
-    private init() {}
+    //private init() {}
     
     
     //MARK: - Fetch images from Unsplash
@@ -74,16 +74,14 @@ class APIManager {
         }
     }
 
-    //MARK: -  Fetch API from NPS.gov
-    
     func fetchDataAPI(searchTerm: String, completion: @escaping ([ParkData]?) -> Void) {
-        
+            
         // Define the URL for the API request
-        let url = URL(string: "https://developer.nps.gov/api/v1/parks?limit=20&q=\(searchTerm)")!
+        let url = URL(string: "https://developer.nps.gov/api/v1/parks?q=\(searchTerm)")!
         
         // Create a URLRequest object
         var request = URLRequest(url: url)
-        request.addValue("WKsNM1QPZ90IJLcgF7zsufYJQh8nCyACrTtoEABo", forHTTPHeaderField: "x-api-key")
+            request.addValue("WKsNM1QPZ90IJLcgF7zsufYJQh8nCyACrTtoEABo", forHTTPHeaderField: "x-api-key")
         request.httpMethod = "GET"
         
         // Create a URLSession data task
@@ -91,13 +89,13 @@ class APIManager {
             // Handle any errors
             if let error = error {
                 print(error.localizedDescription)
-                 completion(nil)
+                completion(nil)
                 return
             }
             // Ensure data is returned from the API
             guard let data = data else {
                 print("No data returned from API.")
-                 completion(nil)
+                completion(nil)
                 return
             }
             do {
@@ -106,16 +104,33 @@ class APIManager {
                 
                 // Update the parksArray property with the results
                 let parksArray = parkResponse.data
-                 completion(parksArray)
+                
+                // Check if parksArray is nil
+                if parksArray.isEmpty {
+                    // Display a message in the UI when no data is available
+                    DispatchQueue.main.async {
+                        // Update your UI elements here, e.g., show an error message
+                        print("No parks found for the given search term.")
+                        // Update your UI accordingly
+                        completion([])
+                    }
+                } else {
+                    // Data is available, pass the parksArray to the completion handler
+                    completion(parksArray)
+                }
             } catch {
                 // Handle any decoding errors
                 print(error.localizedDescription)
-                 completion(nil)
+                completion(nil)
             }
         }
         // Start the URLSession data task
         task.resume()
     }
+
+    
+    
+    
     
     
     //MARK: - Fetch weather from Weather.gov

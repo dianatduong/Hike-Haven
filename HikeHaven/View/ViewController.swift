@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class ViewController: UITableViewController {
     
     //API
@@ -17,15 +16,14 @@ class ViewController: UITableViewController {
     var weatherArray: [Periods] = []
         
     var headerView: HeaderView!
-    var searchTerm: String = "Hiking"
-    
+    var searchTerm: String = "Alaska"
     
     let stateCodes = [
-        "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
-        "HI", "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD",
-        "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ",
-        "NM", "NY", "NC", "ND", "OH", "OK", "OR", "PA", "RI", "SC",
-        "SD", "TN", "TX", "UT", "VT", "VA", "WA", "WV", "WI", "WY"
+        "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia",
+        "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland",
+        "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
+        "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina",
+        "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
     ]
     
     var selectedStateCode: String?
@@ -39,21 +37,23 @@ class ViewController: UITableViewController {
         setupHeader()
         
         //fetching API data
-        fetchDataAPI()
-        fetchImagesAPI()
-        fetchWeatherAPI()
+          fetchDataAPI()
+          fetchImagesAPI()
+          fetchWeatherAPI()
                 
     }
     
     func setupHeader() {
         headerView = HeaderView()
-        headerView.setTitle("Explore Hiking Trails")
-        
-        headerView.stateCodePicker.delegate = self // Set the delegate to ViewController
-        headerView.stateCodePicker.dataSource = self // Set the data source to ViewController
         
         tableView.tableHeaderView = headerView
-        tableView.tableHeaderView?.frame.size.height = 100
+        tableView.tableHeaderView?.frame.size.height = 120
+        
+        headerView.stateCodePicker.delegate = self
+        headerView.stateCodePicker.dataSource = self
+        
+        headerView.setTitle("Explore Hiking Trails:")
+        headerView.textField.placeholder = "Select a State"
     }
     
     
@@ -168,7 +168,7 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     }
 
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return 2
+        return stateCodes.count
         
     }
     
@@ -176,23 +176,24 @@ extension ViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         return stateCodes[row]
     }
-
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedStateCode = stateCodes[row]
-    }
     
+ func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let selectedStateCode = stateCodes[row]
+        
+        // Update the text field with the selected state code
+        headerView.textField.text = selectedStateCode
+        
+        // Update the search term based on the selected state code
+        searchTerm = "\(selectedStateCode)" // Modify this as needed
+        
+        // Close the picker
+        headerView.textField.resignFirstResponder()
+        
+        // Fetch data with the updated search term
+        fetchDataAPI()
+        fetchImagesAPI()
+        //fetchWeatherAPI()
+    }
 }
 
-  /*
- 
- UISearchBarDelegate
-     var searchBar: UISearchBar = UISearchBar()
-      var searchManager: SearchBarManager! // Add this property
-    //let imageCache = NSCache<NSString, UIImage>()
- 
- 
- // Configure the search bar using the SearchBarManager
- //searchBar.delegate = self
- //searchManager = SearchBarManager(searchBar: searchBar)
 
-*/
