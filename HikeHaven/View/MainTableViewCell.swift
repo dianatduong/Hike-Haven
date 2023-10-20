@@ -99,11 +99,11 @@ class MainTableViewCell: UITableViewCell {
             addressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             addressLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
            
-            cityLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 2),
+            cityLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 1),
             cityLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            stateLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 2),
+            stateLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 1),
             stateLabel.leadingAnchor.constraint(equalTo: cityLabel.trailingAnchor),
-            postCodeLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 2),
+            postCodeLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 1),
             postCodeLabel.leadingAnchor.constraint(equalTo: stateLabel.trailingAnchor)
             
         ])

@@ -16,6 +16,7 @@ class ViewController: UITableViewController {
     var weatherArray: [Periods] = []
         
     var headerView: HeaderView!
+    
     var searchTerm: String = "Alaska"
     
     let stateCodes = [
@@ -30,17 +31,25 @@ class ViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        setUpNav()
+        setupHeader()
+        
         // Configure the table view using the TableViewManager
         TableViewManager.configureTableView(for: tableView, withDelegate: self)
         
-        setupHeader()
-        
         //fetching API data
-          fetchDataAPI()
-          fetchImagesAPI()
-          fetchWeatherAPI()
-                
+        fetchDataAPI()
+        fetchImagesAPI()
+        fetchWeatherAPI()
+    }
+    
+    func setUpNav() {
+        self.navigationItem.title = "Hike Haven"
+        
+        let backButton = UIBarButtonItem()
+        backButton.title = "Home"
+        self.navigationController?.navigationBar.topItem?.backBarButtonItem = backButton
     }
     
     func setupHeader() {
@@ -52,8 +61,8 @@ class ViewController: UITableViewController {
         headerView.stateCodePicker.delegate = self
         headerView.stateCodePicker.dataSource = self
         
-        headerView.setTitle("Explore Hiking Trails:")
-        headerView.textField.placeholder = "Select State"
+        headerView.setTitle("Explore Hiking Trails")
+        headerView.textField.placeholder = "Select a state"
     }
     
     

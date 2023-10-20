@@ -80,9 +80,9 @@
 		A3266E682AD0860E007C63C1 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				A37A5B3C2AB2B47D004F9007 /* MainTableViewCell.swift */,
 				A3266E6E2AD09355007C63C1 /* HeaderView.swift */,
 				A3266E702AD09481007C63C1 /* TableViewManager.swift */,
+				A37A5B3C2AB2B47D004F9007 /* MainTableViewCell.swift */,
 				A3266E742AD09A6E007C63C1 /* DetailsView */,
 			);
 			path = View;

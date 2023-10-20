@@ -54,9 +54,9 @@ class HeaderView: UIView {
 
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10),
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 15),
             
-            textField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 15),
+            textField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10),
             textField.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
