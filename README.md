@@ -44,3 +44,7 @@ An app designed with safety in mind, providing essential information to ensure a
 * Find & search trails based on location
 * Offline access
 
+<br>
+
+SWIFT | UIKIT | API | JSON PARSING | DARK MODE | GOOGLE MAPS | ACCORDION SECTIONS | IMAGE CACHING | UIPICKER 
+
