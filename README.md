@@ -18,6 +18,10 @@ An app designed with safety in mind, providing essential information to ensure a
     * Contact Information  
 <br>
 
+**Figma Mockup**
+<br>
+<img width="625" alt="Figma" src="https://github.com/dianatduong/hikehaven/assets/14034457/79c7045e-c4e6-4678-a2d9-688330b708d4">
+
 **Light Mode**
 <br>
 <img width="225" alt="Main Screen w/ picker" src="https://github.com/dianatduong/hikehaven/assets/14034457/973d7494-80ef-4054-aea5-78d9cad8acf8">
@@ -46,5 +50,5 @@ An app designed with safety in mind, providing essential information to ensure a
 
 <br>
 
-SWIFT | UIKIT | API | JSON PARSING | DARK MODE | GOOGLE MAPS | ACCORDION SECTIONS | IMAGE CACHING | UIPICKER 
+SWIFT | UIKIT | API | JSON PARSING | DARK MODE | GOOGLE MAPS | ACCORDION SECTIONS | IMAGE CACHING | UIPICKER | Figma
 
