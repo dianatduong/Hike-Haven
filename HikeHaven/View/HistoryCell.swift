@@ -30,7 +30,7 @@ class HistoryCell: UITableViewCell {
         
         // Configure constraints for trailHoursLabel
         NSLayoutConstraint.activate([
-            trailHistoryLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 15),
+            trailHistoryLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             trailHistoryLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             trailHistoryLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -15),
             trailHistoryLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)

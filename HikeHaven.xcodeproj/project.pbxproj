@@ -114,11 +114,11 @@
 			children = (
 				A3266E752AD09AC4007C63C1 /* UIManager.swift */,
 				A37FA5462ADCF34700C21A08 /* AccordionManager.swift */,
+				A3266E5E2AD083CD007C63C1 /* HistoryCell.swift */,
 				A3266E5C2AD083A7007C63C1 /* DirectionsCell.swift */,
 				A3266E602AD083F5007C63C1 /* HoursCell.swift */,
 				A3266E642AD08444007C63C1 /* ContactsCell.swift */,
 				A3266E622AD0841C007C63C1 /* WeatherCell.swift */,
-				A3266E5E2AD083CD007C63C1 /* HistoryCell.swift */,
 			);
 			name = DetailsView;
 			sourceTree = "<group>";

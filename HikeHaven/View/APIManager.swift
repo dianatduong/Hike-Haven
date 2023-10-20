@@ -14,12 +14,9 @@ class APIManager {
     
     // Add the imageCache property
     private let imageCache = NSCache<NSString, UIImage>()
-    
-    //private init() {}
-    
+        
     
     //MARK: - Fetch images from Unsplash
-    
     func fetchImagesAPI(searchTerm: String, completion: @escaping ([UnSplashData]?) -> Void) {
         let url = URL(string: "https://api.unsplash.com/search/photos?client_id=SwsdyqI6m6t38pMRrT8uCyXd-6-AKdT5Dy8I76IpEtc&count=1&query=\(searchTerm)+national+parks&per_page=20&orientation=landscape&order_by=popular&color=blue")!
         
@@ -128,8 +125,6 @@ class APIManager {
         task.resume()
     }
 
-    
-    
     
     
     

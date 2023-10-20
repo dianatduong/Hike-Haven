@@ -36,7 +36,7 @@ class AccordionManager: UITableViewController {
         accordionTableView.register(WeatherCell.self, forCellReuseIdentifier: "weatherCell")
         
         NSLayoutConstraint.activate([
-            accordionTableView.topAnchor.constraint(equalTo: UIManager.shared.selectedImageView.bottomAnchor, constant: 5),
+            accordionTableView.topAnchor.constraint(equalTo: UIManager.shared.selectedImageView.bottomAnchor),
             accordionTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             accordionTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             accordionTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
