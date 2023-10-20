@@ -16,7 +16,7 @@ class APIManager {
     private let imageCache = NSCache<NSString, UIImage>()
         
     func fetchImagesAPI(searchTerm: String, completion: @escaping ([UnSplashData]?) -> Void) {
-        let apiKey = "SwsdyqI6m6t38pMRrT8uCyXd-6-AKdT5Dy8I76IpEtc"
+        let apiKey = "API-KEY"
 
         let url = URL(string: "https://api.unsplash.com/search/photos?client_id=\(apiKey)&count=1&query=\(searchTerm)+national+parks&per_page=20&orientation=landscape&order_by=popular&color=blue")!
         
@@ -75,7 +75,7 @@ class APIManager {
 
     func fetchDataAPI(searchTerm: String, completion: @escaping ([ParkData]?) -> Void) {
         
-        let apiKey = "WKsNM1QPZ90IJLcgF7zsufYJQh8nCyACrTtoEABo"
+        let apiKey = "API-KEY"
 
         // Define the URL for the API request
         let url = URL(string: "https://developer.nps.gov/api/v1/parks?q=\(searchTerm)&api_key=\(apiKey)")!
