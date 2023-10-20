@@ -389,15 +389,15 @@ extension DetailsViewController: UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // If user tapped the first row
+        // If user tapped the first row with index 0
         if indexPath.row == 0 {
-            // Toggle the collapsed state via the collapse array for the value at the index section
+            // Toggle the collapsed/expand state
             collapsed[indexPath.section] = !collapsed[indexPath.section]
             
-            // Update the section with animation
+            // updates the tableview to reflect collapsed/expand state with animation
             tableView.reloadSections(IndexSet(integer: indexPath.section), with: .automatic)
             
-            // Deselect the row that was just selected
+            // Deselect and remove selection highlight from row that was just selected
             tableView.deselectRow(at: indexPath, animated: true)
         }
     }

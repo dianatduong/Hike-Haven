@@ -93,7 +93,7 @@ class MainTableViewCell: UITableViewCell {
             
             nameLabel.topAnchor.constraint(equalTo: mainImageView.bottomAnchor, constant: 10),
             nameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            nameLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
             addressLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 3),
             addressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),

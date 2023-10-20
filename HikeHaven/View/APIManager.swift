@@ -15,10 +15,10 @@ class APIManager {
     // Add the imageCache property
     private let imageCache = NSCache<NSString, UIImage>()
         
-    
-    //MARK: - Fetch images from Unsplash
     func fetchImagesAPI(searchTerm: String, completion: @escaping ([UnSplashData]?) -> Void) {
-        let url = URL(string: "https://api.unsplash.com/search/photos?client_id=SwsdyqI6m6t38pMRrT8uCyXd-6-AKdT5Dy8I76IpEtc&count=1&query=\(searchTerm)+national+parks&per_page=20&orientation=landscape&order_by=popular&color=blue")!
+        let apiKey = "SwsdyqI6m6t38pMRrT8uCyXd-6-AKdT5Dy8I76IpEtc"
+
+        let url = URL(string: "https://api.unsplash.com/search/photos?client_id=\(apiKey)&count=1&query=\(searchTerm)+national+parks&per_page=20&orientation=landscape&order_by=popular&color=blue")!
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -70,15 +70,18 @@ class APIManager {
             }.resume()
         }
     }
+    
+        
 
     func fetchDataAPI(searchTerm: String, completion: @escaping ([ParkData]?) -> Void) {
-            
+        
+        let apiKey = "WKsNM1QPZ90IJLcgF7zsufYJQh8nCyACrTtoEABo"
+
         // Define the URL for the API request
-        let url = URL(string: "https://developer.nps.gov/api/v1/parks?q=\(searchTerm)")!
+        let url = URL(string: "https://developer.nps.gov/api/v1/parks?q=\(searchTerm)&api_key=\(apiKey)")!
         
         // Create a URLRequest object
         var request = URLRequest(url: url)
-            request.addValue("WKsNM1QPZ90IJLcgF7zsufYJQh8nCyACrTtoEABo", forHTTPHeaderField: "x-api-key")
         request.httpMethod = "GET"
         
         // Create a URLSession data task
