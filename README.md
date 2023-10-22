@@ -1,10 +1,8 @@
 # Hike Haven
 
-**Idea:** Hiking Trail Search App
+A hiking trail search app designed with safety in mind, providing essential information to ensure a safe and enjoyable outdoor adventure, whether embarking on a solo journey or exploring with friends.
 
-An app designed with safety in mind, providing essential information to ensure a safe and enjoyable outdoor adventure, whether embarking on a solo journey or exploring with friends.
-
-**MVP Features:**
+### MVP Features
 * Explore trails by State
 * API to all the National Parks
 * API to Unsplash Images
@@ -16,6 +14,10 @@ An app designed with safety in mind, providing essential information to ensure a
     * Address & Directions
     * Park Hours
     * Contact Information  
+
+### Technologies
+SWIFT | UIKIT | API | JSON PARSING | GOOGLE MAPS | DARK MODE | FIGMA
+
 <br>
 
 **Figma Mockup**
@@ -24,31 +26,33 @@ An app designed with safety in mind, providing essential information to ensure a
 
 **Light Mode**
 <br>
-<img width="225" alt="Main Screen w/ picker" src="https://github.com/dianatduong/hikehaven/assets/14034457/973d7494-80ef-4054-aea5-78d9cad8acf8">
+<img alt="Main Screen" src="https://github.com/dianatduong/Hike-Haven/assets/14034457/efa48635-7d03-49ed-b9f3-5a7020dc4575" width="225">
 <span>...</span>
-<img width="220" alt="Main Screen" src="https://github.com/dianatduong/hikehaven/assets/14034457/09df84d5-ab84-41a4-b58a-6dee721cbe65"> 
+<img alt="Picker View" src="https://github.com/dianatduong/Hike-Haven/assets/14034457/b5f21ef5-f7ae-4b4d-91fa-c4e86014efd7" width="225">
 <span>...</span>
-<img width="222" alt="Details Screen" src="https://github.com/dianatduong/hikehaven/assets/14034457/d7e70774-b0f5-4837-8e95-23930f20472b">
-<br><br>
+<img alt="Details Screen" src="https://github.com/dianatduong/Hike-Haven/assets/14034457/64e378ec-9930-4929-b5b4-0090116d1e84" width="225">
+
+<br>
 
 **Dark Mode**
 <br>
-<img width="225" alt="Dark Mode- Main Screen w/ picker" src="https://github.com/dianatduong/hikehaven/assets/14034457/f6250ed4-3022-4184-9a57-918877e397b3">
+<img alt="Main Screen DM" src="https://github.com/dianatduong/Hike-Haven/assets/14034457/7cf3c19a-cb84-412a-b7da-682e798a7426" width="225">
 <span>...</span>
-<img width="225" alt="Dark Mode-Main" src="https://github.com/dianatduong/hikehaven/assets/14034457/805c216a-a812-4c0d-a3ed-855b4dde5636">
+<img alt="Picker View DM" src="https://github.com/dianatduong/Hike-Haven/assets/14034457/59059a94-3772-4ace-9276-4bfe5df3e646" width="225">
 <span>...</span>
-<img width="224" alt="Dark Mode-Details" src="https://github.com/dianatduong/hikehaven/assets/14034457/bab38e03-69fb-4c5f-858c-7086d07ea494">
-<br>
+<img alt="Details Screen DM" src="https://github.com/dianatduong/Hike-Haven/assets/14034457/69ed0c50-4025-445a-b466-74f322fe905b" width="225">
+
 <br>
 
-**Future:**
-* Find data for emergency alerts, cell service, & other 
-* API to weather data
+**Future**
+* Data for emergency alerts, cell service, available amenities, etc
+* API to weather from Openweather
 * Save to favorites
 * Find & search trails based on location
 * Offline access
 
 <br>
 
-SWIFT | UIKIT | API | JSON PARSING | DARK MODE | GOOGLE MAPS | ACCORDION SECTIONS | IMAGE CACHING | UIPICKER | Figma
-
+**Inspiration**
+<br>
+During a hike in Joshua Tree’s Cactus Garden, a friend lost the car keys, leaving us stranded without cell service as the sunset. We hitched a ride with tourists, but the lack of emergency protocols and contact with park rangers was alarming. Enterprise Rental couldn’t secure transportation until 2AM, and arranging one the next day was equally challenging. We learned from park rangers that two people had already died in the park that year, highlighting the need for improved safety measures. Thus, I wanted to create an app to help equip hikers with the necessary information _before_ their hiking journey.
