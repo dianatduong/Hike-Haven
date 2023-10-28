@@ -16,7 +16,8 @@ class APIManager {
     private let imageCache = NSCache<NSString, UIImage>()
         
     func fetchImagesAPI(searchTerm: String, completion: @escaping ([UnSplashData]?) -> Void) {
-        let apiKey = "API-KEY"
+        
+        if let apiKey = Bundle.main.infoDictionary?["UNSPLASH_API_KEY"] as? String {
 
         let url = URL(string: "https://api.unsplash.com/search/photos?client_id=\(apiKey)&count=1&query=\(searchTerm)+national+parks&per_page=20&orientation=landscape&order_by=popular&color=blue")!
         
@@ -46,6 +47,7 @@ class APIManager {
         }
         task.resume()
     }
+}
     
     func loadImage(from url: URL, completion: @escaping (UIImage?) -> Void) {
         if let cachedImage = imageCache.object(forKey: url.absoluteString as NSString) {
@@ -72,61 +74,59 @@ class APIManager {
     }
     
         
-
     func fetchDataAPI(searchTerm: String, completion: @escaping ([ParkData]?) -> Void) {
-        
-        let apiKey = "API-KEY"
 
-        // Define the URL for the API request
-        let url = URL(string: "https://developer.nps.gov/api/v1/parks?q=\(searchTerm)&api_key=\(apiKey)")!
-        
-        // Create a URLRequest object
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        
-        // Create a URLSession data task
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            // Handle any errors
-            if let error = error {
-                print(error.localizedDescription)
-                completion(nil)
-                return
-            }
-            // Ensure data is returned from the API
-            guard let data = data else {
-                print("No data returned from API.")
-                completion(nil)
-                return
-            }
-            do {
-                // Decode the JSON data into a Park object
-                let parkResponse = try JSONDecoder().decode(Park.self, from: data)
-                
-                // Update the parksArray property with the results
-                let parksArray = parkResponse.data
-                
-                // Check if parksArray is nil
-                if parksArray.isEmpty {
-                    // Display a message in the UI when no data is available
-                    DispatchQueue.main.async {
-                        // Update your UI elements here, e.g., show an error message
-                        print("No parks found for the given search term.")
-                        // Update your UI accordingly
-                        completion([])
-                    }
-                } else {
-                    // Data is available, pass the parksArray to the completion handler
-                    completion(parksArray)
+        if let apiKey = Bundle.main.infoDictionary?["NPS_API_KEY"] as? String {
+            // Define the URL for the API request
+            let url = URL(string: "https://developer.nps.gov/api/v1/parks?q=\(searchTerm)&api_key=\(apiKey)")!
+            
+            // Create a URLRequest object
+            var request = URLRequest(url: url)
+            request.httpMethod = "GET"
+            
+            // Create a URLSession data task
+            let task = URLSession.shared.dataTask(with: request) { data, response, error in
+                // Handle any errors
+                if let error = error {
+                    print(error.localizedDescription)
+                    completion(nil)
+                    return
                 }
-            } catch {
-                // Handle any decoding errors
-                print(error.localizedDescription)
-                completion(nil)
+                
+                // Ensure data is returned from the API
+                guard let data = data else {
+                    print("No data returned from API.")
+                    completion(nil)
+                    return
+                }
+                
+                do {
+                    let parkResponse = try JSONDecoder().decode(Park.self, from: data)
+                    let parksArray = parkResponse.data
+                    
+                    if parksArray.isEmpty {
+                        // Display a message in the UI when no data is available
+                        DispatchQueue.main.async {
+                            // Update your UI elements here, e.g., show an error message
+                            print("No parks found for the given search term.")
+                            // Update your UI accordingly
+                            completion([])
+                        }
+                    } else {
+                        // Data is available, pass the parksArray to the completion handler
+                        completion(parksArray)
+                    }
+                } catch {
+                    // Handle decoding errors
+                    print(error.localizedDescription)
+                    completion(nil)
+                }
             }
+            // Start the URLSession data task
+            task.resume()
         }
-        // Start the URLSession data task
-        task.resume()
     }
+
 
     
     
