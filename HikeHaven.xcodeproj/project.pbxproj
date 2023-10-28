@@ -54,7 +54,7 @@
 		A37A5B442AB38511004F9007 /* AccordionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccordionViewController.swift; sourceTree = "<group>"; };
 		A37A5B482AB385D9004F9007 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 		A37FA5462ADCF34700C21A08 /* AccordionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccordionManager.swift; sourceTree = "<group>"; };
-		A3DDC0772AED875600C71765 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Config.xcconfig; path = "API Keys/Config.xcconfig"; sourceTree = "<group>"; };
+		A3F4330C2AED8F63007B5821 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,7 +151,7 @@
 				A37A5B242AB2AA1D004F9007 /* SceneDelegate.swift */,
 				A37A5B2B2AB2AA20004F9007 /* Assets.xcassets */,
 				A37A5B302AB2AA20004F9007 /* Info.plist */,
-				A3DDC0772AED875600C71765 /* Config.xcconfig */,
+				A3F4330C2AED8F63007B5821 /* Config.xcconfig */,
 			);
 			path = HikeHaven;
 			sourceTree = "<group>";
