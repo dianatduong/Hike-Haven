@@ -15,7 +15,7 @@ A hiking trail search app designed with safety in mind, providing essential info
     * Park Hours
     * Contact Information  
 
-### Technologies
+### Tech Stack
 SWIFT | UIKIT | API | JSON PARSING | GOOGLE MAPS | DARK MODE | FIGMA
 
 <br>
