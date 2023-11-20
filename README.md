@@ -1,6 +1,6 @@
 # Hike Haven
 
-A hiking trail search app designed with safety in mind, providing essential information to ensure a safe and enjoyable outdoor adventure, whether embarking on a solo journey or exploring with friends.
+A hiking trail search app designed with safety in mind, providing essential information to ensure a safe and enjoyable outdoor adventure, whether on a solo journey or exploring with friends.
 
 ### MVP Features
 * Explore trails by State
