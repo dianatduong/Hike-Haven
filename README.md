@@ -3,11 +3,11 @@
 A hiking trail search app designed with safety in mind, providing essential information to ensure a safe and enjoyable outdoor adventure, whether on a solo journey or exploring with friends.
 
 ### MVP Features
+* Integrated National Park Services API for park data and Unsplash API for enhanced imagery
+* Optimized performance with image caching, reducing load times and improving download speed
+* Designed with dark mode for enhanced accessibility
 * Explore trails by State
-* API to all the National Parks
-* API to Unsplash Images
 * Address linked to Google Maps
-* Dark Mode 
 * Accordion sections with detailed information on each park
     * History
     * Weather Overview
