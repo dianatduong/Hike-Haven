@@ -1,22 +1,29 @@
 # Hike Haven
 
-A hiking trail search app designed with safety in mind, providing essential information to ensure a safe and enjoyable outdoor adventure, whether embarking on a solo journey or exploring with friends.
+A hiking trail search app designed with safety in mind, providing essential information to ensure a safe and enjoyable outdoor adventure, whether on a solo journey or exploring with friends.
+
+### Tech Stack
+SWIFT | UIKIT | API | JSON PARSING | GOOGLE MAPS | DARK MODE | FIGMA
 
 ### MVP Features
+* Integrated National Park Services API for park data and Unsplash API for enhanced imagery
+* Optimized performance with image caching, reducing load times and improving download speed
+* Designed with dark mode for enhanced accessibility
 * Explore trails by State
-* API to all the National Parks
-* API to Unsplash Images
 * Address linked to Google Maps
-* Dark Mode 
 * Accordion sections with detailed information on each park
     * History
     * Weather Overview
     * Address & Directions
     * Park Hours
-    * Contact Information  
-
-### Technologies
-SWIFT | UIKIT | API | JSON PARSING | GOOGLE MAPS | DARK MODE | FIGMA
+    * Contact Information
+ 
+🚧 **Future Features** 🚧
+* Data for emergency alerts, cell service, available amenities, etc
+* API to weather from Openweather
+* Save to favorites
+* Find & search trails based on location
+* Offline access
 
 <br>
 
@@ -44,15 +51,5 @@ SWIFT | UIKIT | API | JSON PARSING | GOOGLE MAPS | DARK MODE | FIGMA
 
 <br>
 
-**Future**
-* Data for emergency alerts, cell service, available amenities, etc
-* API to weather from Openweather
-* Save to favorites
-* Find & search trails based on location
-* Offline access
-
-<br>
-
-**Inspiration**
-<br>
-During a hike in Joshua Tree’s Cactus Garden, a friend lost the car keys, leaving us stranded without cell service as the sunset. We hitched a ride with tourists, but the lack of emergency protocols and contact with park rangers was alarming. Enterprise Rental couldn’t secure transportation until 2AM, and arranging one the next day was equally challenging. We learned from park rangers that two people had already died in the park that year, highlighting the need for improved safety measures. Thus, I wanted to create an app to help equip hikers with the necessary information _before_ their hiking journey.
+## Inspiration
+During a hike in Joshua Tree’s Cactus Garden, a friend lost the car keys, leaving us stranded without cell service as the sun was about to set. We luckily found a nice couple to hitch a ride out of the park with but it was extremely unsettling once the realization sunk in of the lack of emergency protocols and ability to contact park rangers for help. Enterprise Car Rental couldn’t secure our transportation until 2 AM, and arranging transportation the following day was equally challenging. We learned from park rangers that two people had already died in the park that year (it was only January), highlighting the need for improved safety measures. Thus, I wanted to create an app to help equip hikers with the necessary information _before_ their hiking journey.
